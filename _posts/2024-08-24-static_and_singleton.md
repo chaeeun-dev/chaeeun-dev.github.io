@@ -1,3 +1,10 @@
+---
+title: "[C++] static과 singleton"
+date: 2024-07-24 23:20:00 +09:00 
+---
+
+### static과 singleton
+
 ## static
 
 정의) 클래스의 모든 instance가 공유하는 변수나 함수
