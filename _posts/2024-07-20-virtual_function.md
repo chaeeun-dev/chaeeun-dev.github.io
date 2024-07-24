@@ -1,5 +1,5 @@
 ---
-title: "[C++] Virtual 함수와 override"
+title: "[C++] virtual 함수와 override"
 date: 2024-07-20 11:25:00 +09:00 
 ---
 
