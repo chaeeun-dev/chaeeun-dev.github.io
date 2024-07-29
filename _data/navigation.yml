@@ -6,23 +6,3 @@ main:
   - title: "GitHub"
     url: https://github.com/chaeeun-dev
 
-
-categories:
-  - title: "Essential"
-    children:
-      - title: "C++"
-        url: /Essential/cpp/
-      - title: "Operating System"
-        url: /Essential/operating-system/
-  
-  - title: "Recollection"
-    children:
-      - title: "Today I Learned"
-        url: /Recollection/til/
-      - title: "Mind"
-        url: /Recollection/mind/  
-
-  - title: "ErrorLog"
-    children:
-      - title: "Error & Solution"
-        url: /Errorlog/ErrorAndSolution/
