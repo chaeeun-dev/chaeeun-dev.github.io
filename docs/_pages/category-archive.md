@@ -1,7 +1,7 @@
 ---
 title: "Cartegory"
 layout: cartegories
-permalink: /categories/
+permalink: /cartegories/
 author_profile: true
 sidebar_main: true
 ---
