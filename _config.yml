@@ -20,7 +20,7 @@ rtl                      : # true, false (default) # turns direction of the page
 title                    : "Chaeeun's Devlog"
 title_separator          : "|"
 subtitle                 : "Hello Word!"
-name                     : # "Chaeeun"
+name                     : "Study Note"
 description              : "공부 노트 블로그 입니다!"
 url                      : "https://chaeeun-dev.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
