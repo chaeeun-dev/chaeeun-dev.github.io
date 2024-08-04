@@ -1,6 +1,7 @@
 ---
 title: "[C++] oveloading과 overriding"
 date: 2024-07-22 03:55:00 +09:00 
+author_profile: false
 ---
 
 ### 오버로딩과 오버라이딩

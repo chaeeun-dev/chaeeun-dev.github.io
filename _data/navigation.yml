@@ -6,3 +6,9 @@ main:
   - title: "GitHub"
     url: https://github.com/chaeeun-dev
 
+docs:
+  - title: "TIL"
+    children:
+      - title: "Category"
+        url: /categories/
+        
