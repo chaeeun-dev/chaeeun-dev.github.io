@@ -17,9 +17,9 @@ minimal_mistakes_skin    : "dirt" # "air", "aqua", "contrast", "dark", "dirt", "
 # Site Settings
 locale                   : "ko-KR"
 rtl                      : # true, false (default) # turns direction of the page into right to left for RTL languages
-title                    : "Chaeeun's Devlog"
+title                    : "Devlog"
 title_separator          : "|"
-subtitle                 : "Hello Word!"
+subtitle                 : # "Study and Development"
 name                     : "Chaeeun"
 description              : "공부 노트 블로그 입니다!"
 url                      : "https://chaeeun-dev.github.io"
@@ -115,7 +115,7 @@ analytics:
 author:
   name             : # "Chaeeun"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "Game Engineering"
+  bio              : "Study and Development"
   location         : "South Korea"
   email            :
   links:
