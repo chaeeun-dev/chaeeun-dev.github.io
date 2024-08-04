@@ -1,6 +1,7 @@
 ---
 title: "[C++] static과 singleton"
 date: 2024-07-24 23:20:00 +09:00 
+author_profile: false
 ---
 
 ### static과 singleton
