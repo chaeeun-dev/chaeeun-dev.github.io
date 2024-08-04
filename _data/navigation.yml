@@ -2,13 +2,14 @@
 main:
   - title: "Category"
     url: /categories/
-  
   - title: "GitHub"
     url: https://github.com/chaeeun-dev
+  - title: "Search"
+    url: /search/
 
-docs:
-  - title: "TIL"
-    children:
-      - title: "Category"
-        url: /categories/
+# docs:
+#   - title: "TIL"
+#     children:
+#       - title: "Category"
+#         url: /categories/
         
