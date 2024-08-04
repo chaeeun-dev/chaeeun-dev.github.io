@@ -7,9 +7,3 @@ main:
   - title: "Search"
     url: /search/
 
-# docs:
-#   - title: "TIL"
-#     children:
-#       - title: "Category"
-#         url: /categories/
-        
