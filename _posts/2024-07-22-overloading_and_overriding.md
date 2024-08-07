@@ -1,6 +1,7 @@
 ---
 title: "[C++] oveloading과 overriding"
-date: 2024-07-22 03:55:00 +09:00 
+date: 2024-07-22 03:55:00 +09:00
+categories: C++ 
 author_profile: false
 ---
 
