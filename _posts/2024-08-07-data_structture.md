@@ -9,11 +9,9 @@ author_profile: false
 
 ## vector와 list
 
-**vector(std::vector<Type> name)**
+**std::vector**
 
-size
-
-capacity
+size, capacity
 
 삽입과 삭제
 
@@ -27,7 +25,9 @@ front 첫 번째 원소에 접근 O(1)
 
 임의 접근 가능 v[i]
 
-**list(std::list<Type> name)**
+
+
+**list**
 
 size, capacity는 없는 개념
 
@@ -45,7 +45,8 @@ front 첫 번째 원소에 접근 O(1)
 
 임의 접근 불가능, 원소에 접근하려면 순차 접근 필요
 
----
+
+
 
 ## 이진 탐색, 트리, map, hash_map
 
@@ -57,7 +58,9 @@ front 첫 번째 원소에 접근 O(1)
 
 → 이진 탐색 트리
 
-**이진 탐색 트리**(Binary Search Tree)
+
+
+**이진 탐색 트리(Binary Search Tree)**
 
 구조 : 왼쪽 자식 노드는 부모 노드보다 작고, 오른쪽 자식 노드는 부모 노드보다 큼.
 
@@ -69,6 +72,8 @@ front 첫 번째 원소에 접근 O(1)
 
 → Red Black Tree
 
+
+
 **레드 블랙 트리(Red Black Tree)**
 
 특징 : 이진 탐색 트리의 균형이 깨지는(데이터가 한 쪽으로 쏠림) 문제를 해결하기 위해 고안됨.
@@ -76,6 +81,9 @@ front 첫 번째 원소에 접근 O(1)
 장점 : 균형을 유지하여 모든 연산이 O(logN)에 수행됨
 
 사용 예 : std::map의 기반이 됨.
+
+
+
 
 **std::map**
 
@@ -88,6 +96,9 @@ front 첫 번째 원소에 접근 O(1)
 - 추가 m.insert(make_pair(10, 100)); - O(logN)
 - 삭제 m.erase(10); - O(logN)
 - 찾기 m.find(10); - O(logN)
+
+
+
 
 **std::unordered_map(hash_map)**
 
@@ -114,6 +125,8 @@ map과 사용법이 거의 동일함.
 → map - 정렬된 데이터가 필요하거나, 범위 기반 검색이 필요할 때, 
 
 hash_map - 빠른 검색, 삽입, 삭제가 필요할 때 사용 
+
+
 
 ### 요약
 
