@@ -16,7 +16,7 @@ author_profile: false
 - C++ Reference
 - C++ Core Gudelines
 
----
+
 
 
 ## 읽을 책
@@ -25,7 +25,6 @@ author_profile: false
 - 개발자가 영어도 잘해야 하나요?
 
 
----
 
 
 ## 관심 있는 책
