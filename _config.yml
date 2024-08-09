@@ -12,15 +12,15 @@
 
 # theme                  : "minimal-mistakes-jekyll"
 # remote_theme           : "mmistakes/minimal-mistakes"
-minimal_mistakes_skin    : "dark" # "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
+minimal_mistakes_skin    : "custom1" # "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
 
 # Site Settings
-locale                   : "ko-KR"
+locale                   : "en-US"
 rtl                      : # true, false (default) # turns direction of the page into right to left for RTL languages
 title                    : "Chaeeun's Devlog"
-title_separator          : "|"
+title_separator          : "-"
 subtitle                 : # "Study and Development"
-name                     : "Chaeeun"
+name                     : "Im Chaeeun"
 description              : "공부 노트 블로그 입니다!"
 url                      : "https://chaeeun-dev.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
