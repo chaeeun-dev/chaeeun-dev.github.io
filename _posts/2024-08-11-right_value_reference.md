@@ -42,6 +42,7 @@ void TestKnight_RValeRef(Knight&& knight)
 - 자원의 이동을 위해 사용됨
 - 이동 생성자는 객체가 새롭게 생성될 때 호출, 이동 대입 연산자는 이미 존재하는 객체에 다른 객체의 자원을 이동할 때 호출
 - 이동 생성자와 이동 대입 연산자는 일반적으로 오른 값 참조를 사용하여 구현됨
+
 ```cpp
 Knight(Knight&& knight) noexcept
 {
@@ -58,8 +59,8 @@ void operator=(Knight&& knight) noexcept
     _pet = knight._pet;
     knight._pet = nullptr;  // 원본 객체는 더 이상 소유하지 않음
 }
-
 ```
+
 std::move  - 객체를 오른 값으로 반환해주는 함수, 이를 통해 객체의 자원을 안전하게 이동할 수 있음
 
 k2 = std::move(k1);   k1을 오른 값으로 변환하여 k2에 이동 대입 연산을 수행
