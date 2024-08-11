@@ -24,6 +24,7 @@ void TestKnight_LValueRef(Knight& knight)
 }
 ```
 
+
 ## 오른 값 참조(r-value reference)
 
 오른 값  참조는 T&& 형태로 선언됨, 주로 이동이나 소유권 이전 할 때 사용됨
@@ -35,12 +36,12 @@ void TestKnight_RValeRef(Knight&& knight)
 }
 ```
 
+
 ## 이동 생성자와 이동 대입 연산자
 
 - 자원의 이동을 위해 사용됨
 - 이동 생성자는 객체가 새롭게 생성될 때 호출, 이동 대입 연산자는 이미 존재하는 객체에 다른 객체의 자원을 이동할 때 호출
 - 이동 생성자와 이동 대입 연산자는 일반적으로 오른 값 참조를 사용하여 구현됨
-
 ```cpp
 Knight(Knight&& knight) noexcept
 {
@@ -59,13 +60,12 @@ void operator=(Knight&& knight) noexcept
 }
 
 ```
-
 std::move  - 객체를 오른 값으로 반환해주는 함수, 이를 통해 객체의 자원을 안전하게 이동할 수 있음
 
 k2 = std::move(k1);   k1을 오른 값으로 변환하여 k2에 이동 대입 연산을 수행
 
-cf) 복사 생성자와 복사 대입 연산자
 
+cf) 복사 생성자와 복사 대입 연산자
 ```cpp
 Knight(const Knight& knight)
 {
@@ -77,6 +77,7 @@ void operator=(const Knight& knight)
 			// 복사 대입 연산자 : 깊은 복사를 구현
 }
 ```
+
 
 ## 정리
 
