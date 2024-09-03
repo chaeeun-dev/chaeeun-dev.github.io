@@ -6,7 +6,7 @@ author_profile: false
 # published : false
 ---
 
-## 24.08.09
+### 24.08.09
 
 ## Ch0. IT 영어, 어떻게 공략할까?
     
