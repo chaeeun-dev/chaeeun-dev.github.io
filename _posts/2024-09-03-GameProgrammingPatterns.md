@@ -122,7 +122,7 @@ class Command
 {
 public:
 	virtual ~Command() {}
-	virtual void execute(GameActor& actor) = 0;   // FameActor는 게임 객체 클래스
+	virtual void execute(GameActor& actor) = 0;   // GameActor는 게임 객체 클래스
 };
 
 class JumpCommand : public Command
