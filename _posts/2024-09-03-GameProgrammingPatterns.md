@@ -7,7 +7,7 @@ author_profile: false
 
 ## Part1 도입
 
-### chapter1 - 구조, 성능, 게임
+### chapter1 - 구조, 성능, 게임(24.09.03)
 
 **좋은 소프트웨어 구조란?** - ‘구조는 변경과 관련이 있다.’ 좋은 SW 구조는 쉽게 변경(수정) 할 수 있어야 한다.
 
@@ -30,3 +30,119 @@ author_profile: false
 - 게임 기획 내용을 확인해볼 수 있도록 빠르게 개발하되, 너무 서두르느라 코드를 엉망으로 만들지 말자. 결국 그 코드도 작업해야 하는 건 우리다.
 - 나중에 버릴 코드를 잘 만들겠다고 시간 낭비하지 말자. 록 스타들이 호텔 방을 어지르는 이유는 다음 날 계산하고 나가면 그만이라는 것을 알기 때문이다.
 - 무엇보다, 뭔가 재미있는 걸 만들고 싶다면 먼저 만드는 데에서 재미를 느껴보라.
+
+
+## Part2 디자인 패턴 다시 보기
+
+### ch2 명령(24.09.06)
+
+**명령(command) 패턴은 메서드 호출을 실체화(reify)한 것이다.**
+
+(실체화 - 실제하는 것으로 만든다. 프로그래밍에서는 무엇인가를 ‘일급(first-class)로 만든다는 뜻으로도 통한다.)
+
+cf) 함수(function)와 메서드(method)의 차이 - 메서드는 함수 중에서 클래스의 멤버 함수를 뜻하는 것. 객체에 종속적이다.
+
+→ 함수 호출을 객체로 감쌌다(콜백 : 전달 인자로 , 함수 포인터 등).
+
+**입력키 변경**
+
+```cpp
+void InputHandler::handleInput() {
+        if (isPressed(BUTTON_X)) jump();    // 직접 함수를 호출
+        else if (isPressed(BUTTON_Y)) fireGun();
+        else if (isPressed(BUTTON_A)) swapWeapon();
+        else if (isPressed(BUTTON_B)) loadGun();
+}
+```
+
+이 코드는 유저 입력을 받아 게임에서 의미 있는 행동으로 전환한다. 그런데 많은 게임이 키를 바꿀 수 있게 해준다. 키 변경을 지원하려면 jump(), fireGun() 함수를 직접 호출하지 말고, 교체 가능한 무엇인가로 바꿔야 한다.
+
+```cpp
+class Command
+{
+public:
+	virtual ~Command() { };
+	virtual void execute() = 0;
+};
+```
+
+행동을 실행할 수 있는 공통 상위(부모) 클래스를 정의한다.
+
+```cpp
+class JumpCommand : public Command
+{
+public: 
+	virtual void execute() { jump(); }
+};
+
+class FireCommand : public Command
+{
+public:
+	virtual void execute() { FireGun(); }
+};
+```
+
+행동 별로 하위(자식) 클래스를 만든다. 
+
+```cpp
+class InputHandler
+{
+public:
+	void handleInput();
+	// 명령을 바인드 할 메서드들...
+	
+private:
+	Command* buttonX_;
+	Command* buttonY_;
+	Command* buttonA_;
+	Command* buttonB_;
+};
+```
+
+입력 핸들러 코드에 각 버튼별로 Command 클래스 포인터를 저장한다. 
+
+```cpp
+void InputHandler::handleInput()
+{
+	if (isPressed(Button_X)) button_X->execute();    // 직접 함수를 호출하지 않고 한 겹 우회
+	else if (isPressed(Button_Y)) button_Y->execute();
+	else if (isPressed(Button_A)) button_A->execute();
+	else if (isPressed(Button_B)) button_B->execute();
+}
+```
+
+이렇게 handleInput() 함수를 정의해준다. 직접 함수를 호출하지 않고 한 겹 우회하는 계층이 생겼다. 
+
+**액터에게 지시하기**
+
+위의 예제는 잘 동작하지만, jump(), fireGun() 같은 전역 함수가 플레이어 객체를 찾아야 한다는 점에서 커플링이 깔려 있다고 할 수 있다(커플링으로 인해 Command 클래스의 유용성이 떨어짐). 또, JumpComman 클래스는 오직 플레이어 캐릭터만 점프하게 만들 수 있다. 유연하게 하기 위해 객체를 직접 찾게 하지 말고 밖에서 전달해주자.
+
+```cpp
+class Command
+{
+public:
+	virtual ~Command() {}
+	virtual void execute(GameActor& actor) = 0;   // FameActor는 게임 객체 클래스
+};
+
+class JumpCommand : public Command
+{
+public:
+	virtual void execute(GameActor& actor) { actor.jump(); }
+}
+```
+
+이렇게 하면 JumpCommand 클래스 하나로 게임에 등장하는 모든 객체에서 jump() 할 수 있다. 남은 것은 입력 핸들러에서 입력을 받아 메서드를 호출하는 명령 객체를 연결하는 코드이다. 
+
+```cpp
+Command* InputHandler::handlerInput()
+{
+	if (isPressed(BUtton_X)) return button_X;
+	if (isPressed(BUtton_Y)) return button_Y;
+	if (isPressed(BUtton_A)) return button_A;
+	if (isPressed(BUtton_B)) return button_B;
+	
+	return NULL;
+}
+
+```
