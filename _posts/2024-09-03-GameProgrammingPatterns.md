@@ -36,13 +36,13 @@ author_profile: false
 
 ### ch2 명령(24.09.06)
 
-**명령(command) 패턴은 메서드 호출을 실체화(reify)한 것이다.**
+**명령(command) 패턴은 메서드 호출을 실체화(reify)한 것이다. → 함수 호출을 객체로 감쌌다(콜백, 함수 포인터 등).**
 
 (실체화 - 실제하는 것으로 만든다. 프로그래밍에서는 무엇인가를 ‘일급(first-class)로 만든다는 뜻으로도 통한다.)
 
 cf) 함수(function)와 메서드(method)의 차이 - 메서드는 함수 중에서 클래스의 멤버 함수를 뜻하는 것. 객체에 종속적이다.
 
-→ 함수 호출을 객체로 감쌌다(콜백, 함수 포인터 등).
+
 
 **입력키 변경**
 
@@ -113,9 +113,7 @@ void InputHandler::handleInput()
 
 이렇게 handleInput() 함수를 정의해준다. 직접 함수를 호출하지 않고 한 겹 우회하는 계층이 생겼다. 
 
-**액터에게 지시하기**
-
-위의 예제는 잘 동작하지만, jump(), fireGun() 같은 전역 함수가 플레이어 객체를 찾아야 한다는 점에서 커플링이 깔려 있다고 할 수 있다(커플링으로 인해 Command 클래스의 유용성이 떨어짐). 또, JumpCommand 클래스는 오직 플레이어 캐릭터만 점프하게 만들 수 있다. 유연하게 하기 위해 객체를 직접 찾게 하지 말고 밖에서 전달해주자.
+**액터에게 지시하기** - 위의 예제는 잘 동작하지만, jump(), fireGun() 같은 전역 함수가 플레이어 객체를 찾아야 한다는 점에서 커플링이 깔려 있다고 할 수 있다(커플링으로 인해 Command 클래스의 유용성이 떨어짐). 또, JumpCommand 클래스는 오직 플레이어 캐릭터만 점프하게 만들 수 있다. 유연하게 하기 위해 객체를 직접 찾게 하지 말고 밖에서 전달해주자.
 
 ```cpp
 class Command
@@ -135,14 +133,92 @@ public:
 이렇게 하면 JumpCommand 클래스 하나로 게임에 등장하는 모든 객체에서 jump() 할 수 있다. 남은 것은 입력 핸들러에서 입력을 받아 메서드를 호출하는 명령 객체를 연결하는 코드이다. 
 
 ```cpp
-Command* InputHandler::handlerInput()
+Command* InputHandler::handleInput()
 {
 	if (isPressed(BUtton_X)) return button_X;
 	if (isPressed(BUtton_Y)) return button_Y;
 	if (isPressed(BUtton_A)) return button_A;
 	if (isPressed(BUtton_B)) return button_B;
 	
-	return NULL;
+	return NULL;		// 아무것도 누르지 않았다면, 아무것도 하지 않는다.
 }
 
 ```
+
+어떤 액터를 매개변수로 넘겨줘야 할지 모르기 때문에 handleInput()에서는 명령을 실행할 수 없고 함수 호출 시점을 지연한다.
+
+
+```cpp
+Command* command = InputHandler.handleInput();
+if (command)
+{	
+	command->execute(actor);
+}
+```
+
+이렇게 코드를 작성하면, 명령을 실행할 때 액터만 바꾸면 어떤 액터라도 제어할 수 있게 된다.
+
+플레이어가 제어하는 캐릭터 외에 게임에는 다른 캐릭터가 많다. 이런 캐릭터는 AI가 제어하는데, 같은 명령 패턴을 AI 엔진과 액터 사이에 인터페이스 용으로 사용할 수 있다. Command 객체를 선택하는 AI와 이를 실행하는 액터를 디커플링함으로써 코드가 훨씬 유연해질 수 있다.
+
+
+
+**실행취소와 재실행** - 그냥 실행 취소 기능을 구현하려면 굉장히 어렵지만, 명령 패턴을 이용하면 쉽게 만들 수 있다. 어떤 유닛을 옮기는 명령에 대해 알아보자.
+
+```cpp
+class MoveUnitCommand : public Command
+{
+public:
+	MoveUnitCommand(Unit* unit, int x, int y) : unit_(unit), x_(x), y_(y) {}
+
+	virtual void execute() { unit_->moveTo(x_, y_); }
+
+private:
+	Unit* unit_;
+	int x_;
+	int y_;
+};
+```
+
+이전 예제에서는 명령에서 변경하려는 액터와 명령 사이를 추상화로 격리시켰지만, 이 코드는 이동하려는 유닛과 위치 값을 생성자에서 받아 명령과 명시적으로 바인드했다. 
+
+
+실행 취소 코드를 구현해보자.
+```cpp
+Class Command
+{
+public:
+	virtual ~Command() {}
+	virtual void execute() = 0;
+	virtual void undo() = 0;	// 명령을 취소할 수 있도록 순수 가상 함수 undo()를 정의한다.
+};
+```
+
+
+MoveUnit Command 클래스에 실행 취소 기능을 넣어보자.
+
+```cpp
+class MoveUnitCommand : public Command
+{
+public:
+	MoveUnitCommand(Unit* unit, int x, int y) : unit_(unit), x_(x), _y(y), xBefore_(0), yBefore_(0), x_(x), y_(y) { }
+
+	virtual void execute() 
+	{ 	
+		// 나중에 이동을 취소할 수 있도록 원래 유닛 위치를 저장한다.
+		xBefore_ = unit_->x();
+		yBefore_ = unit_->y();
+		unit_->moveTo(x_, y_);
+	}
+
+	virtual void undo() { unit_->moveTo(xBefore_, yBefore_); }
+
+private:
+	Unit* unit;
+	int x_, y_;
+	int xBefore_, yBefore_;
+```
+
+실행 취소 스택 - 실행 취소를 선택하면 현재 명령을 취소하고 현재 명령을 가리키는 포인터를 뒤로 이동... 이런 식으로 구현할 수 있음
+
+
+**클래스만 좋고 함수형은 별로인가?** - (이 부분은 이해가 잘 안 가서 패스) 
