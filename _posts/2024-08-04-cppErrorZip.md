@@ -35,3 +35,13 @@ author_profile: false
 ![image](https://github.com/user-attachments/assets/401fc8b9-913f-4fff-8aca-978e13052a50)
 
 class에서 생성자에 public을 안 붙여서!!!
+
+
+
+
+
+## 24.09.08
+
+![image](https://github.com/user-attachments/assets/5a6ab72d-1c8e-46f3-9494-a213bf69e225)
+
+문제) 타일맵 강의 들으면서 devScene.cpp에 타일 생성하고 맵에 그려주려고 하는데 자꾸 this가 nullptr이라는 오류가 발생한다!! 아직 해결 못함.. 이틀째..
