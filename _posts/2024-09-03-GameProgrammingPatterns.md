@@ -222,3 +222,117 @@ private:
 
 
 **클래스만 좋고 함수형은 별로인가?** - (이 부분은 이해가 잘 안 가서 패스) 
+
+
+
+### ch3 경량(24.09.08)
+
+**숲에 들어갈 나무들**
+
+숲을 실시간 게임으로 구현한다는 것은 수천 그루가 넘는 나무를 각각 수천 폴리곤의 형태로 표현해야한다는 것이다. 나무의 정보를 코드로 표현해면 다음과 같다
+
+```cpp
+class Tree
+{
+private:
+	Mesh mesh_;
+	Texture bark_;
+	Texture leaves_;
+	Vector position_;
+	double height_;
+	double thcikness_;
+	Color barkTint_;
+	Color leafTint_;
+};
+```
+
+많은 객체로 이루어진 숲 전체 데이터를 1프레임에 GPU로 모두 전달하기엔 양이 너무 많다. 그런데 핵심은 숲의 나무가 대부분 비슷해 보인다는 점이다. 객체를 반으로 쪼개 이런 점을 명시적으로 모델링할 수 있다. 모든 나무가 다 같이 사용하는 데이터를 뽑아내 새로운 클래스에 모아보자.
+
+```cpp
+class TreeModel
+{
+private:
+	Mesh mesh_;
+	Texture bark_;
+	Texture leaves_;
+};
+```
+
+TreeModel 객체는 하나만 존재하게 된다(같은 메시와 텍스처를 여러 번 메모리에 올릴 필요가 없어서). 각 나무 인스턴스는 공유 객체인 TreeModel을 참조하기만 한다.
+
+```cpp
+class Tree
+{
+private:
+	TreeModel* model_;
+	Vector position_;
+	double height_;
+	double thcikness_;
+	Color barkTint_;
+	Color leafTint_;
+}
+```
+
+사진 삽입!!!
+
+나무 인스턴스 각각이 모델 하나를 공유한다. 주메모리에 객체를 ‘저장’하기 위한 것이라면 충분하지만, ‘렌더링’은 다른 문제다. 화면에 숲을 그리기 위해서는 먼저 데이터를 GPU로 전달해야 한다. 어떤 식으로 자원을 공유하고 있는지 그래픽 카드가 이해할 수 있는 방식으로 표현해야 한다.
+
+**수천 개의 인스턴스** - GPU로 보내는 데이터 양을 최소화하기 위해서는 공유 데이터인 TreeModel을 딱 ‘한 번’만 보낼 수 있어야 한다. 그 후 나무마다 값이 다른 정보(위치, 색, 크기)를 전달하고, 마지막으로 GPU에 전체 나무 인스턴스를 그릴 때 공유 데이터를 사용하라고 하면 된다. 다행히 Direct3D, OpenGl 모두 ‘인스턴스 렌더링’을 지원한다.
+
+**경량 패턴** - 경량  패턴은 어떤 객체의 수가 너무 많아 좀 더 가볍게 만들고 싶을 때 사용한다. 경량 패턴은 객체 데이터를 두 종류로 나누는데, 자유문맥(고유 상태)(모든 객체 데이터 값이 같아 공유할 수 있는 데이터)와 외부상태(인스턴스 별로 값이 다른 데이터 ex. 위치, 크기, 색)
+
+**지형 정보** - 땅은 보통 풀, 흙, 언덕, 호수, 강 같은 다양한 지형을 이어 붙여서 만든다(여기서는 타일 기반으로 만들 것). 즉 땅은 작은 타일들이 모여 있는 거대한 격자이다. 지형 종류에는 플레이에 영향을 주는 여러 속성이 있다(e.g. 플레이어가 빠르게 이동할 수 있는지 결정하는 이동 비용 값, 보트로 건널 수 있는지 여부, 렌더링 할 때 사용할 텍스처 등)
+
+```cpp
+// 지형 종류를 열거형으로 저장하는 게 일반적
+enum Terrain
+{
+	TERRAIN_GRASS,
+	TERRAIN_HILL,
+	TERRAIN_RIVER,
+	// 기타 등등
+};
+
+// 월드는 지형을 거대한 격자로 관리
+class World
+{
+private:
+	Terrian tiles_[WIDTH][HEIGHT];
+};
+
+// 타일 관련 데이터를 얻는 함수
+int World::GetMovementCost(intx, int y)
+{
+	switch (tiles_[x][y])
+		{
+		case TERRAIN_GRASS : return 1;
+		case TERRAIN_HILL : return 2;
+		case TERRAIN_RIVER : return 3;
+		// 기타 등등
+		}
+}
+```
+
+이렇게 코드를 작성하는 것보다 데이터를 하나로 합쳐서 캡슐화하는 게 좋다. 아래처럼 짖형 클래스를 따로 만드는 것이다. 
+
+```cpp
+class Terrain
+{
+public:
+	Terrain(int movementCost, bool isWater, Texture texture)
+	: movementCost_(movementCost), isWater(isWater), texture_(texture) {}
+	
+	// const를 사용한 이유? Terrain 객체를 여러 곳에서 공유해서 쓰기 때문에..(바꾸면 다른 객체에 영향)
+	// 경량 객체는 변경 불가능한 상태로 만드는 게 전부이다.
+	int GetMovementCost() const { return movementCost_; }
+	bool isWater() const { return isWater_; }
+	const Texure& getTexture() const { return texture_; }
+	
+private:
+	int moveCost_;
+	bool isWater_;
+	Texture texture_;
+};	
+```
+
+이 클래스에는 위치와 관련된 내용은 전혀 없다. 즉 ‘자유 문맥’에 해당한다.
