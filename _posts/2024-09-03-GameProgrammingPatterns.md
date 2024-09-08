@@ -311,7 +311,7 @@ int World::GetMovementCost(intx, int y)
 }
 ```
 
-이렇게 코드를 작성하는 것보다 데이터를 하나로 합쳐서 캡슐화하는 게 좋다. 아래처럼 짖형 클래스를 따로 만드는 것이다. 
+이렇게 코드를 작성하는 것보다 데이터를 하나로 합쳐서 캡슐화하는 게 좋다. 아래처럼 지형 클래스를 따로 만드는 것이다. 
 
 ```cpp
 class Terrain
@@ -333,4 +333,63 @@ private:
 };	
 ```
 
-이 클래스에는 위치와 관련된 내용은 전혀 없다. 즉 ‘자유 문맥’에 해당한다.
+이 클래스에는 위치와 관련된 내용은 전혀 없다. 즉 ‘자유 문맥’에 해당한다. 따라서 지형 종류별로 Terrain 객체가 여러 개 있을 필요가 없다. World 클래스 격자 멤버 변수에 열거형이나 Terrain 객체 대신 Terrain 객체 포인터를 넣을 수 있다.
+
+```cpp
+class World
+{
+private:
+	Terrain* tiles_[WIDTH][HEIGHT];
+	// 그 외...
+};
+```
+
+지형 종류가 같은 타일들은 모두 같은 Terrain 인스턴스 포인터를 갖는다.
+
+![image](https://github.com/user-attachments/assets/1c08b1ab-81c9-46e8-8caa-2f78fb80081a)
+
+Terrain 인스턴스가 여러 곳에서 사용되다 보니, 동적으로 할당하면 생명 주기를 관리하기 어려워 World 클래스에 저장한다.
+
+```cpp
+class World
+{
+public:
+	World() :
+	grassTerrain_(1, false, GRASS_TEXTURE), hillTerrain(3, false, HILL_TEXTURE), riverTerrain(2, false, RIVER_TEXTURE) {}
+	
+private:
+	Terrain grassTerrian_;
+	Terrain hillTerrain_;
+	Terrain riverTerrain_;
+	// 그 외...
+}
+```
+
+이렇게 땅 위를 채울 수 있다.
+
+```cpp
+void World::generateTerrain()
+{
+	//땅에 풀 채우기
+	for (int x = 0; x < WIDTH; x++)
+		{
+			for (int y = 0; y < HEIGHT; y++)
+			{
+				// 언덕을 몇 개 놓는다.
+				if (random(10) == 0)
+					tiles_[x][y] = &hillTerrain_;
+				else
+					tiles_[x][y] = &grassTerrain_;
+			}
+		}
+		
+		// 강을 하나 놓는다.
+		int x = random(WIDTH);
+		for (int y = 0; y < HEIGHT; y++)
+			tiles_[x][y] = &riverTerrain_;
+}
+```
+
+d이제 지형 속성 값을 World의 메서드 대신 Terrain 객체에서 바로 얻을 수 있다. World 클래스는 더 이상 지형의 세부 정보와 커플링 되지 않는다. 타일 속성은 Terrain 객체에서 바로 얻을 수 있다. 
+
+**성능에 대하여** - 포인터냐 열거형이냐에 대한 얘기는 뒤로 하고, 확실한 것은 경량 객체를 한 번은 고려해봐야 한다는 점이다. 경량 패턴을 사용하면 객체를 마구 늘리지 않으면서도 객체지향 방식의 장점을 취할 수 있다.
