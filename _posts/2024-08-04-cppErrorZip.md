@@ -45,3 +45,7 @@ class에서 생성자에 public을 안 붙여서!!!
 ![image](https://github.com/user-attachments/assets/5a6ab72d-1c8e-46f3-9494-a213bf69e225)
 
 문제) 타일맵 강의 들으면서 devScene.cpp에 타일 생성하고 맵에 그려주려고 하는데 자꾸 this가 nullptr이라는 오류가 발생한다!! 아직 해결 못함.. 이틀째..
+
+해결 과정)
+![image](https://github.com/user-attachments/assets/b038b923-3906-4405-ada2-460bbdde0a74)
+호출스택에서 TilemapActor.cpp 77번째 줄(TransparentBlt 함수)에서 Sprite::GetTransparent()를 호출했음을 확인
