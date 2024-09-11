@@ -6,7 +6,10 @@ author_profile: false
 toc : true
 ---
 
+
+
 # Part1 도입
+
 
 ## chapter1 - 구조, 성능, 게임(24.09.03)
 
@@ -33,7 +36,10 @@ toc : true
 - 무엇보다, 뭔가 재미있는 걸 만들고 싶다면 먼저 만드는 데에서 재미를 느껴보라.
 
 
+
+
 # Part2 디자인 패턴 다시 보기
+
 
 ## ch2 명령(24.09.06)
 
@@ -226,7 +232,10 @@ private:
 
 
 
+
+
 ## ch3 경량(24.09.08)
+
 
 **숲에 들어갈 나무들** - 숲을 실시간 게임으로 구현한다는 것은 수천 그루가 넘는 나무를 각각 수천 폴리곤의 형태로 표현해야한다는 것이다. 나무의 정보를 코드로 표현해면 다음과 같다.
 
@@ -571,6 +580,127 @@ void Subject::notify(const Entity& entity, Event event)
 **오늘날의 관찰자** - 클래스를 계속 상속 받는 건 무겁고 융통성이 없다. 최신 방식은 메서드나 함수 레퍼런스만으로 ‘관찰자’를 만드는 것이다. 필자가 관찰자 패턴을 다시 만든다면 클래스보다 함수형 방식으로 만들 거라고 한다. 
 
 **미래의 관찰자** - 관찰자 패턴 관련 코드의 공통점 : 1. 어떤 상태가 변했다는 알림을 받는다. 2. 이를 반영하기 위해 UI 상태 일부를 바꾼다 → 체력이 7이면 체력바 너비를 70픽셀로 바꾸는 식이다. 이런 방법 보다 ‘데이터 바인딩’이 인기를 얻고 있는데 이는 어떤 값이 변경되면 관련된 UI 요소나 속성을 바꿔줘야 하는 귀찮은 작업을 알아서 해준다. UI는 성능에 덜 민감하기에 데이터 바인딩이 느리더라도 대세가 될 것이라고 한다.
+
+
+
+## ch5. 프로토타입(24.09.11)
+
+**프로토타입 디자인 패턴** - 몬스터는 종류마다 스포너가 따로 있다. (cf.스포너 spawner) 
+
+```cpp
+class Monster
+{
+	// ect...
+};
+
+class Ghost : public Monster {};
+class Demon : public Monster {};
+class Sorcerer : public Monster {};
+```
+
+한 가지 스포너는 한 가지 몬스터 인스턴스만 만든다. 몬스터 클래스마다 스포너 클래스를 만들면 스포너 클래스 상속 구조가 몬스터 클래스 상속 구조를 따라가게 된다.
+
+![image](https://github.com/user-attachments/assets/bbeb071d-623c-4761-b133-ea0f29e0abca)
+
+```cpp
+class Spawner 
+{
+public:
+	virtual ~Spawner() {}
+	virtual Monster* spawnMonster() = 0;
+};
+
+class GhostSpawner : public Spawner
+{
+public:
+	virtual Monster* spawnMonster()
+	{
+		return new Ghost();
+	}
+};
+
+class DemonSpawner : public Spawner
+{
+public:
+	virtual Monster* spawnMonster()
+	{
+		return new Demon();
+	}
+};
+```
+
+이 코드는 별로다. 클래스도 많고, 행사 코드(프로그램의 실행과 직접적으로는 관계가 없는 프로그래밍 문법적 서식)도 많고, 반복 코드도 많다. 이걸 프로토타입 패턴으로 해결할 수 있다. 핵심은 어떤 객체가 자기와 비슷한 객체를 스폰할 수 있다는 점이다. 유령 객체 하나로 다른 유령 객체를 여럿 만들 수 있는데, 어떤 몬스터 객체든 자신과 비슷한 몬스터 객체를 만드는 원형(protptypal) 객체로 사용할 수 있다. 
+
+```cpp
+class Monster
+{
+public:
+	virtual ~Monster() {]
+	
+	// Monster 하위 클래스는 자신과 자료형과 상태가 같은 새로운 객체를 반환하도록 clone()을 구현한다.
+	virtual Monster* clone() = 0;  
+	}
+
+class Ghost : public Monster
+{
+public:
+	Ghost(int health, int speed) : health_(health), speed_(speed) {}
+	
+	virtual Moster* clone() { return new Ghost(health, speed); }
+	
+private:
+	int health_;
+	int speed_;
+}
+
+// Monster를 상속받는 모든 클래스에 clone() 메서드가 있다면 스포너 클래스를 종류별로 만들 필요 없이 하나만 만들면 된다. 
+class Spawner
+{
+public:
+	Spawner(Monster* prototype) : prototype_(prototype) {}
+	Monster* spawnerMonster() { return prototype_->clone(); }
+}
+```
+
+Spawner 클래스 내부에는 Monster 객체가 숨어 있다. 이 객체는 자기와 같은 Monster 객체를 도장 찍듯 만들어내는 스포너 역할만 한다. 
+
+![image](https://github.com/user-attachments/assets/3f6315d1-8324-4e29-81eb-702865b92abd)
+
+유령 스포너를 만들려면 원형으로 사용할 유령 인스턴스를 만든 후에 스포너에 전달한다. 
+
+```cpp
+Monster* ghostPrototype = new Gohst(15, 3);
+Spawner* ghostSpawner = new Spawner(ghostPrototype);
+```
+
+프로토타입 패턴의 좋은 점은 프로토타입의 클래스 뿐만 아니라 상태도 같이 복제(clone)한다는 점이다. 
+
+**얼마나 잘 작동하는가?** - 이제 몬스터마다 스포너 클래스를 따로 만들지 않아도 된다. 그래도 Monster 클래스마다 clone()을 구현해야 하기 때문에 코드 양은 별 차이가 없다. clone()을 만들다보면 객체를 깊은 복사 해야 할지, 얕은 복사를 해야할지, 악마가 삼지창을 들고 있다면 그것도 복제해야 할지 애매한 경우가 있다. 프로토타입 패턴을 써도 코드 양이 많이 줄지 않고, 요즘 게임 엔진들은 몬스터마다 클래스를 따로 만들지 않는다. 오랜 삽질을 통해 클래스 상속 구조가 복잡하면 유지보수가 힘들다는 걸 체득했기 때문에, 요즘은 개체 종류별로 클래스를 만들기보다 컴포넌트나 타입객체로 모델링 하는 것을 선호한다. 
+
+**스폰함수** - 스폰 함수를 만들어보자.
+
+```cpp
+Monster* spawnGhost() { return new Ghost; }
+```
+
+몬스터 종류마다 클래스를 만드는 것보다 행사코드가 훨씬 적다. 이제 스포너 클래스에는 함수 포인터 하나만 두면 된다.
+
+```cpp
+typedef Monster* (*SpawnCallback)();
+
+class Spawner
+{
+public:
+	Spawner(SpawnCallback spawn) : spawn_(spawn) {}
+	Monster* spawnMonster() { return spawn_(); }
+
+private:
+	SpawnCallback spawn_;
+};
+
+// 유령을 스폰하는 객체는 이렇게 만들 수 있다.
+Spawner* ghostSpawner = new Spawner(spawnGhost);
+```
 
 
 
