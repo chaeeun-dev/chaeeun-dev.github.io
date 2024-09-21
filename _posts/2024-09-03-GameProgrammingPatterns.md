@@ -772,7 +772,7 @@ cf) 필드 : 객체의 정보(상태) / 메서드 : 객체의 동작(기능)
 좋은 프로그래머는 중복을 싫어한다. 하지만 멍청한 JSON에는 그런 기능이 없다. 더 영리하게 만들어보자면 중복되는 데이터를 프로토타입으로 지정해서 반복 입력하지 않아도 되게 만들면 된다.
 
 
-### ch6 싱글턴(24.09.18~)
+## ch6 싱글턴(24.09.18~)
 
 게임 프로그래밍 올인원 강의 듣다가 간단하게 정리했던 static과 singleton 개념 참고 [[**[C++] static과 singleton**](https://chaeeun-dev.github.io/c++/static_and_singleton/)](https://chaeeun-dev.github.io/c++/static_and_singleton/)
 
