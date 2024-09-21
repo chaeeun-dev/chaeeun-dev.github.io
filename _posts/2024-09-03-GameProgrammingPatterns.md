@@ -937,103 +937,104 @@ FileSystem& FileSystem::instance()
     
     이러면 게으른 초기화 문제를 해결할 수 있지만, 싱글턴이 그냥 전역 변수보다 나은 점을 몇 개 포기해야 한다. 정적 인스턴스를 사용하면 다형성을 사용할 수 없다. 클래스는 정적 객체 초기화 시점에 생성된다. 인스턴스가 필요 없어도 메모리를 해제할 수 없다. 싱글턴 대신 단순한 정적 클래스를 하나 만든 셈이다.
 
-	**대안** - 싱글턴을 안 쓰는 것에 대한 대안
 
-**클래스가 꼭 필요한가?** - 이 책의 저자가 게임 코드에서 본 싱글턴 클래스 중에는 객체 관리용으로 존재하는 ‘관리자(manager)’가 많았다고 한다. 관리 클래스가 필요할 때도 있지만, OOP를 제대로 이해하지 못해 만드는 경우도 많다. (…) 관리자 인스턴스를 없애는 코드를 보자.
+**대안** - 싱글턴을 안 쓰는 것에 대한 대안
 
-```cpp
-class Bullet
-{
-public:
-	Bullet(int x, int y) : x(x_), y(y_) {}
-	
-	bool isOnScreen()
+	**클래스가 꼭 필요한가?** - 이 책의 저자가 게임 코드에서 본 싱글턴 클래스 중에는 객체 관리용으로 존재하는 ‘관리자(manager)’가 많았다고 한다. 관리 클래스가 필요할 때도 있지만, OOP를 제대로 이해하지 못해 만드는 경우도 많다. (…) 관리자 인스턴스를 없애는 코드를 보자.
+
+	```cpp
+	class Bullet
 	{
-		return x_ >= 0 && x_ < SCREEN_WIDTH && y_ >= 0 && y_ < SCREEN_HEIGHT;
-	}
-	
-	void move() { x_ += 5; }
-	
-private:
-	int x_;
-	int y_;	
-};
-```
+	public:
+		Bullet(int x, int y) : x(x_), y(y_) {}
+		
+		bool isOnScreen()
+		{
+			return x_ >= 0 && x_ < SCREEN_WIDTH && y_ >= 0 && y_ < SCREEN_HEIGHT;
+		}
+		
+		void move() { x_ += 5; }
+		
+	private:
+		int x_;
+		int y_;	
+	};
+	```
 
-서툴게 만든 싱글턴은 다른 클래스에 기능을 더해주는 ‘도우미’인 경우가 많다. 가능하다면 도우미 클래스에 있던 작동 코드를 모두 원래 클래스에 옮기자. 객체가 스스로를 챙기게 하는 것이 바로 OOP다. 
+	서툴게 만든 싱글턴은 다른 클래스에 기능을 더해주는 ‘도우미’인 경우가 많다. 가능하다면 도우미 클래스에 있던 작동 코드를 모두 원래 클래스에 옮기자. 객체가 스스로를 챙기게 하는 것이 바로 OOP다. 
 
-**오직 한 개의 클래스 인스턴스만 갖도록 보장하기** - 클래스 인스턴스를 하나만 있도록 보장하는 건 중요한데, 그렇다고 전역으로 어디서나 접근할 수 있게 하는 건 아닐 수 있다. 이럴 때 전역에서 누구나 접근할 수 있게 만들면 구조가 취약해진다.  전역 접근 없이 클래스 인스턴스만 한 개로 보장할 수 있는 방법이 있다. 
+	**오직 한 개의 클래스 인스턴스만 갖도록 보장하기** - 클래스 인스턴스를 하나만 있도록 보장하는 건 중요한데, 그렇다고 전역으로 어디서나 접근할 수 있게 하는 건 아닐 수 있다. 이럴 때 전역에서 누구나 접근할 수 있게 만들면 구조가 취약해진다.  전역 접근 없이 클래스 인스턴스만 한 개로 보장할 수 있는 방법이 있다. 
 
-```cpp
-class FileSystem
-{
-public:
-	FileSystem()
+	```cpp
+	class FileSystem
 	{
-		assert(!instantiated_); // assert : 디버깅 모드에서 오류가 생기면 치명적일 곳에 넣는 오류 검출용 함수
-		instactiated_ = true;
-	}
-	
-	~FileSystem() { instanced_ = false; }
-	
-private:
-	static bool instantiated_;
-};
+	public:
+		FileSystem()
+		{
+			assert(!instantiated_); // assert : 디버깅 모드에서 오류가 생기면 치명적일 곳에 넣는 오류 검출용 함수
+			instactiated_ = true;
+		}
+		
+		~FileSystem() { instanced_ = false; }
+		
+	private:
+		static bool instantiated_;
+	};
 
-// 이 클래스는 어디서나 인스턴스를 생성할 수 있지만, 둘 이상 되는 순간 assert 함수에 걸린다.
-// 단일 인스턴스는 보장하지만 클래스를 어떻게 사용할지에 대해서는 강제하지 않는다.
-// 다만 싱글턴은 클래스 문법을 활용해 컴파일 시간에 단일 인스턴스를 보장하는 데 반해, 이 방식에서는 런타임에 인스턴스 개수를 확인한다는 게 단점이다.
-```
+	// 이 클래스는 어디서나 인스턴스를 생성할 수 있지만, 둘 이상 되는 순간 assert 함수에 걸린다.
+	// 단일 인스턴스는 보장하지만 클래스를 어떻게 사용할지에 대해서는 강제하지 않는다.
+	// 다만 싱글턴은 클래스 문법을 활용해 컴파일 시간에 단일 인스턴스를 보장하는 데 반해, 이 방식에서는 런타임에 인스턴스 개수를 확인한다는 게 단점이다.
+	```
 
-**인스턴스에 쉽게 접근하기** - 쉬운 접근성은 싱글턴을 선택하는 가장 큰 이유다. 이런 편리함에는 원치 않는 곳에서도 쉽게 접근할 수 있다는 비용이 따른다. 변수는 작업 가능한 선에서 적은 범위로 노출하는 게 일반적으로 좋다. 변수가 노출된 범위가 적을수록 코드를 볼 때 머릿속에 담아둬야 할 범위가 줄어든다. 전역에서 접근하는 것 말고 객체에 접근할 수 있는 다른 방법을 알아보자.
+	**인스턴스에 쉽게 접근하기** - 쉬운 접근성은 싱글턴을 선택하는 가장 큰 이유다. 이런 편리함에는 원치 않는 곳에서도 쉽게 접근할 수 있다는 비용이 따른다. 변수는 작업 가능한 선에서 적은 범위로 노출하는 게 일반적으로 좋다. 변수가 노출된 범위가 적을수록 코드를 볼 때 머릿속에 담아둬야 할 범위가 줄어든다. 전역에서 접근하는 것 말고 객체에 접근할 수 있는 다른 방법을 알아보자.
 
-- **넘겨주가** - 객체를 필요로 하는 함수에 인수로 넘겨주는 게 가장 쉬우면서도 최선인 경우가 많다. 반면 어떤 객체는 메서드 시그니처에 포함되지 않는다. 다른 방법을 찾아보자.
-- **상위 클래스로부터 얻기** - 게임 내 객체가 상속받는 GameObject라는 상위 클래스가 있다고 해보자. 많은 클래스에서 GameObject 상위 클래스에 접근할 수 있다. 이 점을 활용하면 아래와 같이 만들 수 있다.
+	- **넘겨주가** - 객체를 필요로 하는 함수에 인수로 넘겨주는 게 가장 쉬우면서도 최선인 경우가 많다. 반면 어떤 객체는 메서드 시그니처에 포함되지 않는다. 다른 방법을 찾아보자.
+	- **상위 클래스로부터 얻기** - 게임 내 객체가 상속받는 GameObject라는 상위 클래스가 있다고 해보자. 많은 클래스에서 GameObject 상위 클래스에 접근할 수 있다. 이 점을 활용하면 아래와 같이 만들 수 있다.
 
-```cpp
-class GameObject
-{
-protected:
-	Log& getLog() { return log_; }
-	
-private:
-	static Log& log_;
-};
+	```cpp
+	class GameObject
+	{
+	protected:
+		Log& getLog() { return log_; }
+		
+	private:
+		static Log& log_;
+	};
 
-class Enemy : public GameObject
-{
-	void doSomething() { getLob.write("I can log!"); }
-};
-// 이러면 GameObject를 상속받은 코드에서만 getLog()를 통해 로그 객체에 접근할 수 있다.
-```
+	class Enemy : public GameObject
+	{
+		void doSomething() { getLob.write("I can log!"); }
+	};
+	// 이러면 GameObject를 상속받은 코드에서만 getLog()를 통해 로그 객체에 접근할 수 있다.
+	```
 
-- **이미 전역인 객체로부터 얻기** - 전역 상태를 모두 제거하기란 너무 이상적이다. 결국 Game이나 World같이 전체 게임 상태를 관리하는 전역 객체와 커플링되어 잇기 마련이다. 기존 전역 객체에 빌붙으면 전역 클래스 개수를 줄일 수 있다. Log, FileSystem, Audio Player를 각각 싱글턴으로 만드는 대신 이렇게 해보자.
+	- **이미 전역인 객체로부터 얻기** - 전역 상태를 모두 제거하기란 너무 이상적이다. 결국 Game이나 World같이 전체 게임 상태를 관리하는 전역 객체와 커플링되어 잇기 마련이다. 기존 전역 객체에 빌붙으면 전역 클래스 개수를 줄일 수 있다. Log, FileSystem, Audio Player를 각각 싱글턴으로 만드는 대신 이렇게 해보자.
 
-```cpp
-class Game
-{
-public:
-	static Game& instance() { return instance_; }
-	
-	Log& getLog() { return *log_; }
-	FileSystem& getFileSystem() { return *fileSystem_; }
-	AudioPlayer& getAudioPlayer() { return *audioPlayer_; }
-	
-	// log_ 등을 설정하는 함수들...
+	```cpp
+	class Game
+	{
+	public:
+		static Game& instance() { return instance_; }
+		
+		Log& getLog() { return *log_; }
+		FileSystem& getFileSystem() { return *fileSystem_; }
+		AudioPlayer& getAudioPlayer() { return *audioPlayer_; }
+		
+		// log_ 등을 설정하는 함수들...
 
-private:
-	static Game instance_;
-	Log *log_;
-	FileSystem *fileSystem_;
-	AudioPlayer *audioPlayer_;
-};
+	private:
+		static Game instance_;
+		Log *log_;
+		FileSystem *fileSystem_;
+		AudioPlayer *audioPlayer_;
+	};
 
-// 이제 Game 클래스 하나만 전역에서 접근할 수 있다. 다른 시스템에 접근하려면
-Game::instance().getAudioPlayer().play(VERY_LOUD_BANG); // 이렇게 호출하면 된다.
+	// 이제 Game 클래스 하나만 전역에서 접근할 수 있다. 다른 시스템에 접근하려면
+	Game::instance().getAudioPlayer().play(VERY_LOUD_BANG); // 이렇게 호출하면 된다.
 
-// 나중에 Game 인스턴스를 여러 개 지원하도록 구조를 바꿔도 Log, FileSystem, AudioPlayer는 영향을 받지 않는다.
-// 더 많은 코드가 Game 클래스에 커플링 된다는 단점은 있지만, 여러 방법을 조합해 해결 할 수 있다.
-// 이미 Game 클래스를 알고 있는 코드에서는 AudioPlayer를 Game 클래스로부터 받아서 쓰면 되고, 모르는 코드에서는 ㄴ머겨주가나 상위 클래스로부터 얻어서 접근하면 된다.
-```
+	// 나중에 Game 인스턴스를 여러 개 지원하도록 구조를 바꿔도 Log, FileSystem, AudioPlayer는 영향을 받지 않는다.
+	// 더 많은 코드가 Game 클래스에 커플링 된다는 단점은 있지만, 여러 방법을 조합해 해결 할 수 있다.
+	// 이미 Game 클래스를 알고 있는 코드에서는 AudioPlayer를 Game 클래스로부터 받아서 쓰면 되고, 모르는 코드에서는 ㄴ머겨주가나 상위 클래스로부터 얻어서 접근하면 된다.
+	```
 
-- **서비스 중개자로부터 얻기** - 여러 객체에 대한 전역 접근을 제공하는 용도로만 사용하는 클래스를 따로 정의하는 방법도 있다. 16장에서 살펴볼 것이다.
+	- **서비스 중개자로부터 얻기** - 여러 객체에 대한 전역 접근을 제공하는 용도로만 사용하는 클래스를 따로 정의하는 방법도 있다. 16장에서 살펴볼 것이다.
