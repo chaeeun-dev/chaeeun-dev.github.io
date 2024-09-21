@@ -769,3 +769,167 @@ cf) 필드 : 객체의 정보(상태) / 메서드 : 객체의 동작(기능)
 게임 데이터 규모가 일정 이상이 되면 코드와 비슷한 기능이 필요하다. 데이터 모델링에서 많이 사용하는 기법 중 하나가 JSON이다. 키/값 구조로 이루어진 데이터 객체는 맵, 속성목록 등의 용어로 불리고 있다. 
 
 좋은 프로그래머는 중복을 싫어한다. 하지만 멍청한 JSON에는 그런 기능이 없다. 더 영리하게 만들어보자면 중복되는 데이터를 프로토타입으로 지정해서 반복 입력하지 않아도 되게 만들면 된다.
+
+
+### ch6 싱글턴(24.09.18~)
+
+게임 프로그래밍 올인원 강의 듣다가 간단하게 정리했던 static과 singleton 개념 참고 [[**[C++] static과 singleton**](https://chaeeun-dev.github.io/c++/static_and_singleton/)](https://chaeeun-dev.github.io/c++/static_and_singleton/)
+
+싱글턴은 워낙 남용되는 패턴이다 보니 이 장에서는 싱글턴을 피할 방법을 주로 다룬다.
+
+**싱글턴 패턴** - **오직 한 개의 클래스 인스턴스만 갖도록 보장** : 클래스 인스턴스를 싱글턴으로 만들면 인스턴스를 하나만 가질 수 있게 된다. 외부 시스템과 상호작용하면서 전역 상태를 관리하는 클래스에서 쓰이기도 한다. **전역 접근점을 제공** : 하나의 인스턴스만 생성하는 것에 더해서, 싱글턴 패턴은 그 인스턴스를 전역에서 접근할 수 있는 메서드를 제공한다. 누구든지, 어디서든지 우리가 만든 인스턴스에 접근할 수 있다.
+
+이 모든 걸 제공하는 클래스는 이렇게 구현할 수 있다.
+
+```cpp
+class FileSystem
+{
+public:
+	static FileSystem& instance()    // public에 있는 정적 메서드 instance()는 코드 어디에서나 싱글턴 인스턴스에 접근할 수 있게 하고, 싱글턴을 실제로 필요로 할 때까지 인스턴스 초기화를 미루는 역할도 한다. 
+	{
+		// 게으른 초기화
+		if (instance_ == nullptr)
+			instance_ = new FileSystem();
+		
+		return *instance_;
+	}
+	
+private:
+	FileSystem() {}
+	static FileSystem* instance_;    // instance_ 정적 멤버 변수는 클래스 인스턴스를 저장한다. private이기 때문에 밖에서 생성할 수 없다. 
+};
+```
+
+요즘에는 이렇게도 만든다
+
+```cpp
+class FileSystem
+{
+public:
+	static FileSystem& instance()
+	{
+		static FileSystem *instance_ = new FileSystem();
+		return *instance_;
+	}
+	
+private:
+	FileSystem() {}
+};
+
+// C++ 11에서는 정적 지역 변수 초기화 코드가 멀티스레드 환경에서도 딱 한 번 실행돼야 한다. 이 코드는 이전 예제외 달리 스레드 안전(thread-safe)하다.
+```
+
+**싱글턴을 왜 사용하는가?** - **한 번도 사용하지 않는다면 아예 인스턴스를 생성하지 않는다** : 메모리와 CPU 사용량을 줄일 수 있다. **런타임에 초기화된다** : 보통 싱글턴 대안으로 정적(static) 멤버 변수를 많이 사용한다. 그런데 정적 멤버 변수는 자동 초기화(automatic initialization)되는 문제가 있다. 즉, 컴파일러는 main 함수를 호출하기 전에 정적 변수를 초기화하기 때문에 프로그램이 실행된 다음에야 알 수 있는(파일로 읽어들인 설정 값 같은) 정보를 활용할 수 없다. 정적 변수 초기화 순서도 컴파일러가 보장해주지 않는다. 반면 게으른 초기화(최대한 늦게 초기화)는 이 문제를 해결해준다. 초기화 될 쯤에는 클래스가 필요로 하는 정보가 준비되어 있다. 초기화할 때 다른 싱글턴을 참조해도 괜찮다. **싱글턴을 상속할 수 있다** - 파일 시스템 래퍼가 크로스 플래솜을 지원해야 한다면 추상 인터페이스를 만든 뒤, 플랫폼마다 구체 클래스를 만들면 된다.
+
+상위 클래스를 먼저 만든다.
+
+```cpp
+class FileSystem    // cf) 추상 클래스(abstract class) - 추상 클래스는 객체로 만들지 못하고 상속으로써만 사용된다. 
+{
+public:
+	virtual ~FileSystem() {}
+	virtual char* readFile(char* path) = 0;    // cf) 순수 가상 함수(pure virtual function) - 함수 정의X 함수 선언만 이루어짐
+	virtual void writeFile(char* path, char* contents) = 0;
+}
+
+// cf) 추상 클래스를 상속받은 자식 클래스는 무조건 해당 순수 가상 함수를 override해야 한다. 
+// 무조건 재정의를 해야하는 경우에 사용!
+```
+
+[순수 가상 함수 개념 참고 블로그](https://hwan-shell.tistory.com/223)
+
+플랫폼별로 하위 클래스를 정의한다.
+
+```cpp
+class PS3FileSystem : public FileSystem
+{
+public:
+	virtual char* readFile(char* path)
+	{
+		// 소니의 파일 IO API를 사용한다...
+	}
+	
+	virtual void writeFile(char* path, char* contents)
+	{
+		// 소니의 파일 IO API를 사용한다...
+	}
+};
+
+class WIIFileSystem : public FileSystem
+{
+public:
+	virtual char* readFile(char* path)
+	{
+		// 닌텐도의 파일 IO API를 사용한다...
+	}
+	
+	virtual void writeFile(char* path, char* contents)
+	{
+		// 닌텐도의 파일 IO API를 사용한다...
+	}
+};
+```
+
+이제 FileSystem 클래스를 싱글턴으로 만든다.
+
+```cpp
+class FileSystem
+{
+public:
+	static FileSystem& instance();
+	
+	virtual ~FileSystem() {};
+	virtual char* readFile(char* path) = 0;   
+	virtual void writeFile(char* path, char* contents) = 0;
+
+protected:
+	FileSystem() {}
+};
+```
+
+핵심은 인스턴스를 생성하는 부분이다.
+
+```cpp
+FileSystem& FileSystem::instance()
+{
+#if PLATFORM == PLAYSTATION3
+	static FIleSystem *instance = new PS3FileSystem();
+#elif PLATFORM == WII
+	static FIleSystem *instance = new WiiFileSystem();
+#endif
+	return *instance;
+}
+// 이렇게 하면 시스템 래퍼에 필요한 기능을 다 제공하는 셈이다.  안정적으로 작동하고, 어디에서나 접근할 수 있다. 
+```
+
+**싱글턴이 왜 문제라는 거지?** - 짧게 놓고 보면 큰 문제는 없지만, 길게 놓고 보면 비용을 지부랗게 된다. 꼭 필요하지 않은 곳에 싱글턴을 사용하면 다음과 같은 문제가 발생한다.
+
+- **알고보니 전역 변수**
+    - **전역 변수는 코드를 이해하기 어렵게 한다.**
+    - **전역 변수는 커플링을 조장한다** - 인스턴스에 대한 접근을 통제함으로써 커플링을 통제할 수 있다.
+    - **전역 변수는 멀티스레딩 같은 동시성 프로그래밍에 알맞지 않다** - 멀티스레딩을 최대한 활용하지 못하더ㅏ도 최소한 멀티스레딩 방식에 맞게 코드를 만들어야 한다. 무엇인가를 전역으로 만들면 모든 스레드가 보고 수정할 수 있는 메모리 영역이 생기는 것이다. 다른 스레드가 전역 데이터에 무슨 작업을 하는지 모를 때도 있는데, 이러다 보면 교착상태, 경쟁 상태 등 찾기 어려운 스레드 동기화 버그가 생기기 쉽다.
+    
+    그럼 전역 상태 없이 게임 아키텍처를 만드려면 어떻게 할까? 싱글턴은 치료제보다는 진정제에 가깝다. 어느 하나도 싱글턴 패턴으로 해결 할 수 없다. 뭐니 뭐니 해도 싱글턴 패턴이 바로 클래스로 캡슐화된 전역 상태이기 때문이다. 
+    
+- **싱글턴은 문제가 하나뿐일 때도 두 가지 문제를 풀려 든다**
+    
+    인스턴스를 하나로 강제하고 싶을 뿐, 전역 접근을 원하지 않는다면? 반대로 클래스를 전역에서 접근하고 싶지만 인스턴스 수는 여러 개일 수 있다면? (‘한 개의 인스턴스’와 ‘전역 접근’ 중 보통 ‘전역 접근’이 싱글턴 패턴을 선택하는 이유다.)
+    
+- **게으른 초기화는 제어할 수가 없다**
+    
+    가상 메모리도 사용할 수 있고 성능 요구도 심하지 않은 데스크톱 PC에서는 게으른 초기화가 괜찮은 기법이지만, 게임은 다르다. 시스템을 초기화 할 때 메모리 할당, 리소스 로딩 등 할 일이 많다 보니 시간이 꽤 걸릴 수 있다. 청므 소리를 재생할 때 게으른 초기화를 하게 만들면 전투 도중 초기화가 시작되는 바람에 화면 프레임이 떨어지고 버벅거릴 수 있다. 게임에서는 메모리 단편화를 막기 위해 힙에 메모리를 할당하는 방식을 세밀하게 제어하는 게 보통이다. 오디오 시스템이 초기화될 때 상당한 메모리를 힙에 할당하면, 힙 어디에 메모리를 할당할지를 제어할 수 있도록 적절한 초기화 시점을 찾아야 한다. 게으른 초기화 문제를 해결하기 위한 코드를 보자.
+    
+    ```cpp
+    class FileSystem
+    {
+    public:
+    	static FileSystem& instance() { return instance_; }
+    	
+    private:
+    	FileSystem() {}
+    	
+    	static FileSystem instance_;
+    };
+    ```
+    
+    이러면 게으른 초기화 문제를 해결할 수 있지만, 싱글턴이 그냥 전역 변수보다 나은 점을 몇 개 포기해야 한다. 정적 인스턴스를 사용하면 다형성을 사용할 수 없다. 클래스는 정적 객체 초기화 시점에 생성된다. 인스턴스가 필요 없어도 메모리를 해제할 수 없다. 싱글턴 대신 단순한 정적 클래스를 하나 만든 셈이다.
