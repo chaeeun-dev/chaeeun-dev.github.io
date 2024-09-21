@@ -14,15 +14,15 @@ author_profile: false
 특징)
 
 - 클래스의 모든 객체가 동일한 static 변수를 사용한다
-- 사용 예) Player instance들의 ID를 생성할 떄, Archer 의 모든 instance의  attack 속성이 10으로 같아야 할 때 등
+- 사용 예) Player instance들의 ID를 생성할 때, Archer 의 모든 instance의  attack 속성이 10으로 같아야 할 때 등
 - static 멤버 변수는 클래스의 외부에서 정의해야 함
 
 ```jsx
 class Player()
 {
 public: 
-		static int mp;
-		static void f() { }
+	static int mp;
+	static void f() { }
 };
 
 int Player::mp = 10;
