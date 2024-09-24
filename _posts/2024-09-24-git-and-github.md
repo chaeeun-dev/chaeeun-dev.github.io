@@ -1,7 +1,7 @@
 ---
 title: "[GIT & GITHUB] 모두의 깃 & 깃허브"
-date: 2024-09-03 12:50:00 +09:00 
-categories: GIT & GITHUB
+date: 2024-09-24 12:50:00 +09:00 
+categories: GIT
 author_profile: false
 toc : true
 toc_sticky: true
