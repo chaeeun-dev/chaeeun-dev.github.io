@@ -1,7 +1,7 @@
 ---
-title: "[Github] Jekyll 블로그 잔디 안 심어지는 문제 해결"
+title: "[Github Blog] Jekyll 블로그 잔디 안 심어지는 문제 해결"
 date: 2024-09-09 12:50:00 +09:00 
-categories: GITHUB
+categories: GITHUB BLOG
 author_profile: false
 toc : true
 ---
