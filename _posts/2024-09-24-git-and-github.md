@@ -7,6 +7,8 @@ toc : true
 toc_sticky: true
 ---
 
+![image](https://github.com/user-attachments/assets/f45f0254-aab4-4b46-91bb-8f106d48816d)
+
 # 준비하기
 
 
