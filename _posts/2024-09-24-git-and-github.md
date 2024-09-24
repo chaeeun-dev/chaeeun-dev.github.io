@@ -71,3 +71,8 @@ cmd 창 또는 git bash(경로 우클릭→추가 옵션 표시→git bash) - cm
 [source tree 사이트](https://www.sourcetreeapp.com/) 소스트리 설치 
 
 Registration 건너뛰기 → Mercurial 체크 박스 해제 → 이름과 이메일 입력 → SSH키 아니오
+
+
+## [Windows 실습] 깃허브 회원가입(24.09.24)
+
+이미 되어있으니 pass!
