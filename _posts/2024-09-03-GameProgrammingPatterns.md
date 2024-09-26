@@ -1198,3 +1198,24 @@ private:
 	// chargeTime_ 변수는 엎드리기 상태에서만 의미 있다는 점을 분명하게 보여준다
 }
 ```
+
+- **동작을 상태에 위임하기** - 이번에는 Herion 클래스에 자신의 현재 상태 객체 포인터를 추가해, 거대한 다중 선택문은 제거하고 대신 상태 객체에 위임한다.
+
+```cpp
+class Herion
+{
+public:
+	virtual void handleInput(Input input)
+	{
+		state_->handleInput(*this, input);
+	}
+	
+	virtual void update() { state_ ->update(*this); }
+
+	// 다른 메서드들...
+	
+private:
+	HerionState *state_;
+	// 상태를 바꾸려면 state_ 포인터에 HerionState를 상속받는 객체를 할당하기만 하면 된다. 
+}
+```
