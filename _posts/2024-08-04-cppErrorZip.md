@@ -49,3 +49,12 @@ class에서 생성자에 public을 안 붙여서!!!
 해결 과정)
 ![image](https://github.com/user-attachments/assets/b038b923-3906-4405-ada2-460bbdde0a74)
 호출스택에서 TilemapActor.cpp 77번째 줄(TransparentBlt 함수)에서 Sprite::GetTransparent()를 호출했음을 확인
+
+
+## 24.09.29
+
+비주얼 스튜디오 첫 공동작업 하는데 비주얼 스튜디오 화면이 원래 하는 것과 다르게 뜬다. 아직 원인은 모르겠는데 아마 sln 파일이 없어서 그런 것 같다. 
+
+![image](https://github.com/user-attachments/assets/8fbba589-c30d-4c67-8c3e-d9bb0d4ba462)
+
+![image](https://github.com/user-attachments/assets/5eb22145-e7cc-4772-81ef-8eca3de8d446)
