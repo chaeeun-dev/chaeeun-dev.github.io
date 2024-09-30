@@ -24,7 +24,13 @@ toc_sticky: true
 ![image](https://github.com/user-attachments/assets/3bb98d2f-779a-4249-a1a1-0d962966289f)
 
 
-그러면 두 번째 버전에서 다섯 번째 버전을 비교했을 때 달라진 점을 확인하는 방법을 알아보자. ctrl을 누르고 두 번째 버전과 다섯 번째 버전을 클릭한 후, 비교할 파일인 a.txt를 선택하면 된다. 
+그러면 두 번째 버전에서 다섯 번째 버전을 비교했을 때 달라진 점을 확인하는 방법을 알아보자. ctrl을 누르고 두 번째 버전과 다섯 번째 버전을 클릭한 후, 비교할 파일인 a.txt를 선택하면 우측 하단에 버전 차이를 확인할 수 있다.
 
 ![image](https://github.com/user-attachments/assets/195bb269-272d-4fe3-b756-0dfe57e559e5)
 
+
+
+
+---
+
+출처 [인프런 강민철님 모두의 깃&깃허브](https://www.inflearn.com/course/%EB%AA%A8%EB%91%90%EC%9D%98-%EA%B9%83-%EA%B9%83%ED%97%88%EB%B8%8C)
