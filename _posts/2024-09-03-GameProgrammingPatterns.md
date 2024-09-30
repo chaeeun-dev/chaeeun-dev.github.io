@@ -1219,3 +1219,124 @@ private:
 	// 상태를 바꾸려면 state_ 포인터에 HerionState를 상속받는 객체를 할당하기만 하면 된다. 
 }
 ```
+
+**상태 객체는 어디에 둬야 할까?** - 상태를 바꾸려면 state_에 새로운 상태 객체를 할당해야 한다. 상태 패턴은 열거형이 아닌 클래스를 쓰기 때문에 포인터에 저장할 실제 인스턴스가 필요하다. 두 가지 방법을 알아보자.
+
+- **정적 객체** - 상태 객체에 필드(멤버 변수)가 따로 없다면 가상 메서드 호출에 필요한 vtable 포인터만 있는 셈이다. 이 경우 모든 인스턴스가 같기 때문에 인스턴스는 하나만 있으면 된다. 정적 인스턴스를 원하는 곳에 두면 된다. 특별히 다른 곳이 없다면 상위 클래스에 두자
+    
+    ```cpp
+    class HerionState
+    {
+    public:
+    	static StadingState standing;
+    	static DuckingState ducking;
+    	static JumpingState jumping;
+    	static DivingState diving;
+    	// 다른 코드들...
+    };
+    
+    // 각각의 정적 변수가 게임에서 사용하는 상태 인스턴스다. 서 있는 상태에서 점프하게 하려면 이렇게 한다.
+    if (input == PRESS_B)
+    {
+    	heroine.state_ = &HerioineState::jumping;
+    	herione.setGraphics(IMAGE_JUMP);
+    }
+    ```
+    
+
+- **상태 객체 만들기** - 정적 객체만으로 부족할 떄도 있다. 엎드리기 상태에서 chargeTime_ 필드가 있는데 이 값이 주인공마다 다르니 정적 객체로 만들 수 없다. 주인공이 둘 이상일 때 문제가 된다. 이럴 때는 전이할 때마다 상태 객체를 만들어야 한다. 이러면 FSM이 상태별로 인스턴스를 갖게 된다. 새로 상태를 할당했기 떄문에 이전 상태를 해제해야 한다. 상태를 바꾸는 코드가 현재 상태 메서드에 있기 때문에 삭제할 때 this를 스스로 지우지 않도록 주의해야 한다. 이를 위해 handleInput()에서 상태가 바뀔 때에만 새로운 상태를 반환하고, 밖에서는 반환 값에 따라 예전 상태를 삭제하고 새로운 상태를 저장하도록 바꿔보자.
+    
+    ```cpp
+    void Herione::handleInput(Input input)
+    {
+    	HeroineState* state = state_->handleInput(*this, input);
+    	
+    	if (state != NULL)
+    	{
+    		delete state_;
+    		state_ = state;
+    	}
+    }
+    
+    // handleInput 메서드가 새로운 상태를 반환하지 않는다면 현재 상태를 삭제하지 않는다.
+    // 서 있기 상태에서 엎드리기 상태로 전이하려면 새로운 인스턴스를 생성해 반환한다. 
+    
+    HeroineState* StandingState::handleInput(Heroine& heroine, Input input)
+    {
+    	if (input == PRESS_DOWN)
+    	{
+    		// 다른 코드들...
+    		return new DukingState();
+    	}
+    	
+    	// 지금 상태를 유지한다.
+    	return NULL;
+    }
+    ```
+    
+
+→ 이 책의 저자는 가능하다면 매번 상태 객체를 할당하기 위해 메모리와 CPU를 낭비하지 않아도 되는 정적 상태를 쓰는 편이다. 지금부터는 상태 패턴을 ‘상태스럽게’ 만드는 방법을 살펴본다.
+
+**입장과 퇴장** - 상태 패턴의 목표는 같은 상태에 대한 모든 동작과 데이터를 클래스 하나에 캡슐화하는 것이다. 이런 면에서 예제는 아직 부족한 면이 있다. 주인공은 상태를 변경하면서 주인공의 스프라이트도 바꾼다. 지금까지는 이전 상태에서 스프라이트를 변경했다. (e.g. [엎드리기 → 서있기] - 엎드리기 상태에서 주인공 이미지 변경) 이렇게 하는 것보다 **상태에서 그래픽까지 제어**하는 게 바람직하다. 이를 위해 **입장 기능**을 추가한다.
+
+```cpp
+class StandingState : public HeroineState
+{
+public:
+	virtual void enter(Heroine& heroine) { heroine.SetGraphics(IMAGE_STAND); }
+	// ect...
+};
+
+// enter 함수를 호출하도록 상태 변경 코드를 수정한다.
+void Heroine::handleInput(Input input)
+{
+	HeroineState* state = state_->handleInput(*this, input);
+	
+	if (state)
+	{
+		delete state_;
+		state_ = state;
+	}
+	
+	// 새로운 상태의 입장 함수를 호출한다.
+	state_->enter(*this);
+}
+
+// 이제 엎드리기 코드를 더 단순하게 만들 수 있다.
+HeroineState* DuckingState::handleInput(Heroine& heroine, Input input)
+{
+	if (input == RELEASE_DOWN)
+	{
+		return new StandingState();
+	}
+	// ect...
+}
+```
+
+서기 상태로 변경하면 서기 상태가 알아서 그래픽까지 챙긴다. 이제 제대로 캡슐화 되었다. 그 전 상태와 상관없이 항상 같은 입장 코드가 실행된다는 것도 장점이다. **퇴장코드(상태가 새로운 상태로 교체되기 직전에 호출되는)**도 이런 식으로 활용할 수 있다.
+
+**단점은?** - 상태 기계는 엄격하게 제한된 구조를 강제함으로써 복잡하게 얽힌 코드를 정리할 수 있게 해준다. FSM에는 미리 정해 놓은 여러 상태와 현재 상태 하나, 하드코딩 되어 잇는 전이만이 존재한다. 인공지능 같이 복잡한 곳에 적용하는 데 한계가 있다. 다행이 몇 가지 방법이 있다.
+
+**병행 상태 기계** - 주인공이 총을 들어도 달리기, 점프, 엎드리기 등의 동작을 모두 할 수 있어야 한다. 동시에 총도 쏠 수 있어야 한다. FSM 방식을 고수한다면 모든 상태를 서기, 무장 상태로 서기, 점프, 무장 상태로 점프 같이 무장과 비무장에 맞춰 두 개씩 만들어야 한다. 무기를 추가할 수록 조합이 폭발적으로 늘어난다. 해결 방법은 간단한데, 상태 기계를 둘로 나누면 된다. 무엇을 하는가에 대한 상태 기계는 그대로 두고, 무엇을 들고 있는가에 대한 상태 기게를 따로 정의한다. Heroine 클래스는 이들 상태를 **각각** 참조한다.
+
+```cpp
+class Heroine
+{
+	// ect...
+	
+private:
+	HeroineState* state_;
+	HeroineState* equipment_;
+};
+
+// Heroine에서 입력을 상태에 위임할 때에는 입력을 상태 기계 양쪽에 다 전달한다.
+void Heroine::handleInput(Input input)
+{
+	state_->handleInput(*this, input);
+	equipment_->handleInput(*this, input);
+}
+```
+
+각각의 상태 기계는 입력에 따라 동작을 실행하고 독립적으로 상태를 변경할 수 있다. 두 상태 기계가 서로 연관이 없다면 이 방법이 잘 맞는다. 현실적으로 점프 도중 총을 못 쏘거나, 무장한 상태에서는 내려찍기를 못한다든가 하는 식으로 복수의 상태 기계가 상호작용해야 할 수도 있다. 이를 위해 어떤 상태 코드에서 다른 상태 기계의 상태가 무엇인지를 검사한느 지저분한 ㅗ드를 만들 일이 생길 수도 있다. 
+
+**계층형 상태 기계** - 주인공 동작을 만들다 보면 서기, 걷기, 달리기, 미끄러지기 등과 같이 비슷한 상태가 많이 생긴다. 이들 상태에선 모두 B를 누르면 점프하고, 아래 버튼을 누르면 엎드려야 한다. 단순한 상태 기계 구현에서는 이런 코드를 모든 상태마다 중복해 넣어야 한다. 그보다는 한 번만 구현하고 다른 상태에서 재사용하는 게 낫다. 상태 기계가 아니라 객체지향 코드라고 생각해보면, 상속으로 여러 상태가 코드를 공유할 수 있다.
