@@ -7,8 +7,6 @@ toc : true
 toc_sticky: true
 ---
 
-# 깃으로 버전 관리 시작하기
-
 ## [Windows 실습] 로컬 저장소 만들기(24.09.27)
 
 저장소 : 깃으로 버전을 관리할 수 있는 공간
@@ -109,7 +107,11 @@ Sourcetree에서 태그를 붙여보자. 태그를 붙일 커밋에 우클릭을
 
 ![image](https://github.com/user-attachments/assets/604b4029-9168-40be-b9fa-b859e87fdfff)
 
-
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
 
 ---
 
