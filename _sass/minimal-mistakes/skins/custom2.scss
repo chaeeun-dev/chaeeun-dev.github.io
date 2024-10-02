@@ -1,0 +1,36 @@
+/* ==========================================================================
+   Custom2 : Aqua skin Custom
+   ========================================================================== */
+
+/* Colors */
+$gray                       : #1976d2 !default;
+$dark-gray                  : mix(#000, $gray, 40%) !default;
+$darker-gray                : mix(#000, $gray, 60%) !default;
+$light-gray                 : mix(#fff, $gray, 50%) !default;
+$lighter-gray               : mix(#fff, $gray, 90%) !default;
+
+$body-color                 : #ffffff !default;
+$background-color           : #ffffff !default;
+$code-background-color      : $lighter-gray !default;
+$code-background-color-dark : $light-gray !default;
+$text-color                 : #000 !default;
+$border-color               : $lighter-gray !default;
+
+$primary-color              : $gray !default;
+$success-color              : #27ae60 !default;
+$warning-color              : #e67e22 !default;
+$danger-color               : #c0392b !default;
+$info-color                 : #03a9f4 !default;
+
+/* links */
+$link-color                 : $info-color !default;
+$link-color-hover           : mix(#000, $link-color, 25%) !default;
+$link-color-visited         : mix(#fff, $link-color, 25%) !default;
+$masthead-link-color        : $primary-color !default;
+$masthead-link-color-hover  : mix(#000, $primary-color, 25%) !default;
+
+/* notices */
+$notice-background-mix: 90% !default;
+$code-notice-background-mix: 95% !default;
+
+// 각 부분 설명 https://datanovice.tistory.com/entry/Minimal-Mistakes-Github-%EB%B8%94%EB%A1%9C%EA%B7%B8-%EB%B8%94%EB%A1%9C%EA%B7%B8-%EC%8A%A4%ED%82%A8-%ED%85%8C%EB%A7%88-%EB%B3%80%EA%B2%BD
