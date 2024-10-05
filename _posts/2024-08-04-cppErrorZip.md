@@ -7,17 +7,19 @@ author_profile: false
 
 ## 24.08.21
 
-삽질 1) GET_SINGLE(TimeManager)→Init(); 에서 → 이 부분에 “식이 필요합니다” 오류 나서 봤더니 Defines.h에 정의한 매크로에 ;를 붙여서였다. ( #define GET_SINGLE(classname) classname::GetInstance()  ← 여기에 세미콜론 붙여서)
+### 매크로에 ; 붙여서 
 
-삽질 2) 매크로에 단순 오타 Normal을 Nornal로 씀.
+GET_SINGLE(TimeManager)→Init(); 에서 → 이 부분에 “식이 필요합니다” 오류 나서 봤더니 Defines.h에 정의한 매크로에 ;를 붙여서였다. ( #define GET_SINGLE(classname) classname::GetInstance()  ← 여기에 세미콜론 붙여서)
 
+### 오타
 
+매크로에 단순 오타 Normal을 Nornal로 씀.
 
 
 
 ## 24.08.28
 
-### 삽질 1
+### return 값 제대로 확인하지 않아서 
 
 스프라이트 강의() 듣던 중 리소스를 화면에 그리는 코드를 작성헀는데, 제대로된 경로임을 확인하고도 화면에 그림이 로드되지 않는 상황이 발생했다.
 
@@ -30,7 +32,7 @@ author_profile: false
 ![image](https://github.com/user-attachments/assets/ddb99b76-fa0f-4de1-8086-23c27e85f78b)
 
 
-### 삽질 2
+### class에서 public 안 붙여서 
 
 ![image](https://github.com/user-attachments/assets/401fc8b9-913f-4fff-8aca-978e13052a50)
 
@@ -41,6 +43,8 @@ class에서 생성자에 public을 안 붙여서!!!
 
 
 ## 24.09.08
+
+### 미해결 오류(프로젝트를 새로 파서 묻혀진 오류...)
 
 ![image](https://github.com/user-attachments/assets/5a6ab72d-1c8e-46f3-9494-a213bf69e225)
 
@@ -53,7 +57,9 @@ class에서 생성자에 public을 안 붙여서!!!
 
 ## 24.09.30
 
-오류) C1083 미리 컴파일된 헤더 파일을 열 수 없습니다. 
+### 미리 컴파일된 헤더 pch
+
+C1083 미리 컴파일된 헤더 파일을 열 수 없습니다. 
 
 ![image](https://github.com/user-attachments/assets/e0ca05ea-48bc-498b-b5a7-605d1edfbaf5)
 
@@ -66,3 +72,29 @@ class에서 생성자에 public을 안 붙여서!!!
 참고 블로그 [[C/C++] 미리 컴파일된 헤더](https://noirstar.tistory.com/12)
 
 
+## 24.10.05
+
+### thread에서 join() 함수 안 써서
+
+오류) 쓰레드 관련 코드를 실행했는데, "abort() has been called" 오류가 발생했다.
+
+```cpp
+	std::thread t1(Add);
+	std::thread t2(Sub);
+```
+
+![image](https://github.com/user-attachments/assets/ff74626a-0cdb-4dfb-9654-c9c666e7f469)
+
+'다시 시도(R)'를 누르면 오류 위치를 알 수 있다(VS가 자동으로 중단점을 트리거 해줌).
+
+![image](https://github.com/user-attachments/assets/1d64087f-7e23-4eef-af3b-59742c4920c0)
+
+해결) 쓰레드 실행하고 join() 함수 안 넣어서 오류 발생했던 것이다. 확인 꼼꼼히 하자!! 그래도 문제가 발생했을 때 '다시 시도'를 누르면 중단점으로 간다는 걸 처음 알게됐다.
+
+```cpp
+	std::thread t1(Add);
+	std::thread t2(Sub);
+
+	t1.join();
+	t2.join();
+```
