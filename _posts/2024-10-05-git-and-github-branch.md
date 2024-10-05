@@ -55,15 +55,15 @@ C 회사가 제작한 프로그램을 여러 회사에 납품한다.
 
 **[예시1 문제 해결]** 
 
-1. 브랜치를 나눈다.
+- 브랜치를 나눈다.
 
 ![image](https://github.com/user-attachments/assets/6b0e52aa-4084-4013-8698-f6ca4aba0724)
 
-2. 각자의 브랜치에서 작업한다.
+- 각자의 브랜치에서 작업한다.
 
 ![image](https://github.com/user-attachments/assets/72bec97e-ac88-4cf2-94e5-dba9b5c8d52d)
 
-3. 나눈 브랜치를 합친다.
+- 나눈 브랜치를 합친다.
 
 ![image](https://github.com/user-attachments/assets/a823d858-ff06-4cf6-9042-ccf0fa72577f)
 
