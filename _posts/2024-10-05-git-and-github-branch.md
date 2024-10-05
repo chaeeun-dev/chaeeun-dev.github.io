@@ -9,7 +9,8 @@ toc_sticky: true
 
 ## [이론] 브랜치란 : 브랜치를 나누어 관리하는 이유(24.10.05)
 
-![image](https://github.com/user-attachments/assets/6c70e805-d296-4861-92e7-59715532560d)
+![image](https://github.com/user-attachments/assets/9a848bfd-a02f-4ea7-8b6d-7bbab4e0c58d)
+
 
 브랜치 : 버전을 여러 개의 흐름으로 관리하는 방법, <span style="background-color:#fff5b1"> 버전의 분기 </span>
 
