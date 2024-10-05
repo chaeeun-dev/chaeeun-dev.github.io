@@ -4,6 +4,7 @@ date: 2024-09-09 12:50:00 +09:00
 categories: GITHUB_BLOG
 author_profile: false
 toc : true
+toc_sticky: true
 ---
 
 ## 문제

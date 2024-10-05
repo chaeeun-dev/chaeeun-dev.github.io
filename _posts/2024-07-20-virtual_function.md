@@ -3,6 +3,8 @@ title: "[C++] virtual 함수와 override"
 date: 2024-07-20 11:25:00 +09:00 
 categories: C++
 author_profile: false
+toc : true
+toc_sticky: true
 ---
 
 ### virtual 함수

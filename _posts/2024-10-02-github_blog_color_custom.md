@@ -4,6 +4,7 @@ date: 2024-10-02 12:50:00 +09:00
 categories: GITHUB_BLOG
 author_profile: false
 toc : true
+toc_sticky: true
 ---
 
 블로그 색을 내가 좋아하는 색으로 바꾸고 싶어서 custom 방법을 알아봤다. 일단 기존 블로그는 이렇게 생겼다.

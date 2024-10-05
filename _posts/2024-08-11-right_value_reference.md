@@ -3,6 +3,8 @@ title: "[C++] r-value, move constructor"
 date: 2024-08-11 12:50:00 +09:00 
 categories: C++
 author_profile: false
+toc : true
+toc_sticky: true
 ---
 
 

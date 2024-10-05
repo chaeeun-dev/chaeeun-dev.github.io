@@ -3,6 +3,8 @@ title: "[BOOK] 책 모음"
 date: 2024-08-08 12:50:00 +09:00 
 categories: BOOK
 author_profile: false
+toc : true
+toc_sticky: true
 ---
 
 ## C++ 책, 사이트
