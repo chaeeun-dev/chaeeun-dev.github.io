@@ -54,3 +54,166 @@ toc_sticky: true
 **교체 연산 자체에 시간이 걸린다** - 이중 버퍼 패턴에서는 버퍼에 값을 다 입력했다면 버퍼를 **교체**해야 한다. 교체 연산은 원자적atomic이어야 한다. 즉 교체 중에는 두 버퍼 **모두에** 접근할 수 없어야 한다. 대부분 포인터만 바꿔서 충분히 빠르지만 혹시 값을 쓰는 것보다 교체에 오랜 시간이 걸린다면 이중 버퍼 패턴이 아무 도움이 되지 않는다.
 
 **버퍼 두 개가 필요하다** - 상태를 메모리 버퍼 **두 곳**에 항상 쌍으로 가지고 있어야 하기 때문에 메모리가 부족한 기기에서는 굉장히 부담이 될 수 있다. 메모리가 부족해 버퍼를 두 개 만들기 어렵다면 이중 버퍼 패턴을 포기하고 상태를 변경하는 동안 밖에서 접근하지 못하게 할 방법을 찾아야 한다.
+
+
+## 8.6 예제 코드
+
+프레임 버퍼에 픽셀을 그릴 수 있는 아주 단순한 그래픽 시스템을 만들 것이다. 요즘 콘솔이나 PC에서는 비디오 드라이버에서 지원해주지만, 직접 구현해보자.
+
+```cpp
+class Framebuffer
+{
+public:
+    Framebuffer() { clear(); }
+    
+    void clear()    // 전체 버퍼를 흰색으로 채운다.
+    {
+        for (int i = 0; i < WIDTH * HEIGHT; i++)
+        pixels_[i] = WHITE;
+    }
+
+    void draw(int x, int y)     // 픽셀에 검은색을 입력한다. 
+    {
+        pixels_[(WIDTH * y) + x] = BLACK;
+    }
+
+    const char* getPixels() { return pixels_; }     
+    // 픽셀 데이터를 담고 있는 메모리 배열에 접근한다.
+    // 비디오 드라이버가 화면을 그리기 위해 버퍼 값 읽을 때 호출한다.
+
+private:
+    static const int WIDTH = 160;
+    static const int HEIGHT = 120;
+    
+    char pixels_[WIDTH * HEIGHT];
+};
+```
+
+이걸 Scene 클래스에 넣어 여러 번 draw()를 호출해 버퍼에 원하는 그림을 그린다.
+
+```cpp
+class Scene
+{
+public:
+    void draw()
+    {
+        buffer_.clear();
+        buffer_.draw(1, 1);
+        buffer_.draw(4, 1);
+        buffer_.draw(1, 3);
+        buffer_.draw(2, 4);
+        buffer_.draw(3, 4);
+        buffer_.draw(4, 3); 
+    }
+
+    Framebuffer& getBuffer() { return buffer_; }
+private:
+    Framebuffer buffer_;
+}
+
+```
+
+마인크래프트에 나올 것 같은 얼굴..
+
+![image](https://github.com/user-attachments/assets/5323837a-b4e8-4dc0-8c07-9c6b72f97731)
+
+게임 코드는 매 프레임마다 어떤 장면을 그려야 할지를 알려준다. 먼저 버퍼를 지운 뒤 한 번에 하나씩 그리고자 하는 픽셀을 찍는다. 동시에 비디오 드라이버에서 내부 버퍼에 접근할 수 있도록 getBuffer()를 제공한다. 이것만으로는 문제가 생길 수 있다. 비디오 드라이버가 **아무 때나** getPixel()를 호출해 버퍼에 접근할 수 있기 때문이다. 
+
+```cpp
+    void draw()
+    {
+        buffer_.clear();
+        buffer_.draw(1, 1);
+        buffer_.draw(4, 1);
+        // 이 때 비디오 드라이버가 픽셀 버퍼 전체를 읽을 수도 있다.
+        buffer_.draw(1, 3);
+        buffer_.draw(2, 4);
+        buffer_.draw(3, 4);
+        buffer_.draw(4, 3); 
+    }
+```
+
+이렇게 되면 화면 전체가 그려지지 않거나, 화면이 깜빡 거리는flicking 화면을 보게 된다. 이중 버퍼로 해결해보자.
+
+```cpp
+class Scene
+{
+    Scene() : current_(&buffers_[0], next_(&buffers_[1])) {}
+
+    void draw()
+    {
+        next_->clear();
+        next_->draw(1, 1);
+        // ...
+        next_->draw(4, 3);
+        swap();
+    }
+
+    Framebuffer& getBuffer() { return *current_; }
+
+private:
+    void swap()     // 버퍼 포인터를 교체한다.
+    {
+        Framebuffer* temp = current_;
+        current_ = next_;
+        next_ = temp;
+    }
+
+    Framebuffer buffers_[2];
+    Framebuffer* current_;
+    Framebuffer* next_;
+}
+```
+
+이제 Scene 클래스에는 버퍼 두개가 buffers_ 배열에 들어 있다. 버퍼에 접근할 때는 배열 대신 next_와 current_ 포인터 멤버 변수로 접근한다. 렌더링 할 때는 next_ 포인터가 가리키는 다음 버퍼에 그리고, 비디오 드라이버는 current_ 포인터로 현재 버퍼에 접근해 픽셀을 가져온다. 이러면 비디오 드라이버가 작업 중인 버퍼에 접근하는 걸 막을 수 있다. 장면을 다 그린 후에 swap()을 호출하면 된다. 이제 비디오 드라이버가 getBuffer()를 호출하면 이전에 화면에 그리기 위해 사용한 버퍼 대신 방금 그린 화면이 들어 있는 버퍼를 얻게 된다.  
+
+
+**그래픽스 외의 활용법** - 변경 중인 상태에 접근하지 못하도록 하는 게 이중 버퍼의 핵심이다. 원인 한 가지는 다른 스레드나 인터럽트interrupt에서 상태에 접근하는 경우이다(이미 그래픽스 예제에서 살펴봄). 다른 한 가지는 **어떤 상태를 변경하는 코드**가 동시에 지금 변경하려는 상태를 읽는 경우이다. 특히 물리나 인공지능 같이 객체가 서로 상호작용할 때 쉽게 볼 수 있다. 이중 버퍼가 도움이 될 수 있다. 
+
+**멍청한 인공지능** - 슬랩스틱 코미디 기반 게임에 들어갈 행동 시스템을 만들어보자. 배우Actor를 위한 상위 클래스를 먼저 만들자.
+
+```cpp
+class Actor
+{
+public:
+    Actor() : slapped_(false) {}
+
+    virtual ~Actor() {}
+    virtual void update() = 0;
+    
+    void reset() { slapped_ = false; }    
+    void slap() { slapped_ = true; }
+    bool wasSlapped() {}
+
+private:
+    bool slapped_;
+};
+```
+
+매 프레임마다 배우 객체의 update()를 호출한다. 유저 입장에서 **모든 배우가 한 번에 업데이트되는 것처럼 보여야 한다.** 배우는 서로 상호작용(여기선 돌아가면서 서로 때리는 것)할 수 있다. update()가 호출될 때 배우는 다른 배우 객체의 slap()을 호출해 때리고, wasSlapped()를 통해 맞았는지 확인할 수 있다.
+
+배우들이 상호작용할 수 있는 무대stage를 제공하자.
+
+```cpp
+class Stage
+{
+public:
+    void add(Actor* actor, int idex) { actors_[index] = actor; }
+    void update()
+    {
+        for (int i = 0; i < NUM_ACTORS; i++)
+        {
+            actors_[i]->update();
+            actors_[i]->reset();
+
+            // 배우가 맞았을 때 한 번만 반응하기 위해 맞은 상태(slapped_)를 update() 후에 바로 reset한다.
+        }
+    }
+
+private:
+    static const int NUM_ACTORS = 3;
+    Actor* actors_[NUM_ACTORS];
+};
+```
+
+stage 클래스는 배우를 추가할 수 있고, 관리하는 배우를 전체 업데이트 할 수 있는 update()메서드를 제공한다. 유저 입장에서는 배우들이 한 번에 움직이는 것처럼 보이지만 내부적으로는 하나씩 업데이트된다. 
