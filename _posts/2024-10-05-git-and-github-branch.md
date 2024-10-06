@@ -81,6 +81,48 @@ C 회사가 제작한 프로그램을 여러 회사에 납품한다.
 버전 별로 출시하고, 각 버전에 대한 요구 사항이 생기면 그때그때 브랜치를 나눠 수정하면 된다. 복사본을 일일이 만드는 것 보다 메모리도 적게 들고, 실수도 줄일 수 있고, 작업도 훨씬 간편해진다.
 
 
+## [이론] 브랜치 나누기(24.10.06)
+
+브랜치 이름 - 최초의 브랜치, master 브랜치(github에서는 main 브랜치라고 한다)
+
+가장 기본적인, 최초의 브랜치이다. 지금까지 만든 커밋들은 모두 기본적으로 master 브랜치에 속해 있다(내 블로그 빼고!).
+
+
+예를 들어 이 그림을 보자. 
+
+![image](https://github.com/user-attachments/assets/5ac5c824-d4d4-4e88-b3a7-f327529c7f3d)
+
+master 브랜치에는 커밋이 <span style="color:red"> 세 개 </span>, foo 브랜치에는 커밋이 <span style="color:red"> 다섯 개 </span> 쌓여 있다.
+
+![image](https://github.com/user-attachments/assets/18352b97-9dfb-47b8-9314-8af35de2a616)
+
+master 브랜치에는 커밋이 <span style="color:red"> 세 개 </span>, foo 브랜치에는 커밋이 <span style="color:red"> 다섯 개 </span>, bar 브랜치에는 커밋이 <span style="color:red"> 여섯 개 </span> 쌓여 있다.
+
+
+### 브랜치 이름을 어떻게 지을까? 
+
+![image](https://github.com/user-attachments/assets/d72cf3a0-cbbb-4624-9140-b4814aadba46)
+
+강제하진 않지만 막 짓는 것보다 목적에 맞게 브랜치 이름을 설정하는 게 좋다.
+
+
+### 특정 브랜치에서 작업하기 : HEAD와 체크아웃
+
+HEAD
+- 현재 작업 중인 브랜치의 커밋을 가리킨다.
+- 일반적으로 현재 작업 중인 브랜치의 <span style="color:red"> 최신 커밋 </span>을 가리킨다.
+- 한 마디로 "내가 지금 어디에서 작업 중인가"를 가리킨다.
+
+![image](https://github.com/user-attachments/assets/51ae9af8-b3bf-4671-af69-c55b8b6b99c4)
+
+HEAD가 bar 브랜치의 6번 커밋을 가리키고 있다 ➡️ 현재 여섯 개의 커밋이 쌓여 있고, 최신 커밋을 bar 6번 커밋이다.
+
+HEAD를 요리조리 옮겨서 작업 브랜치를 바꿀 수 있는데, 이 걸 체크 아웃이라고 한다.
+
+체크 아웃(checkout)
+- 특정 브랜치에서 작업할 수 있도록 환경을 바꾸는 것이다.
+- HEAD의 위치를 특정 브랜치의 최신 커밋으로 옮긴다.
+
 
 &nbsp;
 &nbsp;
