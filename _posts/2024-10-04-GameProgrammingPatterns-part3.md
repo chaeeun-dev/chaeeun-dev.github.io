@@ -217,3 +217,15 @@ private:
 ```
 
 stage 클래스는 배우를 추가할 수 있고, 관리하는 배우를 전체 업데이트 할 수 있는 update()메서드를 제공한다. 유저 입장에서는 배우들이 한 번에 움직이는 것처럼 보이지만 내부적으로는 하나씩 업데이트된다. 
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+
+---
+
+출처 [게임 프로그래밍 패턴](https://www.hanbit.co.kr/store/books/look.php?p_code=B4342659595)
