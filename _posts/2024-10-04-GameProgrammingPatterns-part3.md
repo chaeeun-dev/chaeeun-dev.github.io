@@ -1,5 +1,5 @@
 ---
-title: "[GPP] 게임 프로그래밍 패턴 Part Ⅲ 순서 페턴"
+title: "[GPP] 게임 프로그래밍 패턴 Part Ⅲ 순서 패턴"
 date: 2024-10-04 12:50:00 +09:00 
 categories: GPP
 author_profile: false
