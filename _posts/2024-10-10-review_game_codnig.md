@@ -74,3 +74,68 @@ GetMessage 함수는 메시지를 큐에서 가져왔으면 큐에서 해당 메
 &nbsp;
 
 ## 💡프레임워크 제작
+
+### 📌int 자료형
+
+✅int 자료형
+
+| Type | Min value | Max value |
+| --- | --- | --- |
+| int8 | -128 | 127 |
+| int16 | -32768 | 32767 |
+| int32 | -2147483648 | 2147483647 |
+| int64 | -2^63 | 2^63 - 1 |
+
+
+✅uint 자료형
+
+| Type | Min value | Max value |
+| --- | --- | --- |
+| uint8 | 0 | 255 |
+| uint16 | 0 | 65535 |
+| uint32 | 0 | 4294967295 |
+| uint64 | 0 | 2^64 - 1 |
+
+
+참고 사이트 [Data types](https://doc.embedded-wizard.de/uint-type?v=13.00)
+
+---
+
+### 📌미리 컴파일된 헤더
+
+- pch 파일을 생성하고 자주 컴파일하는 헤더를 include한다.
+- 프로젝트 속성에서 '미리 컴파일 된 헤더 파일'에 'pch.h'를 입력하고 '사용(/Yu)'으로 수정한다.
+- pch.cpp 속성에서 '미리 컴파일 된 헤더'에 '만들기(/Yc)'로 수정한다.
+- 여기서 윈도우 템플릿 파일에 헤더를 <span style="color:red"> 맨 위에 </span> 작성해야 한다!
+
+(이거 안 해서 오류를 겪었기에.. 오류 게시글에도 정리해뒀었다.)
+
+---
+
+### 📌캐스팅 4총사
+
+static_cast와 dynamic_cast가 핵심이다.
+1. static_cast
+2. dynamic_cast
+3. const_cast
+4. reinterpret_cast
+
+**static_cast** : 타입 원칙에 비춰볼 때 상식적인 캐스팅만 허용해준다.
+
+- int -> float
+
+```cpp
+int hp = 100;
+int maxHp = 200;
+
+float ratio = hp / maxHp;   // 결과 0, 오른쪽 '/' 연산부터 처리
+float ratio = (float)hp / maxHp;    // 결과 0.5, 캐스팅 처리 완료
+```
+
+- Player* -> Knight
+
+---
+
+&nbsp;
+
+&nbsp;
