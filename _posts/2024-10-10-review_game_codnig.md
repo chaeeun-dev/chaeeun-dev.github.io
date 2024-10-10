@@ -114,25 +114,40 @@ GetMessage 함수는 메시지를 큐에서 가져왔으면 큐에서 해당 메
 
 ### 📌캐스팅 4총사
 
-static_cast와 dynamic_cast가 핵심이다.
+**캐스팅(형변환)이란?** 
+
+하나의 자료형을 다른 자료형으로 변환하는 것이다. C 스타일 캐스팅은 의도가 불분명하여 에러가 발생할 수 있고, 의도와 다르게 결과가 나올 수 있다. 따라서 C++은 용도에 따라 사용하도록 4가지 캐스팅으로 나누어 도입하였고 C 스타일보다 안전하게 캐스팅할 수 있게 되었다.
+
+4총사 중에서 static_cast와 dynamic_cast가 핵심이지만 4개 다 중요하다.
 1. static_cast
 2. dynamic_cast
 3. const_cast
 4. reinterpret_cast
+
+&nbsp;
 
 **static_cast** : 타입 원칙에 비춰볼 때 상식적인 캐스팅만 허용해준다.
 
 - int -> float
 
 ```cpp
-int hp = 100;
-int maxHp = 200;
+    int hp = 100;
+    int maxHp = 200;
 
-float ratio = hp / maxHp;   // 결과 0, 오른쪽 '/' 연산부터 처리
-float ratio = (float)hp / maxHp;    // 결과 0.5, 캐스팅 처리 완료
+    float ratio = hp / maxHp;   // 결과 0, 오른쪽 '/' 연산부터 처리
+    float ratio = (float)hp / maxHp;    // 결과 0.5, 캐스팅 처리 완료
 ```
 
-- Player* -> Knight
+- Player* -> Knight(Knight는 Player를 상속받음)
+
+```cpp
+    Knight* k = new Knight();
+    Player* p = k;
+
+    Knight* k2 = p; // 위험한 작업이니 에러 발생함
+    Knight* k2 = (Knight*)p;    // 뭘 하는지 알고 괜찮으니 통과해줘
+```
+
 
 ---
 
