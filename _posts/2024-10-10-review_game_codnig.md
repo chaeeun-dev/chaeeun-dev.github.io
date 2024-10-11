@@ -167,7 +167,7 @@ GetMessage 함수는 메시지를 큐에서 가져왔으면 큐에서 해당 메
 
 Knight -> Player -> Knight 로 캐스팅 하는 건 괜찮은데,
 
-Archer -> Player -> Knight 로 캐스팅한다면 위험하다. <span style="color:red"> memory leak </span>이 일어나는 것!
+Archer -> Player -> Knight 로 캐스팅한다면 위험하다. <span style="color:red"> memory leak </span>이 일어날 수 있다.
 
 안전한 방법은 아니다. 위험하지만, 뭘 하는지 알고 있다고 안심시키는 것. 
 
@@ -201,6 +201,8 @@ virtual이 하나라도 있어야 활용할 수 있다. ➡️ RTTI(RunTime Type
     };
     
 ```
+
+&nbsp;
 
 ✅virtual 함수
 
