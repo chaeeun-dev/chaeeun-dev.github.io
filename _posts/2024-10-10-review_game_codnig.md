@@ -520,6 +520,8 @@ Function for_each(InputIterator first, InputIterator last, Function fn);
 
 ### 📌벡터
 
+&nbsp;
+
 스칼라 vs 벡터
 - 스칼라 : 고정, 변하지 않는 값.
 - 벡터 : 크기와 방향을 가진 값. (목적지 - 시작점)
@@ -543,7 +545,7 @@ Function for_each(InputIterator first, InputIterator last, Function fn);
 1. 스마트 포인터
 2. 오브젝트 ID
 
-이 방법으로 메모리 leak을 방지할 수 있다. 지금은 ID로 관리하는데 ObjectManager에서 ID로 객체를 구별하여 삭제한다.
+이 방법으로 메모리 leak을 방지할 수 있다. 지금은 ID로 관리하는데 ObjectManager에서 ID로 객체를 구별하여 삭제하면 된다.
 
 
 &nbsp;
@@ -552,9 +554,66 @@ struct로 Vector 자료형을 만들고, operator도 구현한다.
 
 ![image](https://github.com/user-attachments/assets/5903f9cb-58b7-40e5-97f8-28bb5b121769)
 
+(코드가 길어서 앞에만 캡쳐했다.)
 
+&nbsp;
 
+### 📌내적(dot product)
 
+&nbsp;
+
+내적의 결과는 방향이 없는 스칼라 값이다.
+
+v1 = (x1, y1), v2 = (x2, y2)
+
+v1⋅v2 = |v1||v2|cosθ = x1x2 + y1y2
+
+내적 응용
+1. dot == 0 이면 직각
+2. dot > 0 이면 θ < 90도
+3. dot < 0 이면 θ > 90도
+4. v1, v2 모두 단위벡터라면, 내적 결과는 cosθ
+5. v1에 대한 v2의 성분을 구하려면(projection 투영)
+
+&nbsp;
+
+Vector 자료형에 내적 연산을 추가한다.
+
+```cpp
+	float Dot(Vector other)
+	{
+		return x * other.x + y * other.y;
+	}
+```
+
+&nbsp;
+
+### 📌외적(cross product)
+
+&nbsp;
+
+외적의 결과는 벡터이다. 외적은 순서가 바뀌면 방향이 반대로 바뀐다. 
+
+v1 = (x1, y1), v2 = (x2, y2)
+
+v1 x v2 = (|v1||v2|sinθ)k = (x1y2 - x2y1)k
+
+외적 응용
+1. 시계 / 반시계 방향 체크
+2. 방향을 체크해 범위에서 벗어난 걸 체크
+
+&nbsp;
+
+Vector 자료형에 외적 연산을 추가한다.
+
+```cpp
+	float Cross(Vector other)
+	{
+		return x * other.y - y * other.x;
+	}
+```
+
+&nbsp;
 
 ---
 
@@ -570,6 +629,8 @@ struct로 Vector 자료형을 만들고, operator도 구현한다.
 
 24.10.13 Object 설계의 Object 매니저(STL 함수 정리), 기존 프로젝트에 pch 파일 오류 났는데 아직 해결 못함!
 
+24.10.14 pch 문제 해결 완료, 리소스 ~ 게임 수학의 외적까지
+
 &nbsp;
 
 check-list
@@ -581,14 +642,14 @@ check-list
     - [x]  프레임워크 제작(24.10.10~12)
     - [x]  Scene과 SceneManager(24.10.12)
     - [x]  더블 버퍼링(24.10.12)
-    - [x]  오브젝트 설계(24.10.12)
+    - [x]  오브젝트 설계(24.10.12 ~ 13)
     - [x]  리소스(24.10.14)
     - [x]  리소스 매니저(24.10.14)
 - [ ]  게임 수학
     - [x]  삼각함수(24.10.14)
     - [x]  벡터(24.10.14)
-    - [ ]  내적(24.10.14)
-    - [ ]  외적(24.10.14)
+    - [x]  내적(24.10.14)
+    - [x]  외적(24.10.14)
     - [ ]  역삼각함수(24.10.15)
     - [ ]  포트리스 모작(24.10.15)
     - [ ]  속도와 가속도(24.10.15)
