@@ -516,11 +516,51 @@ Function for_each(InputIterator first, InputIterator last, Function fn);
 
 게임에서의 삼각함수 활용 - 슈팅 게임에서 포신의 각도, 각도에 따라서 미사일이 어떻게 날아갈지(x 성분에는 cos(angle) 값 더해주고, y 성분에는 sin(angle) 값을 더해줌) 등
 
+&nbsp;
+
+### 📌벡터
+
+스칼라 vs 벡터
+- 스칼라 : 고정, 변하지 않는 값.
+- 벡터 : 크기와 방향을 가진 값. (목적지 - 시작점)
+
+법칙
+- 교환법칙 v1 + v2 = v2 + v1
+- 결합법칙 (v1 + v2) + v3 = v1 + (v2 + v3)
+
+벡터의 크기 구하기 - 피타고라스 개념으로 동일하게 구하면 됨.
+
+정규화 : 단위 벡터로 만드는 것. 방향만 남김.
+
+게임에서의 벡터? 미사일을 던질 때 유도탄 만들기
+
+&nbsp;
+
+✅미사일에서 포인터를 썼을 때 문제점
+
+여러 개의 미사일을 한 번에 쐈을 때 하나의 미사일이 몬스터와 충돌하여 삭제되면 나머지 미사일은 타겟이 삭제 됐으니 원래 가던 방향으로 가버린다. 그래서 포인터를 생포인터로 넣지 말고
+
+1. 스마트 포인터
+2. 오브젝트 ID
+
+이 방법으로 메모리 leak을 방지할 수 있다. 지금은 ID로 관리하는데 ObjectManager에서 ID로 객체를 구별하여 삭제한다.
+
+
+&nbsp;
+
+struct로 Vector 자료형을 만들고, operator도 구현한다.
+
+![image](https://github.com/user-attachments/assets/5903f9cb-58b7-40e5-97f8-28bb5b121769)
+
+
+
+
+
 ---
 
 &nbsp;
 
-## ⛅날짜별 공부한 내용 
+## ⛅날짜별 공부한 내용 & check-list
 
 24.10.10 기본 템플릿 분석 ~ 프레임워크 제작의 캐스팅 4총사까지
 
@@ -529,6 +569,10 @@ Function for_each(InputIterator first, InputIterator last, Function fn);
 24.10.12 프레임워크 제작의 매니저 ~ Object 설계의 Object 클래스까지
 
 24.10.13 Object 설계의 Object 매니저(STL 함수 정리), 기존 프로젝트에 pch 파일 오류 났는데 아직 해결 못함!
+
+&nbsp;
+
+check-list
 
 10월 14, 15, 16, 17, 18, 19, 20, 21
 
@@ -542,7 +586,7 @@ Function for_each(InputIterator first, InputIterator last, Function fn);
     - [x]  리소스 매니저(24.10.14)
 - [ ]  게임 수학
     - [x]  삼각함수(24.10.14)
-    - [ ]  벡터(24.10.14)
+    - [x]  벡터(24.10.14)
     - [ ]  내적(24.10.14)
     - [ ]  외적(24.10.14)
     - [ ]  역삼각함수(24.10.15)
@@ -566,4 +610,6 @@ Function for_each(InputIterator first, InputIterator last, Function fn);
 
 &nbsp;
 
-필요한 개념 정리 - 동적 바인딩, 싱글톤(메크로 함수에서), ~~전방선언~~
+## ➕추가로 정리할 개념들
+
+동적 바인딩, 싱글톤(메크로 함수에서), ~~전방선언~~
