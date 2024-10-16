@@ -9,6 +9,9 @@ toc_sticky: true
 
 &nbsp;
 
+프로젝트를 본격적으로 진행하기 전에 복습이 필요한 것 같아 직접 코드를 작성하고 부족한 개념을 복습하고자 한다. [Practice_GameCoding](https://github.com/chaeeun-dev/Practice_GameCoding) 이 레파지토리에서 연습하고 이 포스트에 글을 정리할 것이다.😎
+
+
 ## 💡기본 템플릿(Win API) 분석
 
 ### 📌HDC, HWND
@@ -706,9 +709,43 @@ Intermediate - 중간에 생성되는 결과물
 
 솔루션 속성 - 일반 - 중간 디렉터리 - 출력 디렉터리 내용을 복사하고 $(SolutionDir)Intermediate$(Platform)\$(Configuration)\로 수정한다.
 
+&nbsp;
+
+---
+
+&nbsp;
 
 ## 💡스프라이트
 
+### 📌Sprite
+
+Sprite : 2D 게임의 그래픽을 말한다. 캐릭터나 아이템, 배경 등의 이미지를 나타낸다.
+
+&nbsp;
+
+---
+
+### 📌Object vs Resource
+
+&nbsp;
+
+Resource는 하나만 존재해서 공유해서 사용한다! 공공재 느낌.
+
+&nbsp;
+
+---
+
+### 📌Texture
+
+이미지 파일을 텍스처라고 한다.
+
+ResourceBase를 상속받아 Texture class를 생성한다.
+
+&nbsp;
+
+Transparent 함수 - 과거 bmp 파일에는 RGB 값이 들어있는데, 최근에는 RGB에 알파가 더해진 RGBA를 사용한다. 최근 리소스라면 transparent 함수는 사용하지 않아도 되는데 리소스가 과거 파일이라 알파값을 이 함수를 사용해 따로 넣어줘야 한다. 
+
+---
 
 &nbsp;
 
