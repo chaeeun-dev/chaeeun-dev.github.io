@@ -674,7 +674,41 @@ Render 함수에서 방향을 체크한 후 방향에 따라 리소스를 그냥
 
 UI에 데이터와 관련된 정보(Player의 스테미나, 사격 각도, 시간 등)를 묶어서 관리하면 안 된다. 규모가 커질수록 사양에 대한 문제가 커질 수 있다. 그래서 이중으로 관리하더라도 데이터는 꼭 분리해서 관리해야 한다. 
 
+&nbsp;
+
 ---
+
+## 💡2D 프레임워크 설계
+
+### 📌obj 파일이란?
+
+&nbsp;
+
+오브젝트 파일(object file)은 컴파일이 끝나 기게어로 변환된 파일을 말한다. 오브젝트 파일의 확장자는 .o나 .obj가 된다. [TCP SCHOOL.com](https://www.tcpschool.com/cpp/cpp_intro_programming#google_vignette)
+
+![image](https://github.com/user-attachments/assets/441cabd7-42ac-4c55-a243-0583e97ef1f4)
+
+&nbsp;
+
+---
+
+### 📌폴더 정리
+
+&nbsp;
+
+Resources folder - Resource 관리
+Binaries folder - 빌드 결과물
+Intermediate - 중간에 생성되는 결과물
+
+&nbsp;
+
+솔루션 속성 - 일반 - 출력 디렉터리 - $(SolutionDir)Binaries$(Platform)\$(Configuration)\로 수정하여 출력물이 Binaries folder에 들어가도록 한다.
+
+솔루션 속성 - 일반 - 중간 디렉터리 - 출력 디렉터리 내용을 복사하고 $(SolutionDir)Intermediate$(Platform)\$(Configuration)\로 수정한다.
+
+
+## 💡스프라이트
+
 
 &nbsp;
 
@@ -715,8 +749,8 @@ check-list
     - [x]  포트리스 모작(24.10.15)
     - [x]  속도와 가속도(24.10.15)
 - [ ]  2D 게임 프레임워크 설계
-    - [ ]  스프라이트
-    - [ ]  코드 구조 설계
+    - [ ]  스프라이트(24.10.16)
+    - [ ]  코드 구조 설계(24.10.16)
     - [ ]  애니메이션
     - [ ]  카메라
     - [ ]  충돌
