@@ -793,11 +793,41 @@ Sprite Actor : 모든 Object는 Sprite가 필요한 게 아니다. Sprite가 필
 
 Unreal은 Init, Update, Render를 BeginPlay, Tick, Render로 표현한다.
 
+![image](https://github.com/user-attachments/assets/8092b0db-de4c-4b6c-8a6b-53b99f8d1850)
 
+SpriteActor로 출력 완료!(sprite가 자꾸 NULL로 나와서 엄청 헤맸는데 CreateSprite를 안 넣어서 그런 거였다..)
+
+![image](https://github.com/user-attachments/assets/782ca89d-baa2-44ff-9356-6a7d89802433)
+
+
+&nbsp;
+
+✅SpriteActor는 배경과 같이 움직이지 않으면 괜찮지만, 애니메이션이 들어가면 안 된다! ➡️ class를 따로 생성해서 상속 받아 작업하기
+
+e.g. 움직이는 플레이어 만들고 싶으면 SpriteActor를 상속받는 Player class를 생성한다.
+
+💥Unreal 방식은 상속이 중요!
 
 --- 
 
+### 📌Unity 
+
 &nbsp;
+
+GameObject class를 생성한다. GameObject는 Scene에 배치하는 최상위의 Object이다.
+
+Unity는 Component를 객체에 조립하며 사용한다! 따라서 컴포넌트를 생성해야 한다.
+
+Component class를 생성해서 GameObject에 붙일 수 있게 구현하고, Component를 상속받는 SpriteRenderer를 생성한다.
+
+&nbsp;
+
+💥Unity 방식은 Component!
+
+&nbsp;
+
+---
+
 
 ## ⛅날짜별 공부한 내용 & check-list
 
