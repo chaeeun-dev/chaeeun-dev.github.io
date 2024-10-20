@@ -855,6 +855,36 @@ FlipbookActor를 생성하고 DevScene에 넣어주기
 
 여기서 주의할 점은 그리는 순서에 따라 캐릭터가 가려질 수 있다는 것.
 
+&nbsp;
+
+---
+
+## 💡카메라
+
+### 📌카메라
+
+&nbsp;
+
+카메라는 Component로 만들어 붙여줄 것. 
+
+owner의 위치(pos)로 계속 업데이트 하고, 배경이 넘어가지 않도록 clamp함수로 제한한다. 
+
+Actor class에 Component를 add, remove하는 함수를 생성하여 카메라 컴포넌트가 붙였다 뗐다 할 수 있게 만든다.  
+
+TransBltTransBlt 함수의 좌표를 카메라를 넣은 좌표로 수정한다. 
+
+![image](https://github.com/user-attachments/assets/6a2e9e60-76e5-46bd-b39d-a7d44f474abd)
+
+카메라 구현 완료!
+
+&nbsp;
+
+---
+
+### 📌레이어
+
+&nbsp;
+
 
 ## ⛅날짜별 공부한 내용 & check-list
 
@@ -876,6 +906,7 @@ FlipbookActor를 생성하고 DevScene에 넣어주기
 
 24.10.19 코드 구조 설계 끝, 애니메이션 절반
 
+24.10.20 애니메이션 끝, 카메라
 &nbsp;
 
 check-list
@@ -901,7 +932,7 @@ check-list
 - [ ]  2D 게임 프레임워크 설계
     - [x]  스프라이트(24.10.16, 18)
     - [x]  코드 구조 설계(24.10.19)
-    - [ ]  애니메이션(24.10.19 ~ )
+    - [x]  애니메이션(24.10.19 ~ 20)
     - [ ]  카메라
     - [ ]  충돌
     - [ ]  UI
