@@ -847,6 +847,13 @@ BitBlt - 투명화 처리 안 됨 -> TransparentBlt로 투명화 처리!
 
 그 후, 플립북을 사용하는 플립북 액터를 생성한다.
 
+FlipbookActor를 생성하고 DevScene에 넣어주기
+
+![image](https://github.com/user-attachments/assets/cb113826-ee18-4c8a-8f59-3ee3ff609fbb)
+
+캐릭터 그리기 완료!
+
+여기서 주의할 점은 그리는 순서에 따라 캐릭터가 가려질 수 있다는 것.
 
 
 ## ⛅날짜별 공부한 내용 & check-list
