@@ -925,6 +925,17 @@ DevScene에서 vector<Actor*> _actors; 이렇게 관리했던 Actor들을 vector
 
 ### 📌충돌(Collision)
 
+&nbsp;
+
+충돌은 상속보다 컴포넌트로 붙여주는 게 좋다. 예를 들어 캐릭터가 무적 상태일 때, 충돌 컴포넌트를 끌 수 있다.
+
+Enums에 Box, Sphere 등 Collider Type를 생성하고, Collider class를 상속받는 BoxCollider, SphereCollider class를 구현한다. 
+
+
+&nbsp;
+
+---
+
 
 ## ⛅날짜별 공부한 내용 & check-list
 
