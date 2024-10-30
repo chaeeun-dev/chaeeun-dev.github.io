@@ -931,7 +931,10 @@ DevScene에서 vector<Actor*> _actors; 이렇게 관리했던 Actor들을 vector
 
 Enums에 Box, Sphere 등 Collider Type를 생성하고, Collider class를 상속받는 BoxCollider, SphereCollider class를 구현한다. 
 
+여기서 public 안 붙여서 20분 넘게 헤맸다.. 24.10.21에 기록 [[ERROR] VisualStudio 오류, 삽질 모음](https://chaeeun-dev.github.io/error/cppErrorZip/)
+ 
 
+ 
 &nbsp;
 
 ---
