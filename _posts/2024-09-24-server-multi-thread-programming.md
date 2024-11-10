@@ -729,6 +729,12 @@ while (_flag.compare_exchange_strong(OUT expected, desired) == false)
 - 장점 : 아주 짧은 순간 lock 잡고 unlock 할 것이라면, 효율적이다(보통은 lock을 오래 잡는 경우가 많지 않아서 MMO에서 많이 씀).
 - 단점 : 계속 확인해야 하기 때문에 CPU 비용이 많이 든다. 한 스레드가 lock을 오래 붙잡고 있는다면 계속 기다려야한다.
 
+## 💡데드락(24.11.10 ~ 11)
+
+
+
+
+
 &nbsp;
 &nbsp;
 &nbsp;
