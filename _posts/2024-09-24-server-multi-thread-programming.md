@@ -1,7 +1,7 @@
 ---
-title: "[C++] 멀티 쓰레드 프로그래밍"
+title: "[SERVER] 멀티 쓰레드 프로그래밍"
 date: 2024-09-24 12:50:00 +09:00 
-categories: C++
+categories: SERVER
 author_profile: false
 toc : true
 toc_sticky: true
@@ -579,6 +579,145 @@ unique_lock() : lock_guard()와 비슷한데, 추가적인 기능으로 lock을 
 &nbsp;
 
 💥lock이 없는데 vector에 접근하는 코드를 봤을 때 바로 문제점을 캐치할 수 있어야 한다! 또 lock을 남발하면 싱글 스레드만도 못한 코드를 만들 수 있으니 주의할 것.
+
+## 💡스핀락(24.11.10)
+
+### 📌lock class 구현 실습
+
+Lock을 class로 직접 구현해보자.
+
+이 코드의 결과는?
+
+1) 20000
+2) Crash 발생
+3) 이상한 값
+
+```cpp
+class Lock
+{
+public:
+	void lock()
+	{
+		while (_flag)
+		{
+			// Do Nothing
+		}
+
+		_flag = true;
+	}
+
+	void unlock()
+	{
+		_flag = false;
+	}
+
+private:
+	bool _flag = false;
+};
+
+Lock m;
+std::vector<int> v;
+
+void Push()
+{
+	for (int i = 0; i < 10000; i++)
+	{
+		std::lock_guard <Lock> lockGuard(m);
+
+		v.push_back(i);
+	}
+}
+```
+
+결과)
+
+lock의 역할을 제대로 못하고 있다(이상한 값이 나오거나 vector에 reserve를 하지 않았을 땐 crash가 발생함).
+
+설명)
+
+while문에서 flag가 true가 됐을 때 동시에 값을 쓸 수 있기 때문이다(코드가 두 단계로 나뉜 게 문제 원인 - while문과 flag 값을 변경하는 코드 사이). 즉 상호베타적인 조건이 깨져버렸기 때문이다.
+
+![image](https://github.com/user-attachments/assets/ff0ee502-a2c6-4ed3-8c05-7c35f4c7da3f) | ![image](https://github.com/user-attachments/assets/f0050f38-b069-499c-8484-a0afa14732e3)
+
+### CAS (Compare-And-Swap)
+
+두 단계를 한 번에 일어나도록 구현해보자.
+
+
+
+```cpp
+class Lock
+{
+public:
+	void lock()
+	{
+		// CAS (Compare-And-Swap)
+		// 두 단게를 하나로 합치는 코드
+
+		bool expected = false;
+		bool desired = true;
+
+		while (_flag.compare_exchange_strong(OUT expected, desired) == false)
+		{
+			expected = false;
+		}
+
+		// 의사 코드 - 이 코드가 위에서는 한 번에 일어난다.
+		/*
+		if (_flag == expected)
+		{
+			_flag = desired;
+			return true;
+		}
+		else
+		{
+			expected = _flag;
+			return false;
+		}
+		*/
+
+	}
+
+	void unlock()
+	{
+		_flag = false;
+	}
+
+private:
+	std::atomic<bool> _flag = false;
+};
+
+```
+
+앞 코드에서 이 두 단계가 있었는데 CAS를 이용해 하나로 합칠 수 있다.
+
+```cpp
+	while (_flag)		// 단계 1 - expected가 true면 아무것도 하지 않는다.
+	{
+		// Do Nothing
+	}
+
+	_flag = true;		// 단계 2 - expected가 false면 desired를 true로 바꾼다.
+```
+
+&nbsp;
+
+### 📌스핀락
+
+lock이 풀렸는지 계속 계속 뺑뺑이를 돌며 확인하면서 풀렸을 때 lock을 획득하는 방법(존버 메타) - e.g. 화장실이 한 개인데 문 앞에서 계속 기다리는 것. 안에 들어있는 사람이 안 나온다면 시간 낭비이다.
+
+```cpp
+// SpinLock
+while (_flag.compare_exchange_strong(OUT expected, desired) == false)
+{
+	expected = false;
+}
+
+```
+
+스핀락의 장단점
+- 장점 : 아주 짧은 순간 lock 잡고 unlock 할 것이라면, 효율적이다(보통은 lock을 오래 잡는 경우가 많지 않아서 MMO에서 많이 씀).
+- 단점 : 계속 확인해야 하기 때문에 CPU 비용이 많이 든다. 한 스레드가 lock을 오래 붙잡고 있는다면 계속 기다려야한다.
 
 &nbsp;
 &nbsp;
