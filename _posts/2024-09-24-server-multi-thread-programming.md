@@ -487,6 +487,8 @@ int main()
 }
 ```
 
+&nbsp;
+
 정답)  Crash가 발생한다.
 
 &nbsp;
@@ -530,6 +532,8 @@ void Push()
 }
 ```
 
+&nbsp;
+
 - lock : 이미 사용중이면 대기하도록 잠금
 - unlock : 잠금 풀기(풀지 않으면 무한 대기.. 짝 맞추기 기본!)
 ➡️ 한 번에 하나씩 상호베타적으로 실행된다.
@@ -571,6 +575,8 @@ void Push()
 	}
 }
 ```
+
+&nbsp;
 
 표준에서 std::lock_guard() 함수를 제공하니 그대로 사용하면 된다!
 
@@ -629,6 +635,8 @@ void Push()
 }
 ```
 
+&nbsp;
+
 결과)
 
 lock의 역할을 제대로 못하고 있다(이상한 값이 나오거나 vector에 reserve를 하지 않았을 땐 crash가 발생함).
@@ -639,11 +647,9 @@ while문에서 flag가 true가 됐을 때 동시에 값을 쓸 수 있기 때문
 
 ![image](https://github.com/user-attachments/assets/ff0ee502-a2c6-4ed3-8c05-7c35f4c7da3f) | ![image](https://github.com/user-attachments/assets/f0050f38-b069-499c-8484-a0afa14732e3)
 
-### CAS (Compare-And-Swap)
+### 📌CAS (Compare-And-Swap)
 
 두 단계를 한 번에 일어나도록 구현해보자.
-
-
 
 ```cpp
 class Lock
@@ -689,6 +695,8 @@ private:
 
 ```
 
+&nbsp;
+
 앞 코드에서 이 두 단계가 있었는데 CAS를 이용해 하나로 합칠 수 있다.
 
 ```cpp
@@ -714,6 +722,8 @@ while (_flag.compare_exchange_strong(OUT expected, desired) == false)
 }
 
 ```
+
+&nbsp;
 
 스핀락의 장단점
 - 장점 : 아주 짧은 순간 lock 잡고 unlock 할 것이라면, 효율적이다(보통은 lock을 오래 잡는 경우가 많지 않아서 MMO에서 많이 씀).
