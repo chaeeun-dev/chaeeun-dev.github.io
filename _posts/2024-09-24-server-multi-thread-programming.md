@@ -731,9 +731,104 @@ while (_flag.compare_exchange_strong(OUT expected, desired) == false)
 
 ## 💡데드락(24.11.10 ~ 11)
 
+데드락(Deadlock, 교착상태) : lock을 했는데 unlock을 하지 않아 무한 대기에 빠진 상태를 말한다.
 
+데드락 예방 방법 - 소멸될 때 unlock을 하도록 락가드를 사용한다. 그런데 이렇게 간단하게 해결되지는 않는다. 예시로 여러 매니저들이 뮤텍스를 복잡하게 늘어지며 사용하기 때문에 문제를 찾기 어렵다.
 
+&nbsp;
 
+### 📌데드락 실습
+
+```cpp
+class User
+{
+
+};
+
+class UserManager
+{
+public:
+	User* GetUser(int id)
+	{
+		std::unique_lock<std::mutex> guard(_lock);
+
+		if (_users.find(id) == _users.end())
+			return nullptr;
+
+		return _users[id];
+	}
+
+private:
+	std::map<int, User*> _users;
+	std::mutex _lock;
+};
+
+std::mutex m1;	// Account Manager
+std::mutex m2;	// User Manager
+
+void Thread_1()
+{
+	for (int i = 0; i < 10000; i++)
+	{
+		std::lock_guard<std::mutex> lockGuard1(m1);
+		std::lock_guard<std::mutex> lockGuard2(m2);
+		// TODO
+	}
+}
+
+void Thread_2()
+{
+	for (int i = 0; i < 10000; i++)
+	{
+		std::lock_guard<std::mutex> lockGuard1(m2);
+		std::lock_guard<std::mutex> lockGuard2(m1);
+	}
+}
+
+int main()
+{
+	std::thread t1(Thread_1);
+	std::thread t2(Thread_2);
+
+	t1.join();
+	t2.join();
+
+	std::cout << "Jobs Done" << std::endl;
+}
+```
+
+&nbsp;
+
+![image](https://github.com/user-attachments/assets/5f5fa204-fb44-45de-9d89-005a1c7c386d)
+
+상호베타적인 조건이 지켜졌는데 데드락이 발생했다. (사진의 디버깅 중지 옆에 일시 정지 버튼을 누르면 어디서 멈췄는지 확인할 수 있다.) 
+
+why? Thread_1에서 m1을 잡았고, m2를 잡으려고 하는데 Thread_2에서도 m2를 잡고 있고, m1을 잡으려고 하기 때문에 교착상태가 발생하는 것이다. (식사하는 철학자 문제가 생각난다..)
+
+locck을 잡는 순서가 꼬였을 때 문제를 어떻게 해결할까? Thread_2에서 순서를 바꿔주면 해결된다. 
+
+```cpp
+void Thread_2()
+{
+	for (int i = 0; i < 10000; i++)
+	{
+		std::lock_guard<std::mutex> lockGuard2(m1);
+		std::lock_guard<std::mutex> lockGuard1(m2);
+	}
+}
+
+```
+&nbsp;
+
+이렇게 순서를 바꿔주면 "Just Done"이 출력되며 데드락 문제가 해결된다.
+
+근데 이 코드는 Thread가 두 개라서 간단하지만, 규모가 커질수록 순서 맞추는 것도 복잡해진다. (근데 버그 찾기는 쉬움! 찾는 건 쉽지만 고치는 건 상황에 따라 다름.)
+
+또 개발 단계에서는 버그가 일어나지 않지만, 라이브 단계에서 접속자가 늘어났을 때 갑자기 교착상태가 발생할 수도 있다. (이 예제에서도 for문을 10000번으로 설정해서 그렇지, 숫자를 작게 설정하면 교착상태가 발생하지 않음)
+
+cf) lock 구조를 판별하는 방법 중 하나 - 그래프를 그려 cycle이 있는지 판별한다.
+
+➡️결과적으로 lock을 잡는 순서가 꼬인 것이기 때문에, 순서만 잘 맞춰주면 된다! (그치만 완벽하게 처리하는 방법은 없지만 사이클을 그려 런타임에 판별해서 우회할 수는 있음. 그리고 큰 프로젝트가 아닌 이상 데드락은 거의 발생하지 않음.)
 
 &nbsp;
 &nbsp;
