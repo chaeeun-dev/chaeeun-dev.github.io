@@ -445,6 +445,8 @@ p는 Stack 영역에 있어서 다른 스레드들이 알 수 없다. 그리고 
 
 [TCP SCHOOL 메모리의 구조](https://www.tcpschool.com/c/c_memory_structure)
 
+---
+
 ## Lock 기초(24.11.10)
 
 C++에서 lock은 mutex로 사용하면 된다.
@@ -492,13 +494,11 @@ int main()
 }
 ```
 
-정답 -  Crash가 발생한다.
-
 &nbsp;
 
-설명 - 
+정답 -  Crash가 발생한다.
 
-대부분의 STL 컨테이너들을 멀티쓰레드에서 접근하면 거의 Crash 발생한다.
+설명  - 대부분의 STL 컨테이너들을 멀티쓰레드에서 접근하면 거의 Crash 발생한다.
 
 vector의 특징
 - vector는 [][][][][] 이 컨테이너 안의 데이터가 다 차면 이사를 한다. 
