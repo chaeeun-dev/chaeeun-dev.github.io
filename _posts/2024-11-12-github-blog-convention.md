@@ -1,5 +1,5 @@
 ---
-title: "[Github Blog] 블로그 컨벤션 및 테마 수정"
+title: "[Github Blog] 블로그 컨벤션 및 커스텀"
 date: 2024-11-12 12:50:00 +09:00 
 categories: GITHUB_BLOG
 author_profile: false
@@ -30,7 +30,7 @@ toc_sticky: true
 
 ***
 
-## 테마 수정
+## 커스텀
 글이 지저분해 보였던 이유를 찾았다. ```## 목차``` 를 쓰면 아래 구분선이 그어지는데 minimal-mistakes 테마에서 그렇게 정의하고 있던 것이었다. 
 
 ```
