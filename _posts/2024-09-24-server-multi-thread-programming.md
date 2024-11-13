@@ -831,4 +831,193 @@ cf) lock 구조를 판별하는 방법 중 하나 - 그래프를 그려 cycle이
 
 ---
 
+## 이벤트와 조건 변수(24.11.13)
+Manager에 접근할 땐 lock을 걸고 데이터를 가져오는 등의 작업을 수행하면 된다. 
+
+---
+
+### Producer & Consumer 실습 
+Producer, Consumer로 일감을 나누는 실습을 해보자. 네트워크 통신을 받아서 일감을 밀어 넣고, 이어 받아서 처리하는 식의 분담 처리 방식이다. 분담하는 이유는 앞에서 lock을 잡기 위해 경합하며 계속 기다리는 게 싱글 스레드만도 못할 수 있기 때문에 멀티 스레드를 쓰는 의미가 없다. 분담을 하면 이 문제를 해결할 수 있다. 
+
+```cpp
+std::mutex m;
+std::queue<int> q;
+
+void Producer()
+{
+	while (true)
+	{
+		std::unique_lock<std::mutex> lock(m);
+		q.push(100);
+
+		std::this_thread::sleep_for(100ms);
+	}
+}
+
+void Consumer()
+{
+	while (true)
+	{
+		std::unique_lock<std::mutex> lock(m);
+		if (q.empty() == false)
+		{
+			int data = q.front();
+			q.pop();
+			std::cout << data << std::endl;
+		}
+	}
+}
+
+int main()
+{
+	std::thread t1(Producer);
+	std::thread t2(Consumer);
+
+	t1.join();
+	t2.join();
+}
+```
+
+```std::this_thread::sleep_for(100ms);``` 이 부분에서 E2486 (사용자 정의 리터럴 연산자가 없습니다.), E0304(인수 목록이 일치하는 함수 템플릿 'std::this_thread::sleep_for'의 인스턴스가 없습니다.) 오류가 발생해서 ```#include <chrono>```와 ```using namespace std::chrono_literals;```(chrono 네임스페이스에서 ms 같은 시간 단위 사용할 수 있게 해줌)를 추가했더니 오류가 해결 되었다. 
+
+여기서 아쉬운 점은 스핀락처럼 계속 뺑뺑이를 돌며 lock이 풀렸는지 확인하는 점이다. 직접 확인하지 않고 누군가에게 확인을 부탁해보자.
+
+---
+
+### 이벤트
+운영체제에서 제공하는 ```HANDLE```을 사용한다. ```HANDLE hEvent```는 특정 커널 오브젝트를 지칭하는 정수이다. 커널 오브젝트는 유저 레벨에서 관리하는 오브젝트와는 달리 운영체제가 관리하는 오브젝트를 생성할 수 있도록 요청하는 것이다.
+
+```cpp
+std::mutex m;
+std::queue<int> q;
+HANDLE hEvent;
+
+void Producer()
+{
+	while (true)
+	{
+		std::unique_lock<std::mutex> lock(m);
+		q.push(100);
+
+		// 데이터를 넣은 후에 파란불 킴
+		::SetEvent(hEvent);
+
+		std::this_thread::sleep_for(100ms);
+	}
+}
+
+void Consumer()
+{
+	while (true)
+	{
+		// 파란 불로 켜질 때까지 무한 대기 - 파란 불이 켜지면 깨어나서 실행할 수 있음
+		::WaitForSingleObject(hEvent, INFINITE);
+
+		std::unique_lock<std::mutex> lock(m);
+		if (q.empty() == false)
+		{
+			int data = q.front();
+			q.pop();
+			std::cout << data << std::endl;
+		}
+	}
+}
+
+int main()
+{
+	// 커널 오브젝트
+	// - Usage Count
+	//   Signal (파란 불) / Non Signal (빨간 불)
+
+	// Auto / Manual 둘 중 선택할 수 있음 -  bool
+	hEvent = ::CreateEvent(NULL/*보안 속성*/, FALSE/*bManualReset*/, FALSE/*초기상태*/, NULL);
+
+	std::thread t1(Producer);
+	std::thread t2(Consumer);
+
+	t1.join();
+	t2.join();
+
+	::CloseHandle(hEvent);
+}
+```
+
+이벤트 
+- 장점 : 계속 대기타는 것보다 낭비를 줄일 수 있다.
+- 단점 : 비용 문제 - 모든(짜잘한) 것에 대한 이벤트를 처리하는 것에 대해 문제가 있다.
+
+### 조건 변수(condition variable)
+- 조건 변수 : 커널 오브젝트가 아니라 유저 레벨 오브젝트이다. 흐름과 사용하는 방식은 이벤트와 비슷하다. 다른 점은 일이 있을 때만 실행할 수 있다는 것이다. 불필요한 낭비를 막을 수 있다!
+
+```cpp
+std::mutex m;
+std::queue<int> q;
+HANDLE hEvent;
+
+// CV는 커널 오브젝트가 아니라 유저레벨 오브젝트
+std::condition_variable cv;
+
+void Producer()
+{
+	while (true)
+	{
+		// Condition Variable
+		// 1) Lock을 잡기
+		// 2) 공유 변수 값 수정
+		// 3) Lock을 풀고
+		// 4) CV 통해서 통지
+		
+		{
+			std::unique_lock<std::mutex> lock(m);
+			q.push(100);
+		}
+
+		cv.notify_one();
+		std::this_thread::sleep_for(100ms);
+	}
+}
+
+void Consumer()
+{
+	while (true)
+	{
+		//::WaitForSingleObject(hEvent, INFINITE);
+		std::unique_lock<std::mutex> lock(m);
+		cv.wait(lock, []() {return q.empty() == false; });
+		// 1) Lock을 잡으려고 시도 (이미 잡혔으면 skip)
+		// 2) 조건 확인
+		// - 만족O => 바로 빠져 나와서 이어서 코드 진행
+		// - 만족X => Lock을 풀어주고 대기 상태로 전환
+
+		{
+			int data = q.front();
+			q.pop();
+			std::cout << data << std::endl;
+		}
+	}
+}
+
+int main()
+{
+	// 커널 오브젝트
+	// - Usage Count
+	//   Signal (파란 불) / Non Signal (빨간 불)
+
+	// Auto / Manual 둘 중 선택할 수 있음 -  bool
+	hEvent = ::CreateEvent(NULL/*보안 속성*/, FALSE/*bManualReset*/, FALSE/*초기상태*/, NULL);
+
+	std::thread t1(Producer);
+	std::thread t2(Consumer);
+
+	t1.join();
+	t2.join();
+
+	::CloseHandle(hEvent);
+}
+```
+
+기억할 것 : 스핀락처럼 무한이 확인하며 기다리지 않고 누군가 알려주는 방식이 있다. (나중에 필요할 때 구글링해서 찾으면 됨)
+
+---
+
 출처 [루키스님 게임 프로그래밍 올인원 강의](https://www.inflearn.com/course/%EA%B2%8C%EC%9E%84-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8-%EC%9E%85%EB%AC%B8-%EC%98%AC%EC%9D%B8%EC%9B%90-rookiss)
