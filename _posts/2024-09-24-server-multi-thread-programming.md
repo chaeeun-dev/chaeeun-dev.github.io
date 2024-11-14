@@ -1140,16 +1140,22 @@ int main()
 빌드를 하면 경로에 맞게 잘 들어간 걸 볼 수 있다.
 ![image](https://github.com/user-attachments/assets/ef0134f1-7828-4476-b5f1-81b812ba47e1)
 
+&nbsp;
+
 [Server 프로젝트]
 - 프로젝트 속성에서 출력 디렉터리를 ```$(SolutionDir)Binaries\$(Platform)\```로 변경한다.
 - 프로젝트 속성 - C++ - 일반 - 추가 포함 디렉터리에 ```$(SolutionDir)ServerCore\```를 넣는다. <- 헤더 파일의 위치를 넣는 것.
 - 프로젝트 속성 - 링커 - 일반 - 추가 라이브러리 디렉터리에 ```$(SolutionDir)Libraries\ServerCore\```를 넣는다. <- lib 파일의 경로를 어디부터 찾을 것인지.
 - pch.h에 아래 코드 추가  
-```#ifdef _DEBUG	// 디버그 모드일 때
+```cpp
+#ifdef _DEBUG	// 디버그 모드일 때
 #pragma comment(lib, "Debug\\ServerCore.lib")
 #else	// 릴리즈 모드일 때
 #pragma comment(lib, "Release\\ServerCore.lib")
-#endif```
+#endif
+```
+
+&nbsp;
 
 [ServerCore 프로젝트]
 - Thread 폴더에 ThreadManager 클래스 추가
