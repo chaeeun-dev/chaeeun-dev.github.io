@@ -1110,4 +1110,53 @@ int main()
 
 ---
 
+## 프로젝트 설정(24.11.14)
+엔진 코드와 서버 코드를 분리하는 것이 일반적이다.
+
+---
+
+### 새 프로젝트 만들기
+- 새 프로젝트 생성 - 콘솔 앱 - 프로젝트 이름 "DummyClient"
+- 새 프로젝트 생성 - 정적 라이브러리 - 프로젝트 이름 "ServerCore"
+- pch 만들기, 사용으로 속성 변경하기
+
+![image](https://github.com/user-attachments/assets/79fca8f4-c67b-4875-8975-a501628c0abb)
+
+세 개의 프로젝트가 생성 됐다.
+- ServerCore : 라이브러리로, Server가 가져다 쓴다.
+
+---
+
+### 폴더 정리
+- Binaries : 클라, 서버 등이 들어감.
+- Intermediate : 중간에 들어가는 자잘한 것들이 들어감.
+- Libraries : 사용하는 (웹에서 다운 받은)라이브러리를 넣어 놓음. (지금까지 필요 없었던 이유는 VS 다운했을 때 어딘가에 라이브러리가 저장됐던 것.)
+
+---
+
+### 경로 설정
+[ServerCore 프로젝트]
+- 프로젝트 속성에서 출력 디렉터리를 ```$(SolutionDir)Libraries\ServerCore\$(Configuration)\``` 이렇게 변경한다.
+빌드를 하면 경로에 맞게 잘 들어간 걸 볼 수 있다.
+![image](https://github.com/user-attachments/assets/ef0134f1-7828-4476-b5f1-81b812ba47e1)
+
+[Server 프로젝트]
+- 프로젝트 속성에서 출력 디렉터리를 ```$(SolutionDir)Binaries\$(Platform)\```로 변경한다.
+- 프로젝트 속성 - C++ - 일반 - 추가 포함 디렉터리에 ```$(SolutionDir)ServerCore\```를 넣는다. <- 헤더 파일의 위치를 넣는 것.
+- 프로젝트 속성 - 링커 - 일반 - 추가 라이브러리 디렉터리에 ```$(SolutionDir)Libraries\ServerCore\```를 넣는다. <- lib 파일의 경로를 어디부터 찾을 것인지.
+- pch.h에 아래 코드 추가  
+```#ifdef _DEBUG	// 디버그 모드일 때
+#pragma comment(lib, "Debug\\ServerCore.lib")
+#else	// 릴리즈 모드일 때
+#pragma comment(lib, "Release\\ServerCore.lib")
+#endif```
+
+[ServerCore 프로젝트]
+- Thread 폴더에 ThreadManager 클래스 추가
+- TLS 개념 : 코드 X, 스택 X, 힙 O, 데이터 O, TLS X (O - 조심해야하는 영역 / X - 안심해도 되는 영역), 일반 변수를 사용하면 모든 스레드가 접근 가능한데 ```thread_local```을 사용하면 자기 자신의 스레드만 접근할 수 있다. 그 변수의 값을 바꿔도 다른 스레드의 TLS는 아무 영향이 없다.
+
+[소스 코드](https://github.com/chaeeun-dev/Server)
+
+---
+
 출처 [루키스님 게임 프로그래밍 올인원 강의](https://www.inflearn.com/course/%EA%B2%8C%EC%9E%84-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8-%EC%9E%85%EB%AC%B8-%EC%98%AC%EC%9D%B8%EC%9B%90-rookiss)
