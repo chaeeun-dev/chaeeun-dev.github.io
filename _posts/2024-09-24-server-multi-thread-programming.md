@@ -1024,4 +1024,84 @@ int main()
 
 ---
 
+## 스마트 포인터(24.11.14)
+생 포인터를 쓰게 되면 생명 주기가 꼬일 가능성이 매우매우 높다. 그래서 레퍼런스 카운트를 둬서 포인터를 관리하는 방법을 사용한다.
+
+### 레퍼런스 카운트 수동 관리 실습
+레퍼런스 카운트를 관리하는 방법
+1. 객체에 포함 시킴.
+2. 따로 레퍼런스 카운터를 관리하는 블록 생성함.
+
+RefCountable class를 생성해서 수동으로 레퍼런스 카운트를 관리하도록 구현한다.
+```cpp
+class RefCountable
+{
+public:
+	RefCountable() {}
+	virtual ~RefCountable() {}
+
+	int GetRefCount() { return _refCount; }
+	int AddRef() { return ++_refCount; }
+	int ReleaseRef()
+	{
+		int refCount = --_refCount;
+		if (refCount == 0)
+			delete this;
+		
+		return refCount;
+	}
+
+protected:
+	int _refCount = 1;
+};
+```
+
+&nbsp;
+
+객체를 생성할 때 RefCountable을 상속받도록 한다.
+```cpp
+class Knight : public RefCountable
+{
+public:
+
+};
+
+std::map<int, Knight*> _knights;
+
+int main() 
+{
+	Knight* knight = new Knight();	// _refCount == 1
+
+	_knights[100] = knight;
+	knight->AddRef();		// _refCount == 2;
+
+	_knights.erase(100);
+	knight->ReleaseRef();	// _refCount == 1
+	knight = nullptr;
+}
+```
+
+&nbsp;
+
+멀티 스레드 환경이라면 일어날 수 있는 문제점 
+- 증감 연산자가 어셈블리어로 3단계에 걸쳐 일어나기 때문에 refCount를 atomic으로 수정해야 한다. ```int _refCount = 1;``` -> ```std::atomic<int> _refCount = 1;```
+- ```_knights[100] = knight;```와 ```knight->AddRef();``` 사이에 누군가 끼어들어서 Count 값을 0으로 만들어 메모리를 소멸시켜버릴 수 있다.
+-> <span style="color:red"> 웬만하면 수동으로 레퍼런스 카운터 관리하지 말자. (atomic을 해도 소용이 없음) </span>
+
+### 스마트 포인터
+'복사가 되어 생성될 때 RefCount를 1 증가시킨다.'가 핵심! 위의 수동 방식과는 다르게 중간에 누가 끼어들어도 객체가 소멸하지 않는다.
+
+주의할 점
+- 순환 문제(나중에 더 자세히 다룰 예정)
+- 스마트 포인터에서 this 포인터 문제(e.g. 이중 포인터 삭제 등)
+
+정리
+1. RefCount - 스마트 포인터를 이용해 간접적으로 몇 번 참조 되었는지 RefCount로 확인할 수 있다.
+2. RefCount 수동 관리? - 중간에 누가 끼어들 수 있어 위험하다.
+3. RefCount를 객체에 포함시킬 것인지(직접 구현할 때)?
+4. SharedPtr은 왜 2번 문제를 해결해주나?
+5. SharedPtr과 this의 문제를 어떻게 해결할 것인가?
+
+---
+
 출처 [루키스님 게임 프로그래밍 올인원 강의](https://www.inflearn.com/course/%EA%B2%8C%EC%9E%84-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8-%EC%9E%85%EB%AC%B8-%EC%98%AC%EC%9D%B8%EC%9B%90-rookiss)
