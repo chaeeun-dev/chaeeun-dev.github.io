@@ -36,7 +36,7 @@ toc_sticky: true
 
 &nbsp;
 
-- Server에서 receive하지 않고, Client에서 Send한다면? -> 잘 작동한다.. 이유는 Client가 Server로 데이터를 보내는 게 아닌 내부의 SendBuffer에 데이터를 보낸 게 성공으로 보기 때문이다. 그 디음에 OS가 SendBuffer에 있는 데이터를 Server의 RecvBuffer에 들어가게 된다.
+- Server에서 receive하지 않고, Client에서 Send한다면? -> 잘 작동한다.. 이유는 Client가 Server로 데이터를 보내는 게 아닌 내부의 SendBuffer에 데이터를 보낸 게 성공으로 보기 때문이다. 그 다음에 OS가 SendBuffer에 있는 데이터를 Server의 RecvBuffer에 들어가게 된다.
 
 ![image](https://github.com/user-attachments/assets/cd73b4c0-02ca-40ec-8466-b3fc9beba028)
 
@@ -61,17 +61,19 @@ toc_sticky: true
 
 ---
 
-## TCP vs UDP
+## TCP vs UDP(24.11.15)
 앞의 소켓 프로그래밍 입문 수업의 코드는 TCP 코드였다.
 
 TCP, UDP 개념은 기본 상식 + 면접 단골 질문이니 꼭 숙지할 것! 서버 쪽 아니더라도 꼭 알아야 한다.
 
-[개념 설명]
+### 네트워크 통신 개념 설명
 네트워크 통신은 택배를 배송하는 것과 비슷하다.
 
 - 한 아파트 내부에서 각자의 호 수나 닉네임으로 불러 택배를 보낼 수 있다.
 
-![image](https://github.com/user-attachments/assets/9bdee7f4-ecd0-4f5b-9a75-6e1a10d18be5) | ![image](https://github.com/user-attachments/assets/0d657a03-3006-43d9-8eac-48139e136a6f)
+![image](https://github.com/user-attachments/assets/9bdee7f4-ecd0-4f5b-9a75-6e1a10d18be5) 
+
+![image](https://github.com/user-attachments/assets/0d657a03-3006-43d9-8eac-48139e136a6f)
 
 - 다른 아파트로 택배를 보낼 때는 여러 단계를 거쳐서 택배를 보내야 한다.
 
@@ -88,6 +90,74 @@ TCP, UDP 개념은 기본 상식 + 면접 단골 질문이니 꼭 숙지할 것!
 - 다른 네트워크 망으로 보낼 때
 
 ![image](https://github.com/user-attachments/assets/060b7853-0b70-4a97-9e36-2e52d4ab5b21)
+
+---
+
+### 통신 모델
+- 택배 예시 - 택배에 이런 정보들이 다 기입되어 보내진다.
+
+![image](https://github.com/user-attachments/assets/1513b613-18c6-4b91-8d51-3202afc5bc0c)
+
+- 네트워크 통신 - 정
+
+![image](https://github.com/user-attachments/assets/d7831b3e-099a-45c1-8e90-cff14a37f64c)
+
+- 정보를 기입하는 이유? 오류가 발생했을 때 책임을 명확하게 한다.
+
+- TCP IP 모델 - 알아야 되는 것은 '여러 단계로 정책을 정하고 있고, TCP는 트랜스포트(배송 정책)에 해당한다.'
+
+![image](https://github.com/user-attachments/assets/4e5f26fb-5f2e-43cc-9c9c-e46e029ea693)
+
+---
+
+### TCP vs UDP 
+[차이점]
+- TCP 
+1. 안전한 트럭
+2. 전화 연결 방식
+
+- UDP
+1. 위험한 총알 배송
+2. 이메일 전송 방식
+
+[연결 지향성]
+-TCP - 연결형 서비스
+1. 연결을 위해 할당되는 논리적인 경로가 있다.
+2. 전송 순서가 보장된다.
+(소켓 프로그래밍 입문 수업에서 다룬 코드를 보면, 서버는 클라가 올 때까지(accept) 계속 기다리는 것으로 TCP라는 걸 알 수 있다!)
+
+- UDP - 비연결형 서비스
+1. 연결이라는 개념이 없다.
+2. 전송 순서가 보장되지 않는다.
+3. 경계(Boundary)의 개념이 있다.
+
+[속도와 신뢰성]
+- TCP - 신뢰성 Good, 속도 Bad
+1. 분실이 일어나면 책임지고 다시 전송한다. - 신뢰성 Good
+2. 물건을 주고 받을 상황이 아니면 일부만 보낸다 . - 흐름/혼잡 제어
+3. 고려할 것이 많으니 속도가 느리다.
+
+- UDP - 신뢰성 Bad, 속도 Good
+1. 분실에 대한 책임이 없다. - 신뢰성 Bad
+2. 일단 보내고 생각한다.
+3. 단순하기 때문에 속도가 빠르다.
+
+[데이터 경계 Boundary]
+- TCP
+1. 경계의 개념이 없다. - 순서대로 도착하지만, 데이터가 쪼개질 수도 있다.
+
+- UDP
+1. 경계의 개념이 있다. - 순서는 바뀔 수도 있지만, 데이터가 온전한 상태로 도착한다.
+
+![image](https://github.com/user-attachments/assets/892bfb1f-340f-40ab-aea1-63a04378d92f)
+
+---
+
+### 게임에서 TCP vs UDP?
+게임에서는 TCP vs UDP? 양쪽이 다 쓰이는데, 어떤 것을 사용할 때 장단점을 명확히 알아야 한다. 리스크를 감당해서 발생하는 문제점을 처리할 수 있어야 한다. 
+
+- TCP - 속도가 느리고 데이터가 끊길 수도 있지만, 전송 순서가 보장되고 분실에 대한 책임이 있다. (MMO는 대부분 TCP 사용함)
+- UDP - 속도가 빠르고 완전한 데이터가 배송되지만, 전송 순서가 뒤죽박죽이고 데이터 분실이 발생할 수 있다. (속도가 빠른 FPS에서 사용할 수 있는데, 데이터 분실에 대한 처리 작업이 필요함)
 
 ---
 
