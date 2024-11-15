@@ -44,20 +44,50 @@ toc_sticky: true
 
 ### 오류 발생 및 해결
 
+[오류]
+
 오류가 277개나 발생했다. 작성한 코드에서 발생한 게 아니라 include한 헤더 파일에서 오류가 발생한다. (내가 작성한 것도 코드도 아닌데 대체 왜 그러는 거야!!!!!)
 
 - C2065 선언되지 않은 식별자입니다.
 - C2375 재정의. 연결이 다릅니다.
 
-![image](https://github.com/user-attachments/assets/a7cc0057-948e-469f-9db8-e2418a289cca)
-
-&nbsp;
+![image](https://github.com/user-attachments/assets/8068e4dd-19b2-466c-b86b-7d2dd5005e11)
 
 [오류 해결 과정]
 - pch.h 파일에 **#pragma once**가 있는 걸 확인했으니 이는 pass.
 - ServerCore 프로젝트의 CorePch.h 파일에 ```#include <stdio.h>```가 누락 되어 있었다. 해결 완료! 그리고 순서에 따라서 오류가 발생할 수도 있다는 점 꼭 유의하기.
 
-![image](https://github.com/user-attachments/assets/8068e4dd-19b2-466c-b86b-7d2dd5005e11)
+![image](https://github.com/user-attachments/assets/a7cc0057-948e-469f-9db8-e2418a289cca)
+
+---
+
+## TCP vs UDP
+앞의 소켓 프로그래밍 입문 수업의 코드는 TCP 코드였다.
+
+TCP, UDP 개념은 기본 상식 + 면접 단골 질문이니 꼭 숙지할 것! 서버 쪽 아니더라도 꼭 알아야 한다.
+
+[개념 설명]
+네트워크 통신은 택배를 배송하는 것과 비슷하다.
+
+- 한 아파트 내부에서 각자의 호 수나 닉네임으로 불러 택배를 보낼 수 있다.
+
+![image](https://github.com/user-attachments/assets/9bdee7f4-ecd0-4f5b-9a75-6e1a10d18be5) | ![image](https://github.com/user-attachments/assets/0d657a03-3006-43d9-8eac-48139e136a6f)
+
+- 다른 아파트로 택배를 보낼 때는 여러 단계를 거쳐서 택배를 보내야 한다.
+
+![image](https://github.com/user-attachments/assets/89477405-9705-4346-bee7-70d1febebc71)
+
+&nbsp;
+
+실제 네트워크도 이와 마찬가지이다. 집은 단말기(컴퓨터, 휴대폰 등), 경비실은 스위치, 택배 배송 센터는 라우터로 볼 수 있다.
+
+- 같은 네트워크 망에서 보낼 때
+
+![image](https://github.com/user-attachments/assets/7f304a60-366e-4d97-abbc-3fa20d92c1b5)
+
+- 다른 네트워크 망으로 보낼 때
+
+![image](https://github.com/user-attachments/assets/060b7853-0b70-4a97-9e36-2e52d4ab5b21)
 
 ---
 
