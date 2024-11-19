@@ -25,7 +25,7 @@ toc_sticky: true
 
 ![image](https://github.com/user-attachments/assets/195bb269-272d-4fe3-b756-0dfe57e559e5)
 
-
+---
 
 ## [이론] 버전을 되돌리는 방법(24.10.01) 
 
@@ -45,6 +45,7 @@ toc_sticky: true
 2. ~~스테이지로 추가하기~~ → mixed reset(스테이지까지 되돌리기) 
 3. ~~저장소로 커밋하기~~ → soft reset(커밋만 되돌리기)
 
+---
 
 ## [Windows 실습] revert와 reset 실습(24.10.02)
 
@@ -74,6 +75,7 @@ soft reset, mixed reset, hard reset 중 어떤 리셋을 쓸건지 선택하고 
 
 cf) Revert와 Reset을 제대로 할 수 없으면 "이 작업이 잘못되면 다 끝장이야.."라는 생각과 함께 작업에 소극적이게 될 수 있다. Revert와 Reset을 제대로 할 수 있으면 파일 날라가도 다시 되돌릴 수 있으니 쓸 데 없는 걱정이 줄어들게 되고, 작업을 더 과감하게 할 수 있게 된다!
 
+---
 
 ## [Windows 실습] 작업 임시 저장하기 Stash(24.10.02)
 
@@ -115,13 +117,6 @@ a.txt에 C D를 추가했었는데, 스태시를 한 후 변경 사항이 생기
  파일 상태를 보면, 임시 저장1의 변경 사항이 적용되었음을 알 수 있다.
 
  ![image](https://github.com/user-attachments/assets/fe3da5eb-efee-4afc-877f-cc491aacf5b7)
-
-
-&nbsp;
-&nbsp;
-&nbsp;
-&nbsp;
-&nbsp;
 
 ---
 

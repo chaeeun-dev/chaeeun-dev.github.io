@@ -22,7 +22,7 @@ source tree를 실행해서 저장소를 만든다.
 cf) 이렇게 .git이 존재하는 공간이 '작업 디렉터리'이다.
 ![image](https://github.com/user-attachments/assets/7a04a4c3-9836-49d2-bba2-d53b7615bfe5)
 
-
+---
 
 ## [이론] 버전 관리의 큰 그림(24.09.27)
 
@@ -59,6 +59,7 @@ cf) 이렇게 .git이 존재하는 공간이 '작업 디렉터리'이다.
 
 **정리** - 작업 디렉터리의 파일은 변경 사항 생성 → add → commit 과정 통해 작업 디렉터리 → 스테이지 → 저장소 순으로 이동하며 새로운 버전으로 만들어진다.
 
+---
 
 ## [Windows 실습] 버전 관리 맛보기 : 버전 만들기(24.09.29)
 
@@ -93,6 +94,7 @@ Sourcetree 앱을 켜보면 **스테이지에 올라가지 않은 파일**에 a.
 
 ![image](https://github.com/user-attachments/assets/b10f4a67-6089-4d74-a821-4e9029295b08)
 
+---
 
 ## [Windows 실습] 버전에 쌓여 사용자에게 선보이기까지 : 커밋 해시, 태그(24.09.29)
 
@@ -106,12 +108,6 @@ Sourcetree 앱을 켜보면 **스테이지에 올라가지 않은 파일**에 a.
 Sourcetree에서 태그를 붙여보자. 태그를 붙일 커밋에 우클릭을 한 후 태그를 붙인다. 삭제하는 방법도 우클릭 후 태그를 삭제하면 된다.
 
 ![image](https://github.com/user-attachments/assets/604b4029-9168-40be-b9fa-b859e87fdfff)
-
-&nbsp;
-&nbsp;
-&nbsp;
-&nbsp;
-&nbsp;
 
 ---
 

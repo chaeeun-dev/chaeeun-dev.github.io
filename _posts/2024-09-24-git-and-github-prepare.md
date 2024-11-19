@@ -19,6 +19,7 @@ toc_sticky: true
 
 → [명령어 실습] 명령어로 깃/깃허브 다루기(소스트리로 깃을 한 번 익혔다면 아주 빠르게 명령어도 익힐 수 있음.)
 
+---
 
 ## [이론] 깃이 없는 세상: 버전과 버전 관리(24.09.24)
 
@@ -38,6 +39,7 @@ toc_sticky: true
 
 버전 관리? 변경 내역들을 기억하며, 필요하다면 작업을 되돌리며, 여러 명의 코드를 쉽게 나누고 합치며 개발하는 것
 
+---
 
 ## [이론] 깃/깃허브/소스트리란?(24.09.24)
 
@@ -47,6 +49,8 @@ Source tree - Git을 편하게 쓸 수 있게 하는 도구
 
 GitHub - 원격 저장소 호스팅 서비스, 원격 Git으로 관리한 프로젝트 호스팅 서비스, 인터넷 상에서 깃으로 관리한 프로젝트를 관리해주는 서비스, +개발자들의 SNS
 
+
+---
 
 ## [Windows 실습] 깃 설치 및 설정(24.09.24)
 
@@ -65,22 +69,19 @@ cmd 창 또는 git bash(경로 우클릭→추가 옵션 표시→git bash) - cm
 ![image](https://github.com/user-attachments/assets/2b857045-ad19-4bf1-bfde-1b3dcee97cb0)
 
 
+---
+
 ## [Windows 실습] 소스트리 설치(24.09.24)
 
 [source tree 사이트](https://www.sourcetreeapp.com/) 소스트리 설치 
 
 Registration 건너뛰기 → Mercurial 체크 박스 해제 → 이름과 이메일 입력 → SSH키 아니오
 
+---
 
 ## [Windows 실습] 깃허브 회원가입(24.09.24)
 
 이미 되어있으니 pass!
-
-&nbsp;
-&nbsp;
-&nbsp;
-&nbsp;
-&nbsp;
 
 ---
 
