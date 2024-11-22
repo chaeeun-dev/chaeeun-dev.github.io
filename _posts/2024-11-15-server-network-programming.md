@@ -183,4 +183,58 @@ TCP, UDP 개념은 기본 상식 + 면접 단골 질문이니 꼭 숙지할 것!
 
 ---
 
+## 논블로킹 소켓(24.11.21)
+
+### 소켓 옵션
+1. level (SOL_SOCKET, IPPROTO_IP, IPPROTO_TCP)
+2. optname
+3. optval
+
+```cpp
+	// SO_KEEPALIVE (주기적으로 연결 상태 확인)
+	bool enable = true;
+	::setsockopt(listenSocket, SOL_SOCKET, SO_KEEPALIVE, (char*)&enable, sizeof(enable));
+
+
+	// SO_LINGER = 지연하다
+	// SO_SNDBUF
+	// SO_RCVBUF
+
+	int32 sendBufferSize;
+	int32 optionLen = sizeof(sendBufferSize);
+	::getsockopt(listenSocket, SOL_SOCKET, SO_SNDBUF, (char*)&sendBufferSize, &optionLen);
+	std::cout << "송신 버퍼 크기" << sendBufferSize << std::endl;
+
+	//
+
+	// SO_REUSEADDR - 주소 재사용
+	{
+		bool enable = true;
+		::setsockopt(listenSocket, SOL_SOCKET, SO_REUSEADDR, (char*)&enable, sizeof(enable));
+	}
+
+	// IPPROTO_TCP
+	// TCP_NODELAY = Nagle 알고리즘(*중요) 작동 여부 - 데이터가 충분히 크면 보내고, 작으면 보내지 않고 기다림.
+	// 게임에서 필요한가? - 데이터가 작은데 꼭 보내야할 경우는 끄는 게 좋음.
+```
+
+---
+
+### SocketUtils
+SocketUtils에 나만의 라이브러리를 만들어 굳이 외우지 않고 함수를 호출하도록 만든다. 
+
+---
+
+### 논블로킹 소켓
+- 논블로킹 소켓 : 게임에서 다수의 접속자를 모두 받아주는 건 매우 버겁다. 할 일이 없는 이용자는 빠르게 스킵하는 게 논블로킹 소켓이다.
+
+- 블로킹 : 원하는 행위가 일어날 때까지 기다림
+- 논블로킹 : 바로 빠져나오는데 한 번 더 체크를 해서 기다리는 이유를 판별해야 함. (문제가 일어난 것인지, 데이터가 잘 전달된 것인지 등) 
+
+### 소스 코드
+- [Dummy client의 NonblockingSocket 코드](https://github.com/chaeeun-dev/Server/blob/main/DummyClient/NonblockingSocket.cpp)
+- [Server 의 NonblockingSocket 코드](https://github.com/chaeeun-dev/Server/blob/main/Server/NonblockingSocket.cpp)
+
+---
+
 출처 [루키스님 게임 프로그래머 올인원 강의](https://www.inflearn.com/course/%EA%B2%8C%EC%9E%84-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8-%EC%9E%85%EB%AC%B8-%EC%98%AC%EC%9D%B8%EC%9B%90-rookiss)
