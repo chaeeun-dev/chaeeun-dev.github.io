@@ -133,11 +133,13 @@ Collider Componet 구현하는데 자꾸 오류가 발생해서 20분 정도 헤
 ### Sound FMOD
 - 오류 : FMOD 관련된 파일을 찾을 수 없다는 링커 오류 발생
 - 해결
- -  추가 포함 디렉터리를 ```ProjectDir```에서 ```SolutionDir```로 수정함.
- - FOMD 사이트 다운로드 창에 API가 없고 무슨 studio, engine 등만 있어서 헷갈렸는데, Engine으로 다운 받는 거였다. 다운 받고 프로젝트 설정에서 경로 지정해주니까 ```#pragma```로 라이브러리 추가하지 않는 방법으로 해결했다. ([How to set up the FMOD API in Visual Studio](https://medium.com/@migangahuga/how-to-set-up-the-fmod-api-in-visual-studio-9353fbbd2144)이 사이트 덕분에 해결됐다! FMOD 관련 글들이 다 몇년 전에 작성한 거라서 구글 필터를 1년으로 맞춰서 찾았음)
+   -  추가 포함 디렉터리를 ```ProjectDir```에서 ```SolutionDir```로 수정함.
+   - FOMD 사이트 다운로드 창에 API가 없고 무슨 studio, engine 등만 있어서 헷갈렸는데, Engine으로 다운 받는 거였다. 다운 받고 프로젝트 설정에서 경로 지정해주니까 ```#pragma```로 라이브러리 추가하지 않는 방법으로 해결했다. ([How to set up the FMOD API in Visual Studio](https://medium.com/@migangahuga/how-to-set-up-the-fmod-api-in-visual-studio-9353fbbd2144)이 사이트 덕분에 해결됐다! FMOD 관련 글들이 다 몇년 전에 작성한 거라서 구글 필터를 1년으로 맞춰서 찾았음)
 
 ### 전방 선언, include
 - 오류 : C3536, C2672 등
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/1ae9929a-4ca7-4ea8-83b0-958bf5a6ff06/aae058c0-015f-4c6e-915c-5f24acbeedcc/image.png)
+
+![스크린샷 2024-11-28 232417](https://github.com/user-attachments/assets/7a84cf64-f4a8-4665-9a96-2a7effaf0362)
+
 - 해결
- - 전방 선언과 include 헤더로 해결됐다. SoundManager에서 Sound를 사용하는데 전방선언이 안 되어 있으니 그랬던 것 같다. 
+   - 전방 선언과 include 헤더로 해결됐다. SoundManager에서 Sound를 사용하는데 전방선언이 안 되어 있으니 그랬던 것 같다. 
