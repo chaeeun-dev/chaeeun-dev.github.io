@@ -1,5 +1,5 @@
 ---
-title: "[ERROR] 클라, 프로젝트 오류 모음"
+title: "[ERROR] CLIENT, PROJECT 오류 모음"
 date: 2024-08-04 05:20:00 +09:00 
 categories: ERROR
 author_profile: false
