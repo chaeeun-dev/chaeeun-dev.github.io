@@ -33,3 +33,17 @@ toc_sticky: true
 
 ### pull
 원격 저장소를 가져와서 합치기
+
+---
+
+## [Windows 실습] 풀 리퀘스트 : 깃허브로 협업하기
+일반적으로 내가 소유하지 않은 원격 저장소에 푸쉬할 수 없다.
+
+### Pull Request
+원격 저장소가 내 변경사항을 Pull하도록 Request를 보내는 방식
+
+1. 기여하려는 저장소를 본인 계정으로 fork하기
+2. fork한 저장소를 clone하기
+3. branch 생성 후, 생성한 브랜치에서 작업하기
+4. 작업한 branch push하기
+5. pull request 보내기
