@@ -28,7 +28,7 @@ toc_sticky: true
 2. cd : 경로 이동하기
 3. clear : 화면 깨끗하게 만들기
 
-명령어
+[명령어]
 1. git init : 로컬 저장소 만들기
 2. git status : 작업 디렉터리 상태 확인하기
 3. git add : 스테이지에 올리기 (git add . : 모든 변경 사항을 스테이지에 올리기)
@@ -36,7 +36,7 @@ toc_sticky: true
 5. git log : 커밋 조회하기
 
 - commit 메시지
-    - `git commit "commit message"`
+    - `git commit -m "commit message"`
     - `git commit` 적고 Enter키 → VI 편집기에 a나 i 입력 후 `INSERT`뜨면 커밋 메시지 작성(제목, 엔터 후 본문) → `:wq`나 `:w`, `:q` 입력
 
 ---
@@ -62,3 +62,16 @@ toc_sticky: true
 4. git diff 브랜치1 브랜치2 : 브랜치끼리 비교하기
 
 ---
+
+## 작업 되돌리기
+1. git revert 커밋 해시 : 버전을 되돌린 새로운 버전을 만들기
+2. git reset 커밋 해시 : 버전을 완전히 되돌리기
+    - 디폴트 or git reset --mixed 커밋 해시 : 스테이지까지 되돌리기
+    - git reset --soft 커밋 해시 : 커밋만 되돌리기
+    - git reset --hard 커밋 해시 : 커밋부터 스테이지, 작업 디렉터리까지 되돌림
+
+---
+
+커밋 계속 만들면서 연습하기 귀찮아서 gpt한테 문제 내달라고 했다.. 이렇게 하니까 훨씬 재밌다 ㅎㅎ 혼자 레벨도 높여준다..
+
+![Image](https://github.com/user-attachments/assets/2231d777-fcc1-49b3-abd4-01460ccced86)
