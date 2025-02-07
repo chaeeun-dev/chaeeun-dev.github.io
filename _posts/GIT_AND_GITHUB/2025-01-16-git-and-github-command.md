@@ -72,6 +72,35 @@ toc_sticky: true
 
 ---
 
+## 작업 임시 저장하기
+1. git stash : 임시 저장하기
+2. git stash list : stash 목록 확인하기
+3. git stash -m "Commit Message" : stash 저장하기 (최근 항목이 0번이 됨)
+4. git stash apply 적용할 스태시 : 임시 저장된 항목을 적용하기
+5. git stash drop 적용할 스태시 : 임시 저장된 항목을 삭제하기
+
+---
+
+## 브랜치 관리하기
+1. git branch : 현재 브랜치 보기 (e.x. 현재 mster 브랜치에 check out 되어 있으면, * master로 표시)
+2. git branch 생성할 브랜치 : 브랜치 생성하기 (check out은 X)
+3. git checkout 체크아웃 할 브랜치 : check out 하기
+4. git checkout -b 생성할 브랜치 : 브랜치를 생성함과 동시에 check out 하기
+5. git log / git log --branches : 현재 브랜치의 기록 보기 / 모든 브랜치의 기록 보기
+6. git merge 병합할 브랜치 : 현재 브랜치에 병합하기
+
+**Merge 예시**  
+1. git checkout master : 병합 할 브랜치에 check out
+2. git merge foo
+3. git branch -d foo : 병합된 브랜치는 삭제하는 게 좋음
+
+**충돌 발생했을 때**
+1. 직접 수정(둘 중 하나만 남기기)
+2. 커밋하기
+
+
+---
+
 커밋 계속 만들면서 연습하기 귀찮아서 gpt한테 문제 내달라고 했다.. 이렇게 하니까 훨씬 재밌다 ㅎㅎ 혼자 레벨도 높여준다..
 
 ![Image](https://github.com/user-attachments/assets/2231d777-fcc1-49b3-abd4-01460ccced86)
