@@ -98,6 +98,28 @@ toc_sticky: true
 1. 직접 수정(둘 중 하나만 남기기)
 2. 커밋하기
 
+---
+
+## rebase 하기
+**rebase 예시** 
+1. git checkout foo : rebase 할 foo 브랜치로 check out 하기
+2. git rebase master : master 브랜치로 rebase 함
+
+---
+
+## 원격 저장소와 상호작용 하기
+
+### clone, push
+1. git clone <SSH 주소> : SSH 주소로 원격 저장소 clone하기
+2. cd <저장소 이름> : clone한 저장소로 이동하기
+3. ls / ls -a : 저장소 내 파일 목록 확인하기 (-a 옵션은 숨김 파일까지 표시)
+4. git branch -M main : master 브랜치 이름을 main으로 변경하기 (깃허브에서 하라는 대로 명령어 입력하면 됨)
+5. git remote add origin <주소> : 원격 저장소 추가하기
+
+- git remote -v : 등록된 원격 저장소 확인하기
+- git push -u origin main : push하기 (최초 1회 실행하면 이후 git push, git pull, git fetch 등을 입력해도 동일한 원격 브랜치로 작업 수행함)
+- git pull : 원격 저장소에서 최신 변경 사항 가져오기
+- git fetch : 원격 저장소에서 최신 변경 사항을 가져오지만, 자동 병합은 하지 않음
 
 ---
 
