@@ -117,9 +117,32 @@ toc_sticky: true
 5. git remote add origin <주소> : 원격 저장소 추가하기
 
 - git remote -v : 등록된 원격 저장소 확인하기
-- git push -u origin main : push하기 (최초 1회 실행하면 이후 git push, git pull, git fetch 등을 입력해도 동일한 원격 브랜치로 작업 수행함)
-- git pull : 원격 저장소에서 최신 변경 사항 가져오기
-- git fetch : 원격 저장소에서 최신 변경 사항을 가져오지만, 자동 병합은 하지 않음
+- git push -u origin main : push하기 (최초 1회 실행하면 이후 git push만 입력해도 자동 푸시 가능)
+
+### fetch, pull
+- git fetch -u origin main : 원격 저장소에서 최신 변경 사항을 가져오지만, 자동 병합은 하지 않음 (최초 1회 실행하면 이후 git fetch만 입력해도 자동 푸시 가능)
+- git pull -u origin main : 원격 저장소에서 최신 변경 사항 가져오기 (최초 1회 실행하면 이후 git pull만 입력해도 자동 푸시 가능)
+
+---
+
+## 명령어로 풀 리퀘스트(pull request) 보내기
+- fork한 저장소가 원본 저장소보다 뒤쳐져있을 때 → 깃허브에서 Sync fork - Update branch 하기
+
+**Pull Request**
+1. 기여하려는 저장소를 본인 계정으로 fork하기
+2. fork한 저장소를 clone하기
+3. 브랜치 생성 후 생성한 브랜치에서 작업하기
+4. 작업한 브랜치 push하기
+5. pull request 보내기
+
+**Pull Request 명령어**
+1. git clone <SSH 주소>
+2. cd <원격 저장소 이름>
+3. git checkout -b <브랜치 이름> : 브랜치 생성과 동시에 check out (main 브랜치에 커밋하면 안 됨!)
+4. 스테이지 추가 및 커밋
+5. git push origin <브랜치 이름> : 명시적으로 브랜치 이름을 입력해야 함
+6. 깃허브에서 내용 확인 후 pull request 보냄
+7. 원래 저장소의 주인이 확인 후 merge 하면 끝
 
 ---
 
