@@ -21,12 +21,18 @@ categories:
   - title: "Theory"
     children:
       - title: "C++"
-        url: /Theory/cpp/
+        url: /theory/cpp/
+      - title: "DirectX12"
+        url: /theory/directx12/
       - title: "Git"
-        url: /Theory/git/
-      - title: DirectX12/
-        url: /Theory/directx/
+        url: /theory/git/
+
   - title: "Projects"
     children:
-      - title: "B1A2 Project1"
-        url: /Projects/b1a2-project/
+      - title: "B1A2 Project"
+        url: /projects/b1a2-project/
+
+  - title: "Title3"
+    children:
+      - title: "Categories7"
+        url: /categories/categories7/
