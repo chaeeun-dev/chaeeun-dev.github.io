@@ -1,5 +1,5 @@
 ---
-title: "[DirectX 12] 1-1. OT"
+title: "[DirectX 12] 1-1.OT"
 excerpt: "왜 DirectX를 공부해야 하는가"
 
 categories:
@@ -12,8 +12,8 @@ permalink: /DirectX12/ot/
 toc: true
 toc_sticky: true
 
-date: 2025-02-20
-last_modified_at: 2025-02-20
+date: 2025-02-19
+last_modified_at: 2025-02-19
 ---
 
 ## 게임 엔진만으로 충분할까?
