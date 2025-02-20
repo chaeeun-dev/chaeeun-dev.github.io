@@ -1,6 +1,6 @@
 ---
 title: "[Git] #2-2. 버전 관리의 큰 그림"
-excerpt: ""
+excerpt: "깃이 관리하는 작업 디렉터리, 스테이지, 저장소 개념 이해하기"
 
 categories:
   - Git
