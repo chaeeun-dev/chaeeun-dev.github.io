@@ -1,5 +1,5 @@
 ---
-title: "[DirectX 12] 1-1.OT"
+title: "[DirectX 12] 1-1. OT"
 excerpt: "왜 DirectX를 공부해야 하는가"
 
 categories:
@@ -41,3 +41,8 @@ Unity, Unreal 엔진이 강력한 기능을 제공하지만, 단순히 엔진 �
 ## 학습 방향
 - 면접 대비 + 대규모 프로젝트를 다룰 수 있는 역량 기르기
 - 세부적인 함수 인자 설명에 집착하지 말고(MS 공식 홈페이지 참고하기), 전체적인 흐름을 이해하는 데 집중해야 한다. 그래픽스를 공부하면서 개별 요소에 혼란을 느낄 수도 있지만, 나무가 아닌 숲을 보는 시야를 기르는 게 중요하다.
+
+---
+
+*출처* 
+*[인프런 Rookiss님 강의](https://www.inflearn.com/course/%EC%96%B8%EB%A6%AC%EC%96%BC-3d-mmorpg-2/dashboard)*
