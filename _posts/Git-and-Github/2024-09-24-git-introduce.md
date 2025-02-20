@@ -7,7 +7,7 @@ categories:
 tags:
   - [Git, OT]
 
-permalink: /theory/git//introduce
+permalink: /theory/git/introduce
 
 toc: true
 toc_sticky: true
@@ -18,9 +18,7 @@ last_modified_at: 2024-09-24
 
 ![image](https://github.com/user-attachments/assets/f45f0254-aab4-4b46-91bb-8f106d48816d)
 
-## 강의 소개
-
-### 강의 개요
+## 강의 소개 및 개요
 
 1. **이론** 
   - 버전 관리의 기초 개념 
