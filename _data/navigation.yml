@@ -1,0 +1,37 @@
+# main links
+main:
+  - title: "Home"
+    url: https://chaeeun-dev.github.io/
+
+  - title: "About"
+    url: /about/
+
+  - title: "GitHub"
+    url: https://github.com/chaeeun-dev
+
+  # - title: "Projects"
+  #   url: /projects/
+
+  # - title: "Categories"
+  #   url: /categories/
+
+# sidebar navigation (categories)
+# 2022.02.15 sidebar update : simple ver.
+categories:
+  - title: "Theory"
+    children:
+      - title: "C++"
+        url: /theory/cpp/
+      - title: "DirectX12"
+        url: /theory/directx12/
+      - title: "Server"
+        url: /theory/server
+      - title: "Git"
+        url: /theory/git/
+
+  - title: "Projects"
+    children:
+      - title: "2DGame Project"
+        url: /projects/2dgame-project/
+      - title: "Github Blog"
+        url: /projects/github-blog

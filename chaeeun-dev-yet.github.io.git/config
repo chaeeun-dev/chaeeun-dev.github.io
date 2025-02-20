@@ -6,6 +6,3 @@
 	ignorecase = true
 [remote "origin"]
 	url = https://github.com/chaeeun-dev/chaeeun-dev-yet.github.io.git
-	fetch = +refs/*:refs/*
-	mirror = true
-	pushurl = https:github.com/chaeeun-dev/chaeeun-dev.github.io.git
