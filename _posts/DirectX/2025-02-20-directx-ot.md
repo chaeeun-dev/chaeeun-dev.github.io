@@ -12,8 +12,8 @@ permalink: /DirectX12/ot/
 toc: true
 toc_sticky: true
 
-date: 2025-02-19
-last_modified_at: 2025-02-19
+date: 2025-02-18
+last_modified_at: 2025-02-18
 ---
 
 ## 게임 엔진만으로 충분할까?
