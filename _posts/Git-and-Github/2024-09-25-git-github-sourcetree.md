@@ -12,8 +12,8 @@ permalink: /theory/git/git-github-sourcetree
 toc: true
 toc_sticky: true
 
-date: 2024-09-24
-last_modified_at: 2024-09-24
+date: 2024-09-25
+last_modified_at: 2024-09-25
 ---
 
 ## 깃/ 깃허브/ 소스트리란?
