@@ -1,14 +1,24 @@
 ---
-title: "[GIT & GITHUB] 모두의 깃 & 깃허브 - 섹션6 명령어로 깃 다루기"
-date: 2025-01-16 12:50:00 +09:00 
-categories: GIT
-author_profile: false
-toc : true
+title: "[Git] #6. 명령어로 깃 다루기"
+excerpt: "명령어를 알아야 하는 이유와 명령어 사용하기"
+
+categories:
+  - Git
+tags:
+  - [Git, Command]
+
+permalink: /theory/git/git-command
+
+toc: true
 toc_sticky: true
+
+date: 2025-01-16
+last_modified_at: 2024-01-16
 ---
 
-## [이론] 깃 명령어를 알아야 하는 이유
-소스트리로 commit, push, branch 등 공부 끝났는데, 굳이 왜?
+## 깃 명령어를 알아야 하는 이유
+
+소스트리로 commit, push, branch 등 공부 끝났는데, 굳이 왜 배워야 할까?
 - 명령어를 잘 익혀두면 소스트리로 작업하는 것보다 훨씬 간결하고, 편리함.
 - 소스트리를 사용할 수 없는 환경에서 사용할 수 있음.
 
@@ -20,9 +30,10 @@ toc_sticky: true
 
 ---
 
-## [Windows 실습] 명령어
+## 명령어
 
 ### 저장소와 버전 만들기
+
 기본적인 명령어
 1. pwd : 현재 경로 확인하기
 2. cd : 경로 이동하기
@@ -42,6 +53,7 @@ toc_sticky: true
 ---
 
 ### 커밋 다양하게 조회하기
+
 1. git log --oneline : 한 줄에 log를 출력하기
 2. git log -p or patch : 각 커밋의 변경 사항 출력하기
 3. git log --graph : 그래프 보여주기 (한 줄로 그래프를 보고싶다면, git log --oneline --graph)
@@ -49,13 +61,15 @@ toc_sticky: true
 ---
 
 ### 태그 관리하기
+
 1. git tag 태그 : 태그 추가하기 (git tag v0.0.1)
 2. git tag --list : 태그 조회하기
 3. git tag --delete 태그 : 태그 삭제하기
 
 ---
 
-## 작업 내용 비교하기
+### 작업 내용 비교하기
+
 1. git diff / git cached : 최근 커밋과 작업 디렉터리 비교하기
 2. git diff --staged : 최근 커밋과 스테이지 비교하기
 3. git diff 커밋1 커밋2 : 커밋끼리 비교하기 (순서 중요)
@@ -63,7 +77,8 @@ toc_sticky: true
 
 ---
 
-## 작업 되돌리기
+### 작업 되돌리기
+
 1. git revert 커밋 해시 : 버전을 되돌린 새로운 버전을 만들기
 2. git reset 커밋 해시 : 버전을 완전히 되돌리기
     - 디폴트 or git reset --mixed 커밋 해시 : 스테이지까지 되돌리기
@@ -72,7 +87,8 @@ toc_sticky: true
 
 ---
 
-## 작업 임시 저장하기
+### 작업 임시 저장하기
+
 1. git stash : 임시 저장하기
 2. git stash list : stash 목록 확인하기
 3. git stash -m "Commit Message" : stash 저장하기 (최근 항목이 0번이 됨)
@@ -81,7 +97,8 @@ toc_sticky: true
 
 ---
 
-## 브랜치 관리하기
+### 브랜치 관리하기
+
 1. git branch : 현재 브랜치 보기 (e.x. 현재 mster 브랜치에 check out 되어 있으면, * master로 표시)
 2. git branch 생성할 브랜치 : 브랜치 생성하기 (check out은 X)
 3. git checkout 체크아웃 할 브랜치 : check out 하기
@@ -100,14 +117,13 @@ toc_sticky: true
 
 ---
 
-## rebase 하기
+### rebase 
+
 **rebase 예시** 
 1. git checkout foo : rebase 할 foo 브랜치로 check out 하기
 2. git rebase master : master 브랜치로 rebase 함
 
 ---
-
-## 원격 저장소와 상호작용 하기
 
 ### clone, push
 1. git clone <SSH 주소> : SSH 주소로 원격 저장소 clone하기
@@ -125,7 +141,7 @@ toc_sticky: true
 
 ---
 
-## 명령어로 풀 리퀘스트(pull request) 보내기
+### 풀 리퀘스트(pull request) 
 - fork한 저장소가 원본 저장소보다 뒤쳐져있을 때 → 깃허브에서 Sync fork - Update branch 하기
 
 **Pull Request**
@@ -146,6 +162,13 @@ toc_sticky: true
 
 ---
 
+## 연습하기
+
 커밋 계속 만들면서 연습하기 귀찮아서 gpt한테 문제 내달라고 했다.. 이렇게 하니까 훨씬 재밌다 ㅎㅎ 혼자 레벨도 높여준다..
 
 ![Image](https://github.com/user-attachments/assets/2231d777-fcc1-49b3-abd4-01460ccced86)
+
+--- 
+
+*출처*
+*[강민철님 모두의 깃 & 깃허브](https://www.inflearn.com/course/%EB%AA%A8%EB%91%90%EC%9D%98-%EA%B9%83-%EA%B9%83%ED%97%88%EB%B8%8C)*
