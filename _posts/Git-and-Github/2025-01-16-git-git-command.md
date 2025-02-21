@@ -39,7 +39,7 @@ last_modified_at: 2024-01-16
 2. cd : 경로 이동하기
 3. clear : 화면 깨끗하게 만들기
 
-[명령어]
+**[명령어]**
 1. git init : 로컬 저장소 만들기
 2. git status : 작업 디렉터리 상태 확인하기
 3. git add : 스테이지에 올리기 (git add . : 모든 변경 사항을 스테이지에 올리기)
@@ -106,12 +106,12 @@ last_modified_at: 2024-01-16
 5. git log / git log --branches : 현재 브랜치의 기록 보기 / 모든 브랜치의 기록 보기
 6. git merge 병합할 브랜치 : 현재 브랜치에 병합하기
 
-**Merge 예시**  
+**[Merge] 예시**  
 1. git checkout master : 병합 할 브랜치에 check out
 2. git merge foo
 3. git branch -d foo : 병합된 브랜치는 삭제하는 게 좋음
 
-**충돌 발생했을 때**
+**[충돌 발생했을 때]**
 1. 직접 수정(둘 중 하나만 남기기)
 2. 커밋하기
 
@@ -119,13 +119,14 @@ last_modified_at: 2024-01-16
 
 ### rebase 
 
-**rebase 예시** 
+**r[ebase 예시]** 
 1. git checkout foo : rebase 할 foo 브랜치로 check out 하기
 2. git rebase master : master 브랜치로 rebase 함
 
 ---
 
 ### clone, push
+
 1. git clone <SSH 주소> : SSH 주소로 원격 저장소 clone하기
 2. cd <저장소 이름> : clone한 저장소로 이동하기
 3. ls / ls -a : 저장소 내 파일 목록 확인하기 (-a 옵션은 숨김 파일까지 표시)
@@ -135,13 +136,17 @@ last_modified_at: 2024-01-16
 - git remote -v : 등록된 원격 저장소 확인하기
 - git push -u origin main : push하기 (최초 1회 실행하면 이후 git push만 입력해도 자동 푸시 가능)
 
+---
+
 ### fetch, pull
+
 - git fetch -u origin main : 원격 저장소에서 최신 변경 사항을 가져오지만, 자동 병합은 하지 않음 (최초 1회 실행하면 이후 git fetch만 입력해도 자동 푸시 가능)
 - git pull -u origin main : 원격 저장소에서 최신 변경 사항 가져오기 (최초 1회 실행하면 이후 git pull만 입력해도 자동 푸시 가능)
 
 ---
 
 ### 풀 리퀘스트(pull request) 
+
 - fork한 저장소가 원본 저장소보다 뒤쳐져있을 때 → 깃허브에서 Sync fork - Update branch 하기
 
 **Pull Request**
