@@ -1,13 +1,13 @@
 # main links
 main:
-  - title: "Home"
-    url: https://chaeeun-dev.github.io/
-
   - title: "About"
     url: /about/
 
   - title: "GitHub"
     url: https://github.com/chaeeun-dev
+
+  - title: "Search"
+    url: /search/
 
   # - title: "Projects"
   #   url: /projects/
