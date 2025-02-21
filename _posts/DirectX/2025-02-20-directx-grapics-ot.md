@@ -1,5 +1,5 @@
 ---
-title: "[DirectX 12] 1-2. 그래픽스 OT"
+title: "[DirectX 12] #1-2. 그래픽스 OT"
 excerpt: "게임 개발과 그래픽스의 개념적 이해"
 
 categories:
