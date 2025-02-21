@@ -44,10 +44,10 @@ master 브랜치에는 커밋이 <span style="color:red"> 세 개 </span>, foo �
 
 ### 특정 브랜치에서 작업하기 : HEAD와 체크아웃
 
-<span style="background-color:#fff5b1"> HEAD </span>
-- 현재 작업 중인 브랜치의 커밋을 가리킨다.
-- 일반적으로 현재 작업 중인 브랜치의 <span style="color:red"> 최신 커밋 </span>을 가리킨다.
-- 한 마디로 "내가 지금 어디에서 작업 중인가"를 가리킨다.
+- <span style="background-color:#fff5b1"> HEAD </span>
+  - 현재 작업 중인 브랜치의 커밋을 가리킨다.
+  - 일반적으로 현재 작업 중인 브랜치의 <span style="color:red"> 최신 커밋 </span>을 가리킨다.
+  - 한 마디로 "내가 지금 어디에서 작업 중인가"를 가리킨다.
 
 ![image](https://github.com/user-attachments/assets/51ae9af8-b3bf-4671-af69-c55b8b6b99c4)
 
@@ -57,9 +57,10 @@ HEAD가 bar 브랜치의 6번 커밋을 가리키고 있다 ➡️ 현재 여섯
 
 HEAD를 요리조리 옮겨서 작업 브랜치를 바꿀 수 있는데, 이를 체크 아웃이라고 한다.
 
-<span style="background-color:#fff5b1"> 체크 아웃(checkout) </span>
-- 특정 브랜치에서 작업할 수 있도록 환경을 바꾸는 것이다.
-- HEAD의 위치를 특정 브랜치의 최신 커밋으로 옮긴다.
+
+- <span style="background-color:#fff5b1"> 체크 아웃(checkout) </span>
+  - 특정 브랜치에서 작업할 수 있도록 환경을 바꾸는 것이다.
+  - HEAD의 위치를 특정 브랜치의 최신 커밋으로 옮긴다.
 
 --- 
 
