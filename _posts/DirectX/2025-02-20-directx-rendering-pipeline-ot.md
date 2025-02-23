@@ -78,3 +78,8 @@ GPU가 그래픽 연산을 처리하는 단계적 과정으로, 개발자들이 
 - DirectX는 GPU를 위한 표준 API 역할을 수행한다.
 - 개발자는 DirectX를 통해 GPU에 작업을 요청하고, 제조사들은 DirectX 스펙이 맞게 GPU를 제작한다.
 - 즉, DirectX르 사용하면 특정 제조사에 종속되지 않고, 다양한 GPU에서 동일한 방식으로 그래픽을 처리할 수 있다.
+
+---
+
+*출처* 
+*[인프런 Rookiss님 강의](https://www.inflearn.com/course/%EC%96%B8%EB%A6%AC%EC%96%BC-3d-mmorpg-2/dashboard)*
