@@ -1,5 +1,5 @@
 ---
-title: "[DirectX 12] #S1-1. OT"
+title: "[DirectX 12] #1-1. OT"
 excerpt: "왜 DirectX를 공부해야 하는가"
 
 categories:
