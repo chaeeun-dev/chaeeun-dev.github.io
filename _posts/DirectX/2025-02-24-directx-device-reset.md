@@ -40,7 +40,7 @@ struct WindowInfo
 ```
 - `Engine` 클래스를 어디서든 접근할 수 있도록 설정한다.
 1. 싱글톤 디자인 패턴 사용하기
-2. 전역 클래스 사용하기 (`CEngine` 전역 객체 활용)
+2. 전역 클래스 사용하기 (`CEngine` 전역 객체 활용) → 프로젝트에서는 전역 클래스를 사용한다!
 
 ---
 
@@ -52,14 +52,15 @@ struct WindowInfo
     - DirectX는 COM 객체를 사용하여 GPU와 상호작용 한다.
     - COM 객체의 내부 동작은 숨겨져 있기 때문에 개발자는 세부사항을 몰라도 된다.
     - ComPtr(스마트 포인터)를 사용해 GPU 자원을 자동으로 관리한다(delete 신경쓰지 않아도 됨).
-
-→ Device는 COM을 통해 GPU에 접근하고, 그래픽 객체를 생성할 수 있다.
+    - → Device는 COM을 통해 GPU에 접근하고, 그래픽 객체를 생성할 수 있다.
 
 ```cpp
-	ComPtr<ID3D12Debug>			_debugController; // 디버기 활성화
-	ComPtr<IDXGIFactory>		_dxgi; // 화면 관련 기능들
-	ComPtr<ID3D12Device>		_device; // 각종 객체 생성
+	ComPtr<ID3D12Debug> _debugController; // 디버깅 활성화
+	ComPtr<IDXGIFactory> _dxgi; // 화면 관련 기능들
+	ComPtr<ID3D12Device> _device; // 각종 객체 생성
 ```
+
+&nbsp;
 
 초기화 과정 (`Device::Init()`)
 1. 디버깅 활성화
@@ -96,7 +97,9 @@ device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&_fence));
 _fenceEvent = ::CreateEvent(nullptr, FALSE, FALSE, nullptr);
 ```
 
-동기화(`waitSunc()`)
+&nbsp;
+
+동기화(`waitSync()`)
 - GPU 작업이 끝날 때까지 CPU가 대기하도록 설정한다.
 
 ```cpp
@@ -113,7 +116,7 @@ if (_fence->GetCompletedValue() < _fenceValue)
 
 ### RenderBegin & RenderEnd
 
-화면 렌더링에 관련된 기능인데, 이번 강의에선 다루지 않는다.
+화면 렌더링에 관련된 기능인데, 이번 강의 말고 다음에 자세히 다룰 예정이다!
 
 ---
 
