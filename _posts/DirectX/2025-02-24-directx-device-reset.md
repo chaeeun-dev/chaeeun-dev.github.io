@@ -47,7 +47,7 @@ struct WindowInfo
 ### Device 
 
 - Device는 인력 사무소 역할이라고 할 수 있는데, GPU와 연결하고 각종 객체를 생성하는 역할을 담당한다.
-- Device가 GPU를 제어할 수 있는 이유 : COM(Component Object Model)
+> Device가 GPU를 제어할 수 있는 이유 : COM(Component Object Model)
     - COM은 DirectX에서 프로그래밍 언어 독립성과 하위 호환성을 제공하는 기술이다.
     - DirectX는 COM 객체를 사용하여 GPU와 상호작용 한다.
     - COM 객체의 내부 동작은 숨겨져 있기 때문에 개발자는 세부사항을 몰라도 된다.
