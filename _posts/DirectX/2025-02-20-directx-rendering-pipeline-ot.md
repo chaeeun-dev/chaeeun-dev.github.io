@@ -82,4 +82,4 @@ GPU가 그래픽 연산을 처리하는 단계적 과정으로, 개발자들이 
 ---
 
 *출처* 
-*[인프런 Rookiss님 강의](https://www.inflearn.com/course/%EC%96%B8%EB%A6%AC%EC%96%BC-3d-mmorpg-2/dashboard)*
+*[인프런 Rookiss님 게임 수학과 DirectX12](https://www.inflearn.com/course/%EC%96%B8%EB%A6%AC%EC%96%BC-3d-mmorpg-2/dashboard)*

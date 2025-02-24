@@ -119,7 +119,7 @@ last_modified_at: 2024-01-16
 
 ### rebase 
 
-**r[ebase 예시]** 
+**[rebase 예시]** 
 1. git checkout foo : rebase 할 foo 브랜치로 check out 하기
 2. git rebase master : master 브랜치로 rebase 함
 
