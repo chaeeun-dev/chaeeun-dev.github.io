@@ -111,13 +111,6 @@ if (_fence->GetCompletedValue() < _fenceValue)
 	::WaitForSingleObject(_fenceEvent, INFINITE);
 }
 ```
-
----
-
-### RenderBegin & RenderEnd
-
-화면 렌더링에 관련된 기능인데, 이번 강의 말고 다음에 자세히 다룰 예정이다!
-
 ---
 
 
