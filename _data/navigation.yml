@@ -28,6 +28,8 @@ categories:
         url: /theory/server
       - title: "Git"
         url: /theory/git/
+      - tilte: "Error"
+        url: /theory/error
 
   - title: "Projects"
     children:
