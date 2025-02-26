@@ -13,7 +13,7 @@ toc: true
 toc_sticky: true
 
 date: 2025-02-24
-last_modified_at: 2025-02-24
+last_modified_at: 2025-02-27
 ---
 
 ## 장치 초기화
@@ -21,26 +21,6 @@ last_modified_at: 2025-02-24
 장치 초기화란 GPU와 DirectX를 연결하고, 그래픽 명령을 처리할 수 있도록 준비하는 과정이다. 
 
 이번에는 `Command Queue`, `Device`, `Swap Chain`, `Descriptor Heap` 등 장치 초기화에 필요한 API를 다뤄볼 것이다.
-
----
-
-### Engine
-
-- Engine 클래스는 DirectX 12의 핵심 API를 관리한다.
-- `EnginePch.h`에 윈도우 정보 구조체를 정의하여 창 크기 및 모드를 관리하고, `ResizeWindow()` 함수를 통해 초기화와 창 크기 변경할 수 있는 기능을 구현한다.
-
-```cpp
-struct WindowInfo
-{
-	HWND hwnd;	// 출력할 윈도우 핸들
-	int32 width;	// 너비
-	int32 height;	// 높이
-	bool windowed;	// 창 모드 여부
-};
-```
-- `Engine` 클래스를 어디서든 접근할 수 있도록 설정한다.
-1. 싱글톤 디자인 패턴 사용하기
-2. 전역 클래스 사용하기 (`GEngine` 전역 객체 활용) → 프로젝트에서는 전역 클래스를 사용한다!
 
 ---
 
@@ -55,6 +35,7 @@ struct WindowInfo
 >    - → Device는 COM을 통해 GPU에 접근하고, 그래픽 객체를 생성할 수 있다.
 
 - 사용 변수
+
 ```cpp
 ComPtr<ID3D12Debug> _debugController; // 디버깅 활성화
 ComPtr<IDXGIFactory> _dxgi; // 화면 관련 기능들
@@ -63,7 +44,7 @@ ComPtr<ID3D12Device> _device; // 각종 객체 생성
 
 &nbsp;
 
-- 초기화(`Device::Init()`)
+- 초기화 (`Device::Init()`)
 	1. 디버깅 활성화
 		- 개발 및 디버깅을 위한 기능이다.
 		- DirectX 12 API를 사용할 때 잘못된 사용법이나 오류를 출력창에 경고 메시지로 제공한다.
@@ -95,21 +76,21 @@ _debugController->EnableDebugLayer();
 - 사용 변수
 
 ```cpp
-ComPtr<ID3D12CommandQueue>			_cmdQueue;
-ComPtr<ID3D12CommandAllocator>		_cmdAlloc;
+ComPtr<ID3D12CommandQueue>	_cmdQueue;
+ComPtr<ID3D12CommandAllocator>	_cmdAlloc;
 ComPtr<ID3D12GraphicsCommandList>	_cmdList;
 
-ComPtr<ID3D12Fence>					_fence;
-uint32								_fenceValue = 0;
-HANDLE								_fenceEvent = INVALID_HANDLE_VALUE;
+ComPtr<ID3D12Fence>	_fence;
+uint32	_fenceValue = 0;
+HANDLE	_fenceEvent = INVALID_HANDLE_VALUE;
 
-shared_ptr<SwapChain>		_swapChain;
+shared_ptr<SwapChain>	_swapChain;
 shared_ptr<DescriptorHeap>	_descHeap;
 ```
 
 &nbsp;
 
-- 초기화(`CommandQueue::Init()`)
+- 초기화 (`CommandQueue::Init()`)
 	1. GPU가 실행할 명령 리스트를 담을 `Command Queue`를 생성한다.
 	2. 명령 리스트 할당을 위한 `Command Allocator`를 생성한다.
 	3. 실제 GPU 작업을 담는 리스트인 `Command List`를 생성한다.
@@ -125,7 +106,7 @@ _fenceEvent = ::CreateEvent(nullptr, FALSE, FALSE, nullptr);
 
 &nbsp;
 
-- 동기화(`CommandQueue::waitSync()`)
+- 동기화 (`CommandQueue::waitSync()`)
 	- GPU 작업이 끝날 때까지 CPU가 대기하도록 설정한다.
 
 ```cpp
@@ -137,6 +118,67 @@ if (_fence->GetCompletedValue() < _fenceValue)
 	::WaitForSingleObject(_fenceEvent, INFINITE);
 }
 ```
+
+&nbsp;
+
+- 렌더링 준비 (`CommandQueue::RenderBegin()`)
+	- GPU가 렌더링할 준비를 하도록 설정하는 함수이다.
+	- 후면 버퍼를 렌더 타겟으로 변경하고 렌더링을 준비한다.
+	1. `Command Allocator`와 `Command List`를 리셋한다.
+	2. 현재 화면에 출력(Present) 중이던 후면 버퍼를 RTV로 변경한다.
+	3. 뷰포트(GPU가 그릴 화면 크기와 위치)와 시저(화면 잘라 특정 영역만 렌더링)를 설정한다.
+	4. 후면 버퍼에 RTV를 지정하고, 후면 버퍼를 GPU의 렌더 타겟으로 설정한다.
+
+```cpp
+_cmdAlloc->Reset();
+_cmdList->Reset(_cmdAlloc.Get(), nullptr);
+
+D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
+_swapChain->GetCurrentBackBufferResource().Get(),
+D3D12_RESOURCE_STATE_PRESENT, // 화면 출력
+D3D12_RESOURCE_STATE_RENDER_TARGET); // 외주 결과물
+_cmdList->ResourceBarrier(1, &barrier);
+
+_cmdList->RSSetViewports(1, vp);
+_cmdList->RSSetScissorRects(1, rect);
+
+D3D12_CPU_DESCRIPTOR_HANDLE backBufferView = _descHeap->GetBackBufferView();
+_cmdList->ClearRenderTargetView(backBufferView, Colors::LightSteelBlue, 0, nullptr);
+_cmdList->OMSetRenderTargets(1, &backBufferView, FALSE, nullptr);
+```
+
+&nbsp;
+
+- 렌더링 끝 화면 출력 (`CommandQueue::RenderEnd()`)
+	- GPU가 렌더링을 마치고 화면에 출력하는 함수이다.
+	- 후면 버퍼를 화면에 출력하고 GPU가 명령을 실행한다.
+	1. 후면 버퍼를 다시 화면 출력(Present) 가능 상태로 변경한다.
+	2. 커맨드 리스트를 닫는다. (닫아야 GPU 실행 가능)
+	3. GPU가 실행할 수 있도록 커맨드 리스트를 실행 큐에 등록한다.
+	4. 후면 버퍼를 전면 버퍼(현재 화면)으로 변경한다. (렌더링이 끝난 이미지를 화면에 표시함)
+	5. CPU가 GPU의 작업이 끝날 때까지 대기한다.
+	6. 다음 프레임에서 사용할 후면 버퍼로 변경하기 위해 스왑체인 인덱스를 변경한다.
+
+```cpp
+D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
+	_swapChain->GetCurrentBackBufferResource().Get(),
+	D3D12_RESOURCE_STATE_RENDER_TARGET, // 외주 결과물
+	D3D12_RESOURCE_STATE_PRESENT); // 화면 출력
+
+_cmdList->ResourceBarrier(1, &barrier);
+_cmdList->Close();
+
+ID3D12CommandList* cmdListArr[] = { _cmdList.Get() };
+_cmdQueue->ExecuteCommandLists(_countof(cmdListArr), cmdListArr);
+
+_swapChain->Present();
+
+WaitSync();
+
+_swapChain->SwapIndex();
+
+```
+
 ---
 
 ### Swap Chain
@@ -167,7 +209,7 @@ uint32 _backBufferIndex = 0;   // 현재 GPU가 작업 중인 백버퍼 인덱�
 
 &nbsp;
 
-- 초기화(`SwapChain::Init()`)
+- 초기화 (`SwapChain::Init()`)
 	1. 스왑체인 객체를 초기화한다.
 	2. `DXGI_SWAP_CHAIN_DESC` 구조체를 설정하여 해상도, 버퍼 개수, 갱신 빈도 등을 정의한다.
 	3. 스왑 체인 객체를 생성한다.
@@ -177,7 +219,7 @@ uint32 _backBufferIndex = 0;   // 현재 GPU가 작업 중인 백버퍼 인덱�
 _swapChain.Reset();
 
 DXGI_SWAP_CHAIN_DESC sd;
-// sd 구조체에 여러 설정하는 코드(생략)
+// sd 구조체 변수 설정하는 코드(생략)
 
 dxgi->CreateSwapChain(cmdQueue.Get(), &sd, &_swapChain);
 
@@ -187,7 +229,7 @@ for (int32 i = 0; i < SWAP_CHAIN_BUFFER_COUNT; i++)
 
 &nbsp;
 
-- 화면 출력(`SwapChain::Present()`)
+- 화면 출력 (`SwapChain::Present()`)
 	- GPU가 처리한 후면 버퍼를 화면에 출력한다(전면 버퍼로 전환).
 
 ```cpp
@@ -199,7 +241,7 @@ void SwapChain::Present()
 
 &nbsp;
 
-- 버퍼 인덱스 변경(`SwapChain::SwapIndex()`)
+- 버퍼 인덱스 변경 (`SwapChain::SwapIndex()`)
 	- 현재 GPU가 작업 중인 버퍼(후면 버퍼)를 변경한다.
 	- `SWAP_CHAIN_BUFFER_COUNT` 2개를 기준으로 0과 1을 반복한다.
 
@@ -212,7 +254,173 @@ void SwapChain::SwapIndex()
 
 ---
 
+### Descriptor Heap
 
+- 기안서를 작성하는 것과 같다고 할 수 있는데, GPU가 사용할 리소스를 알아볼 수 있도록 정리하는 과정이다.
+- DX11에서 `View`라고 불리던 개념이 DX12에서 `Descriptor`로 통합되었다.
+- DX12에서는 모든 뷰가 디스크립터로 통합되어 디스크립터 힙에서 관리된다.
+
+|DirectX 11|DirectX 12|
+|---|---|
+|RTV, DSV, CBV, SRV, UAV **(뷰 View)**|RTV, DSV, CBV, SRV, UAV **(디스크립터 Descriptor)**|
+|개별적으로 관리됨|**디스크립터 힙을 사용하여 배열 형태로 관리**|
+
+
+> 기안서를 작성하는 과정
+> 외주를 맡길 때 여러 정보를 아무렇게나 보내면 GPU가 리소스를 정확하게 처리할 수 없다.
+> 따라서, 각종 리소스를 어떤 용도로 사용할지 명확하게 정의하여 넘겨줘야 한다.
+
+&nbsp;
+
+- 사용 변수
+
+```cpp
+ComPtr<ID3D12DescriptorHeap>	_rtvHeap; // Render Target View를 저장하는 힙
+uint32	_rtvHeapSize = 0; // RTV 힙의 크기
+D3D12_CPU_DESCRIPTOR_HANDLE	_rtvHandle[SWAP_CHAIN_BUFFER_COUNT]; // RTV 핸들 배열
+
+shared_ptr<class SwapChain>	_swapChain; // 스왑체인 객체
+```
+
+&nbsp;
+
+- 참고
+	- `CD3DX12_CPU_DESCRIPTOR_HANDLE`과 같이 `CD`가 붙은 변수는 **d3dx12.h**에 포함되어 있는 변수다.
+
+&nbsp;
+
+- 초기화 (`DescriptorHeap::Init()`)
+	- RTV(Render Target View) 디스크립터 힙을 생성하고 설정하는 함수이다.
+	1. 스왑체인 정보를 저장한다.
+	2. RTV 디스크립터 크기를 가져온다.
+	3. RTV 디스크립터 힙을 설정한다. (같은 종류의 데이터를 배열로 관리함)
+	4. RTV 디스크립터 힙을 생성한다.
+	5. 디스크립터 힙의 시작 주소를 가져온다.
+	6. RTV 디스크립터를 할당 및 설정한다.
+
+```cpp
+_swapChain = swapChain;
+
+_rtvHeapSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+
+D3D12_DESCRIPTOR_HEAP_DESC rtvDesc;
+rtvDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
+rtvDesc.NumDescriptors = SWAP_CHAIN_BUFFER_COUNT;
+rtvDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+rtvDesc.NodeMask = 0;
+
+device->CreateDescriptorHeap(&rtvDesc, IID_PPV_ARGS(&_rtvHeap));	
+
+D3D12_CPU_DESCRIPTOR_HANDLE rtvHeapBegin = _rtvHeap->GetCPUDescriptorHandleForHeapStart();
+
+for (int i = 0; i < SWAP_CHAIN_BUFFER_COUNT; i++)
+{
+	_rtvHandle[i] = CD3DX12_CPU_DESCRIPTOR_HANDLE(rtvHeapBegin, i * _rtvHeapSize);
+	device->CreateRenderTargetView(swapChain->GetRenderTarget(i).Get(), nullptr, _rtvHandle[i]);
+}
+```
+
+&nbsp;
+
+- 백 퍼버 RTV 핸들 가져오기 (`DescriptorHeap::GetBackBufferView`)
+	- 현재 사용 중인 후면 버퍼의 RTV 핸들을 반환한다.
+
+```cpp
+return GetRTV(_swapChain->GetCurrentBackBufferIndex());
+```
+
+---
+
+### Engine
+
+- Engine 클래스는 DirectX 12의 핵심 API를 관리한다.
+
+&nbsp;
+
+- `EnginePch.h`에 윈도우 정보 구조체를 정의하여 창 크기 및 모드를 관리하고, `ResizeWindow()` 함수를 통해 초기화와 창 크기 변경할 수 있는 기능을 구현한다.
+
+```cpp
+struct WindowInfo
+{
+	HWND hwnd;	// 출력할 윈도우 핸들
+	int32 width;	// 너비
+	int32 height;	// 높이
+	bool windowed;	// 창 모드 여부
+};
+```
+
+&nbsp;
+
+- `Engine` 클래스를 어디서든 접근할 수 있도록 하는 2가지 방법
+1. 싱글톤 디자인 패턴 사용하기
+2. 전역 클래스 사용하기 (`GEngine` 전역 객체 활용) → 프로젝트에서는 전역 클래스를 사용한다!
+
+&nbsp;
+
+- 초기화 (`Engine::Init()`)
+	1. 윈도우 크기를 재설정한다.
+	2. 그려질 화면의 크기를 설정한다.
+	3. DX12의 핵심 객체들을 스마트 포인터로 생성한다.
+	4. 생성된 객체들을 초기화한다.
+
+```cpp
+_window = info;
+ResizeWindow(info.width, info.height);
+
+_viewport = { 0, 0, static_cast<FLOAT>(info.height), 0.0f, 1.0f };
+_scissorRect = CD3DX12_RECT(0, 0, info.width, info.height);
+
+_device = make_shared<Device>();
+_cmdQueue = make_shared<CommandQueue>();
+_swapChain = make_shared<SwapChain>();
+_descHeap = make_shared<DescriptorHeap>();
+
+_device->Init();
+_cmdQueue->Init(_device->GetDevice(), _swapChain, _descHeap);
+_swapChain->Init(info, _device->GetDXGI(), _cmdQueue->GetCmdQueue());
+_descHeap->Init(_device->GetDevice(), _swapChain);
+```
+
+&nbsp;
+
+- 렌더링 (`RenderBegin()` & `RenderEnd()`)
+	- 커맨드 큐를 이용하여 렌더링을 시작하고 끝내는 함수이다.
+
+```cpp
+void Engine::Render()
+{
+	RenderBegin();
+
+	// TODO : 나머지 물체들 그려준다.
+
+	RenderEnd();
+}
+
+void Engine::RenderBegin()
+{
+	_cmdQueue->RenderBegin(&_viewport, &_scissorRect);
+}
+
+void Engine::RenderEnd()
+{
+	_cmdQueue->RenderEnd();
+}
+```
+
+---
+
+## 화면 그리기
+
+- 각 클래스들이 잘 만들었는지 확인하기 위해 빌드 후, Client 프로젝트의 `Game` 클래스에 Engine 프로젝트의 `GEngine`을 가져와 `Init()`과 `Update()`를 해본다.
+- `GEngine`을 동적 할당으로 생성했는데도 empty가 떴지만, 빌드 순서를 `Engine 프로젝트`가 먼저 되도록 설정하니 하늘색 화면이 잘 출력됐다!
+
+![Image](https://github.com/user-attachments/assets/5c88a7f6-ac7f-4ee3-ba8a-101647c598d9)
+
+---
+
+## 마치며
+
+너무 어렵고 머리가 아픈 수업이었다. 정리하는 데도 한 세월 걸렸다..ㅠ0ㅠ 그래도 나무까진 아니지만 숲은 보이는 기분이다. 이 포스트 계속 복습하고, 수업 듣고, 실습하다보면 언젠가는 쉬워지겠지!
 
 ---
 
