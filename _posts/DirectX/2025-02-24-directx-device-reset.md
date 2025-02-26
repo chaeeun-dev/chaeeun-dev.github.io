@@ -92,6 +92,23 @@ _debugController->EnableDebugLayer();
 
 &nbsp;
 
+- 사용 변수
+
+```cpp
+ComPtr<ID3D12CommandQueue>			_cmdQueue;
+ComPtr<ID3D12CommandAllocator>		_cmdAlloc;
+ComPtr<ID3D12GraphicsCommandList>	_cmdList;
+
+ComPtr<ID3D12Fence>					_fence;
+uint32								_fenceValue = 0;
+HANDLE								_fenceEvent = INVALID_HANDLE_VALUE;
+
+shared_ptr<SwapChain>		_swapChain;
+shared_ptr<DescriptorHeap>	_descHeap;
+```
+
+&nbsp;
+
 - 초기화(`CommandQueue::Init()`)
 	1. GPU가 실행할 명령 리스트를 담을 `Command Queue`를 생성한다.
 	2. 명령 리스트 할당을 위한 `Command Allocator`를 생성한다.
@@ -146,15 +163,14 @@ if (_fence->GetCompletedValue() < _fenceValue)
 ComPtr<IDXGISwapChain> _swapChain;   // 스왑 체인 객체 
 ComPtr<ID3D12Resource> _renderTargets[SWAP_CHAIN_BUFFER_COUNT];
 uint32 _backBufferIndex = 0;   // 현재 GPU가 작업 중인 백버퍼 인덱스
-
 ```
 
 &nbsp;
 
 - 초기화(`SwapChain::Init()`)
-	1. 스왑체인 객체 초기화 (`_swapChain.Reset()`)
+	1. 스왑체인 객체를 초기화한다.
 	2. `DXGI_SWAP_CHAIN_DESC` 구조체를 설정하여 해상도, 버퍼 개수, 갱신 빈도 등을 정의한다.
-	3. `dxgi->CreateSwapChain()` 통해 스왑 체인 객체를 생성한다.
+	3. 스왑 체인 객체를 생성한다.
 	4. 생성된 스왑 체인에 `Render Target 버퍼`를 할당한다.
 
 ```cpp
