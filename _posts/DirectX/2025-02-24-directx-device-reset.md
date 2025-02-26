@@ -89,6 +89,10 @@ _debugController->EnableDebugLayer();
 - 하나씩 요청하면 비효율적이기 때문에, 명령을 한 번에 모아 실행한다(외주 목록에 일감을 차곡차곡 기록했다가 한 번에 요청함). 
 - `Fence`를 활용하여 CPU와 GPU를 동기화한다. 
 
+&nbsp;
+
+초기화(`Init()`)
+
 ```cpp
 device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&_cmdQueue));
 device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&_cmdAlloc));
@@ -112,6 +116,69 @@ if (_fence->GetCompletedValue() < _fenceValue)
 }
 ```
 ---
+
+### Swap Chain
+
+- Swap Chain은 GPU가 계산한 렌더링 결과물을 화면에 출력하는 과정을 관리한다.
+- 더블 버퍼링을 통해 끊김 없는 화면 전환을 수행한다.
+- DirectX에서는 `DXGI`가 스왑 체인을 관리한다.
+
+외주 작업과 결과물 전달 과정
+- 게임 화면을 GPU에 맡긴다(외주 요청).
+- GPU가 작업한 결과물을 특정 버퍼(`Render Target`)에 저장한다.
+- 버퍼에 저장된 내용을 화면에 출력한다.
+
+더블 버퍼링(Dubble Buffering)
+- 전면 버퍼 : 현재 화면에 출력 중인 프레임
+- 후면 버퍼 : GPU가 작업 중인 프레임
+- 두 개의 버퍼를 번갈아 사용한다.
+
+```cpp
+ComPtr<IDXGISwapChain> _swapChain;   // 스왑 체인 객체 
+ComPtr<ID3D12Resource> _renderTargets[SWAP_CHAIN_BUFFER_COUNT];
+uint32 _backBufferIndex = 0;   // 현재 GPU가 작업 중인 백버퍼 인덱스
+
+```
+
+&nbsp;
+
+초기화(`Init()`)
+1. 스왑체인 객체 초기화 (`_swapChain.Reset()`)
+2. `DXGI_SWAP_CHAIN_DESC` 구조체를 설정하여 해상도, 버퍼 개수, 갱신 빈도 등을 정의한다.
+3. `dxgi->CreateSwapChain()` 통해 스왑 체인 객체를 생성한다.
+4. 생성된 스왑 체인에 `Render Target 버퍼`를 할당한다.
+
+```cpp
+void SwapChain::Init(const WindowInfo& info, ComPtr<IDXGIFactory> dxgi, ComPtr<ID3D12CommandQueue> cmdQueue)
+```
+
+&nbsp;
+
+화면 출력(`Present()`)
+- GPU가 처리한 후면 버퍼를 화면에 출력한다(전면 버퍼로 전환).
+
+```cpp
+void SwapChain::Present()
+{
+    _swapChain->Present(0, 0);
+}
+```
+
+&nbsp;
+
+버퍼 인덱스 변경(`SwapIndex()`)
+- 현재 GPU가 작업 중인 버퍼(후면 버퍼)를 변경한다.
+- `SWAP_CHAIN_BUFFER_COUNT` 2개를 기준으로 0과 1을 반복한다.
+
+```cpp
+void SwapChain::SwapIndex()
+{
+	_backBufferIndex = (_backBufferIndex + 1) % SWAP_CHAIN_BUFFER_COUNT;
+}
+```
+
+---
+
 
 
 ---
