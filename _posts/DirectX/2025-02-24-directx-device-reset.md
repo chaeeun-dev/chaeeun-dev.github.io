@@ -54,7 +54,7 @@ struct WindowInfo
 >    - ComPtr(스마트 포인터)를 사용해 GPU 자원을 자동으로 관리한다(delete 신경쓰지 않아도 됨).
 >    - → Device는 COM을 통해 GPU에 접근하고, 그래픽 객체를 생성할 수 있다.
 
-사용 변수
+- 사용 변수
 ```cpp
 ComPtr<ID3D12Debug> _debugController; // 디버깅 활성화
 ComPtr<IDXGIFactory> _dxgi; // 화면 관련 기능들
@@ -63,15 +63,15 @@ ComPtr<ID3D12Device> _device; // 각종 객체 생성
 
 &nbsp;
 
-초기화(`Device::Init()`)
-1. 디버깅 활성화
-    - 개발 및 디버깅을 위한 기능이다.
-    - DirectX 12 API를 사용할 때 잘못된 사용법이나 오류를 출력창에 경고 메시지로 제공한다.
-2. DXGI 팩토리 생성 
-    - DXGI(DirectX Graphis Infrastructure)은 Direct3D와 함께 쓰이는 API로, 디스플레이 관련 기능을 담당한다.
-    - 전체 화면 모드 전환 및 창 모드 전환 지원
-    - 현재 시스템에서 사용 가능한 그래픽 카드 및 디스플레이 모드 조회
-3. Direct3D 장치 생성
+- 초기화(`Device::Init()`)
+	1. 디버깅 활성화
+		- 개발 및 디버깅을 위한 기능이다.
+		- DirectX 12 API를 사용할 때 잘못된 사용법이나 오류를 출력창에 경고 메시지로 제공한다.
+	2. DXGI 팩토리 생성 
+		- DXGI(DirectX Graphis Infrastructure)은 Direct3D와 함께 쓰이는 API로, 디스플레이 관련 기능을 담당한다.
+		- 전체 화면 모드 전환 및 창 모드 전환 지원
+		- 현재 시스템에서 사용 가능한 그래픽 카드 및 디스플레이 모드 조회
+	3. Direct3D 장치 생성
 
 ```cpp
 ::D3D12GetDebugInterface(IID_PPV_ARGS(&_debugController));
@@ -92,11 +92,11 @@ _debugController->EnableDebugLayer();
 
 &nbsp;
 
-초기화(`CommandQueue::Init()`)
-1. GPU가 실행할 명령 리스트를 담을 `Command Queue`를 생성한다.
-2. 명령 리스트 할당을 위한 `Command Allocator`를 생성한다.
-3. 실제 GPU 작업을 담는 리스트인 `Command List`를 생성한다.
-4. CPU와 GPU 동기화 장치인 `Fence`를 생성한다.
+- 초기화(`CommandQueue::Init()`)
+	1. GPU가 실행할 명령 리스트를 담을 `Command Queue`를 생성한다.
+	2. 명령 리스트 할당을 위한 `Command Allocator`를 생성한다.
+	3. 실제 GPU 작업을 담는 리스트인 `Command List`를 생성한다.
+	4. CPU와 GPU 동기화 장치인 `Fence`를 생성한다.
 
 ```cpp
 device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&_cmdQueue));
@@ -108,8 +108,8 @@ _fenceEvent = ::CreateEvent(nullptr, FALSE, FALSE, nullptr);
 
 &nbsp;
 
-동기화(`CommandQueue::waitSync()`)
-- GPU 작업이 끝날 때까지 CPU가 대기하도록 설정한다.
+- 동기화(`CommandQueue::waitSync()`)
+	- GPU 작업이 끝날 때까지 CPU가 대기하도록 설정한다.
 
 ```cpp
 _fenceValue++;
@@ -140,7 +140,7 @@ if (_fence->GetCompletedValue() < _fenceValue)
 
 &nbsp;
 
-사용 변수
+- 사용 변수
 ```cpp
 ComPtr<IDXGISwapChain> _swapChain;   // 스왑 체인 객체 
 ComPtr<ID3D12Resource> _renderTargets[SWAP_CHAIN_BUFFER_COUNT];
@@ -150,11 +150,11 @@ uint32 _backBufferIndex = 0;   // 현재 GPU가 작업 중인 백버퍼 인덱�
 
 &nbsp;
 
-초기화(`SwapChain::Init()`)
-1. 스왑체인 객체 초기화 (`_swapChain.Reset()`)
-2. `DXGI_SWAP_CHAIN_DESC` 구조체를 설정하여 해상도, 버퍼 개수, 갱신 빈도 등을 정의한다.
-3. `dxgi->CreateSwapChain()` 통해 스왑 체인 객체를 생성한다.
-4. 생성된 스왑 체인에 `Render Target 버퍼`를 할당한다.
+- 초기화(`SwapChain::Init()`)
+	1. 스왑체인 객체 초기화 (`_swapChain.Reset()`)
+	2. `DXGI_SWAP_CHAIN_DESC` 구조체를 설정하여 해상도, 버퍼 개수, 갱신 빈도 등을 정의한다.
+	3. `dxgi->CreateSwapChain()` 통해 스왑 체인 객체를 생성한다.
+	4. 생성된 스왑 체인에 `Render Target 버퍼`를 할당한다.
 
 ```cpp
 _swapChain.Reset();
@@ -170,8 +170,8 @@ for (int32 i = 0; i < SWAP_CHAIN_BUFFER_COUNT; i++)
 
 &nbsp;
 
-화면 출력(`SwapChain::Present()`)
-- GPU가 처리한 후면 버퍼를 화면에 출력한다(전면 버퍼로 전환).
+- 화면 출력(`SwapChain::Present()`)
+	- GPU가 처리한 후면 버퍼를 화면에 출력한다(전면 버퍼로 전환).
 
 ```cpp
 void SwapChain::Present()
@@ -182,9 +182,9 @@ void SwapChain::Present()
 
 &nbsp;
 
-버퍼 인덱스 변경(`SwapChain::SwapIndex()`)
-- 현재 GPU가 작업 중인 버퍼(후면 버퍼)를 변경한다.
-- `SWAP_CHAIN_BUFFER_COUNT` 2개를 기준으로 0과 1을 반복한다.
+- 버퍼 인덱스 변경(`SwapChain::SwapIndex()`)
+	- 현재 GPU가 작업 중인 버퍼(후면 버퍼)를 변경한다.
+	- `SWAP_CHAIN_BUFFER_COUNT` 2개를 기준으로 0과 1을 반복한다.
 
 ```cpp
 void SwapChain::SwapIndex()
