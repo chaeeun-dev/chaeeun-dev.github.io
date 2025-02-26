@@ -1,7 +1,7 @@
 ---
 title: "Server"
 layout: category
-permalink: /theory/server
+permalink: /theory/server/
 author_profile: true
 taxonomy: Server
 sidebar:
