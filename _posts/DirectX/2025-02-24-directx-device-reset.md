@@ -133,14 +133,15 @@ if (_fence->GetCompletedValue() < _fenceValue)
 >- GPU가 작업한 결과물을 특정 버퍼(`_renderTargets`)에 저장한다.
 >- 버퍼에 저장된 내용을 화면에 출력한다.
 
-더블 버퍼링(Dubble Buffering)
-- 전면 버퍼 : 현재 화면에 출력 중인 프레임
-- 후면 버퍼 : GPU가 작업 중인 프레임
-- 두 개의 버퍼를 번갈아 사용한다.
+- 더블 버퍼링(Dubble Buffering)
+	- 전면 버퍼 : 현재 화면에 출력 중인 프레임
+	- 후면 버퍼 : GPU가 작업 중인 프레임
+	- 두 개의 버퍼를 번갈아 사용한다.
 
 &nbsp;
 
 - 사용 변수
+
 ```cpp
 ComPtr<IDXGISwapChain> _swapChain;   // 스왑 체인 객체 
 ComPtr<ID3D12Resource> _renderTargets[SWAP_CHAIN_BUFFER_COUNT];
