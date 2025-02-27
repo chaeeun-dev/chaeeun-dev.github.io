@@ -13,7 +13,7 @@ toc: true
 toc_sticky: true
 
 date: 2024-10-03
-last_modified_at: 2024-10-03
+last_modified_at: 2025-02-27
 ---
 
 ## 캐시(Cache)

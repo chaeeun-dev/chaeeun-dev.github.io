@@ -13,7 +13,7 @@ toc: true
 toc_sticky: true
 
 date: 2024-09-30
-last_modified_at: 2024-09-30
+last_modified_at: 2025-02-27
 ---
 
 ## 메모리 영역과 쓰레드
