@@ -155,7 +155,7 @@ int main()
 }
 ```
 
-![image](https://github.com/user-attachments/assets/d6912d93-3079-474b-804e-5c5c847b285b)
+![Image](https://github.com/user-attachments/assets/f4137b52-ed19-4858-90e0-6c127b7db8c6)
 
 - 결과
     - `r1 == 0 && r2 == 0`이 발생하는 경우, CPU가 명령어 순서를 최적화하여 의도한 실행 순서가 어긋났음을 의미한다. (코드의 의도대로라면, `r1 == 0 && r2 == 1`이어야 하므로, while문이 종료되면 안 됨)
@@ -242,7 +242,7 @@ int main()
 
         void Thread_1() {x = 1; y = 2;}
         ```
-        
+
         - 실행 순서 `x = 1` → `y = 2`가 보장되지 않는다. 
         - CPU 내부 최적화를 방지하려면, `std::atomic`을 사용해야 한다.
         - 참고. `atomic`은 컴파일러와 CPU의 최적화를 둘 다 방지한다.
