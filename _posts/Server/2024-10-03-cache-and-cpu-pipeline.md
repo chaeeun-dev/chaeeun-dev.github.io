@@ -1,6 +1,6 @@
 ---
 title: "[Server] #15-4. 캐시와 CPU 파이프라인"
-excerpt: ""
+excerpt: "캐시와 CPU 파이프라인에 대한 실습과 최적화 위험성 알아보기"
 
 categories:
   - Server
@@ -161,7 +161,7 @@ int main()
     - `r1 == 0 && r2 == 0`이 발생하는 경우, CPU가 명령어 순서를 최적화하여 의도한 실행 순서가 어긋났음을 의미한다. (코드의 의도대로라면, `r1 == 0 && r2 == 1`이어야 하므로, while문이 종료되면 안 됨)
     - 멀티 쓰레드 환경에서는 명령어 실행 순서가 예측과 다를 수 있어 버그가 발생할 가능성이 크다.
 
-> 💡 결론: 멀티 쓰레드 환경에서는 CPU 최적화로 인해 의도치 않은 결과가 나올 수 있어, 순서가 중요한 연산에 대해 동기화 처리가 필수적이다
+> 💡 결론: 멀티 쓰레드 환경에서는 CPU 최적화로 인해 의도치 않은 결과가 나올 수 있어, 순서가 중요한 연산에 대해 동기화 처리가 필수적이다.
 
 ---
 
@@ -192,7 +192,7 @@ int main()
 }
 ```
 
-- vilatile 키워드
+- volatile 키워드
     - 컴파일러가 변수를 최적화하지 않도록 강제할 수 있다.
     - `while (ready == false)`가 최적화되어 무한 루프가 제거되는 것을 방지한다.
 
@@ -217,35 +217,31 @@ int main()
 
 &nbsp;
 
-`volatile` 키워드는 컴파일러의 최적화를 막지만, CPU의 최적화는 막을 수 없다.
+- `volatile` 키워드는 컴파일러의 최적화를 막지만, CPU의 최적화는 막을 수 없다.
+    - `volatile`이 막는 것
+        - 컴파일러가 변수를 캐싱하거나 불필요한 연산을 제거하는 것을 방지한다.
+        ```cpp
+        volatile bool ready = false;
 
-- `volatile`이 막는 것
-    - 컴파일러가 변수를 캐싱하거나 불필요한 연산을 제거하는 것을 방지한다.
+        void Thread_1()
+        {
+            while (ready == false) { }  // 컴파일러가 무한 루프 제거하지 않음
+            std::cout << "Thread 실행!" << std::endl;
+        }
+        ```
+        - 컴파일러가 `ready`값을 캐싱하지 않고, 항상 메모리에서 읽어오도록 강제한다.
+        - 만약 `volatile`이 없으면, 컴파일러가 `ready == false`를 항상 거짓으로 가정하여 루프를 제거할 수 있다.
+    - `volatile`이 막지 못하는 것
+        - CPU가 명령어를 재배열하는 것은 막지 못한다.
+        ```cpp
+        volatile int x = 0;
+        volatile int y = 0;l
 
-```cpp
-volatile bool ready = false;
-
-void Thread_1()
-{
-    while (ready == false) { }  // 컴파일러가 무한 루프 제거하지 않음
-    std::cout << "Thread 실행!" << std::endl;
-}
-```
-- 컴파일러가 `ready`값을 캐싱하지 않고, 항상 메모리에서 읽어오도록 강제한다.
-- 만약 `volatile`이 없으면, 컴파일러가 `ready == false`를 항상 거짓으로 가정하여 루프를 제거할 수 있다.
-
-- `volatile`이 막지 못하는 것
-    - CPU가 명령어를 재배열하는 것은 막지 못한다.
-
-```cpp
-volatile int x = 0;
-volatile int y = 0;l
-
-void Thread_1() {x = 1; y = 2;}
-```
-- 실행 순서 `x = 1` → `y = 2`가 보장되지 않는다. 
-- CPU 내부 최적화를 방지하려면, `std::atomic`을 사용해야 한다.
-    - `atomic`은 컴파일러와 CPU의 최적화를 둘 다 방지한다.
+        void Thread_1() {x = 1; y = 2;}
+        ```
+        - 실행 순서 `x = 1` → `y = 2`가 보장되지 않는다. 
+        - CPU 내부 최적화를 방지하려면, `std::atomic`을 사용해야 한다.
+        - 참고. `atomic`은 컴파일러와 CPU의 최적화를 둘 다 방지한다.
 
 --- 
 
