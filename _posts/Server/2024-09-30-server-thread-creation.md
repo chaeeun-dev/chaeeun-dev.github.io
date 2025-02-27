@@ -95,6 +95,10 @@ for (thread& t :threads)
 }
 ```
 
+---
+
+[실습 커밋](https://github.com/chaeeun-dev/Server/commit/5515179eb2fb9734efdffb1361c9d4f9cbeec439#diff-5461936725ce266bb330a42086e4adb296e17e78e88f466d776579e341ed8620)
+
 --- 
 
 *출처*
