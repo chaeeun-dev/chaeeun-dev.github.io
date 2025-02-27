@@ -220,6 +220,7 @@ int main()
 - `volatile` 키워드는 컴파일러의 최적화를 막지만, CPU의 최적화는 막을 수 없다.
     - `volatile`이 막는 것
         - 컴파일러가 변수를 캐싱하거나 불필요한 연산을 제거하는 것을 방지한다.
+
         ```cpp
         volatile bool ready = false;
 
@@ -229,16 +230,19 @@ int main()
             std::cout << "Thread 실행!" << std::endl;
         }
         ```
+
         - 컴파일러가 `ready`값을 캐싱하지 않고, 항상 메모리에서 읽어오도록 강제한다.
         - 만약 `volatile`이 없으면, 컴파일러가 `ready == false`를 항상 거짓으로 가정하여 루프를 제거할 수 있다.
     - `volatile`이 막지 못하는 것
         - CPU가 명령어를 재배열하는 것은 막지 못한다.
+
         ```cpp
         volatile int x = 0;
-        volatile int y = 0;l
+        volatile int y = 0;
 
         void Thread_1() {x = 1; y = 2;}
         ```
+        
         - 실행 순서 `x = 1` → `y = 2`가 보장되지 않는다. 
         - CPU 내부 최적화를 방지하려면, `std::atomic`을 사용해야 한다.
         - 참고. `atomic`은 컴파일러와 CPU의 최적화를 둘 다 방지한다.
