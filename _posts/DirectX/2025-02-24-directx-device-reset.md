@@ -20,7 +20,7 @@ last_modified_at: 2025-02-27
 
 장치 초기화란 GPU와 DirectX를 연결하고, 그래픽 명령을 처리할 수 있도록 준비하는 과정이다. 
 
-이번에는 `Command Queue`, `Device`, `Swap Chain`, `Descriptor Heap` 등 장치 초기화에 필요한 API를 다뤄볼 것이다.
+이번에는 `Command Queue`, `Device`, `Swap Chain`, `Descriptor Heap` 등 장치 초기화에 필요한 API의 개념을 이해하고, C++ 코드로 구현해볼 것이다.
 
 ---
 
@@ -233,10 +233,7 @@ for (int32 i = 0; i < SWAP_CHAIN_BUFFER_COUNT; i++)
 	- GPU가 처리한 후면 버퍼를 화면에 출력한다(전면 버퍼로 전환).
 
 ```cpp
-void SwapChain::Present()
-{
-    _swapChain->Present(0, 0);
-}
+_swapChain->Present(0, 0);
 ```
 
 &nbsp;
@@ -246,10 +243,7 @@ void SwapChain::Present()
 	- `SWAP_CHAIN_BUFFER_COUNT` 2개를 기준으로 0과 1을 반복한다.
 
 ```cpp
-void SwapChain::SwapIndex()
-{
-	_backBufferIndex = (_backBufferIndex + 1) % SWAP_CHAIN_BUFFER_COUNT;
-}
+_backBufferIndex = (_backBufferIndex + 1) % SWAP_CHAIN_BUFFER_COUNT;
 ```
 
 ---
@@ -384,8 +378,8 @@ _descHeap->Init(_device->GetDevice(), _swapChain);
 
 &nbsp;
 
-- 렌더링 (`RenderBegin()` & `RenderEnd()`)
-	- 커맨드 큐를 이용하여 렌더링을 시작하고 끝내는 함수이다.
+- 렌더링 (`Render()` - `RenderBegin()` & `RenderEnd()`)
+	- 커맨드 큐를 이용하여 렌더링을 시작하고 끝낸다.
 
 ```cpp
 void Engine::Render()
