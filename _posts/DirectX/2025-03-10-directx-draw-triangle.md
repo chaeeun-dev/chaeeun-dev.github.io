@@ -127,13 +127,15 @@ ComPtr<ID3D12GraphicsCommandList> GetCmdList() { return _cmdList; }
 
 ## 삼각형 띄우기
 
-RootSignature와 Mesh, Shader의 개념을 이해하고 코드로 구현한 뒤, 삼각형을 그려본다.
+RootSignature와 Mesh, Shader의 개념을 이해하고 코드로 구현한 뒤, 삼각형을 그려보자.
 
 ---
 
 ### Root Signature
 
-Root Signature는 계약서를 결재하는 역할이라고 할 수 있다. CPU는 RAM에 있는 데이터를 계속 꺼내면서 사용하지만, GPU는 RAM과 거리가 멀어 직접 사용할 수 없다. 그래서 CPU가 GPU에게 외주를 맡길 때 데이터를 어떤 형식으로 전달할지를 정해야 한다. 예를 들어, 한국(CPU)에서 베트남(GPU)에게 외주를 맡길 때 원석(데이터)를 보내서 가공(일감 처리)해달라고 하는 것과 같다. 여기서 Root Signature는 서명처럼 어떤 정책을 적용할지와 어떤 땅(GPU자원)을 임대할지를 정하는 계약서 역할을 한다.
+- Root Signature는 계약서를 결재하는 역할이라고 할 수 있다. 
+- CPU는 RAM에 있는 데이터를 계속 꺼내면서 사용하지만, GPU는 RAM과 거리가 멀어 직접 사용할 수 없다. 그래서 CPU가 GPU에게 외주를 맡길 때 데이터를 어떤 형식으로 전달할지를 정해야 한다. 
+- 예를 들어, 한국(CPU)에서 베트남(GPU)에게 외주를 맡길 때 원석(데이터)를 보내서 가공(일감 처리)해달라고 하는 것과 같다. 여기서 Root Signature는 서명처럼 어떤 정책을 적용할지와 어떤 땅(GPU자원)을 임대할지를 정하는 계약서 역할을 한다.
 
 &nbsp;
 
@@ -142,6 +144,8 @@ Root Signature는 계약서를 결재하는 역할이라고 할 수 있다. CPU�
 ```cpp
 ComPtr<ID3D12RootSignature>	_signature;
 ```
+
+&nbsp;
 
 - 초기화 (`RootSignature::Init()`)
   1. 기본 상태에서 서명(계약)을 한다. (땅만 둘러봄)
@@ -211,6 +215,8 @@ D3D12_VERTEX_BUFFER_VIEW	_vertexBufferView = {};
 uint32 _vertexCount = 0;
 ```
 
+&nbsp;
+
 - 초기화 (`Mesh::Init(vector<Vertex>& vec))`)
   1. vec의 정보로 정점 개수를 저장한다. (`_vertexCount = vec.size()`)
   2. GPU에 사용할 버퍼 정보(`heapProperty` - 어떤 용도로 사용할지, `desc` - 얼만큼 할당 받을지)를 설정한다.
@@ -218,7 +224,7 @@ uint32 _vertexCount = 0;
     - Map() → 데이터를 복사할 수 있도록 연결
     - memcpy() → 데이터를 복사
     - Unmap() → 연결 해제
-  4. 버퍼 정보를 담은 View(`_vertexBufferView`)를 설정한다. (실질적으로 활용하는 데이터는 Buffer가 아닌 View)
+  4. 버퍼 정보를 담은 View(`_vertexBufferView`)를 설정한다. (실질적으로 활용하는 데이터는 Buffer가 아닌 View이므로)
 
 ```cpp
 _vertexCount = static_cast<uint32>(vec.size());
@@ -276,7 +282,7 @@ CMD_LIST->DrawInstanced(_vertexCount, 1, 0, 0);
   2. 이 파일은 C++이 아니라 **HLSL(High-Level Shader Language)**로 작성해야 한다.
   3. `VS_Main`은 Vertex Shader 단게에서 해야 할 일을 정의하고, `PS_Main`은 Pixel Shader 단계를 정의하는 역할을 한다. 
 
-```h
+```hlsl
 struct VS_IN
 {
     float3 pos : POSITION;
@@ -412,7 +418,7 @@ GEngine->RenderEnd();
     - 삼각형이 그려지지 않고 파란 화면만 떠서 30분 넘게 헤맸는데, 원인은 Viewport 설정 때문이었다. `_viewport = { 0, 0, static_cast<FLOAT>(info.height), 0.0f, 1.0f }; `로 되어있던 코드를 `_viewport = { 0, 0, static_cast<FLOAT>(info.width), static_cast<FLOAT>(info.height), 0.0f, 1.0f };` 이렇게 수정하니 정상적으로 출력됐다. 
     - 뷰포트는 그림을 그릴 캔버스의 크기를 설정하는 과정이다. 앞서 설정한 코드의 3, 4 번째 인자가 캔버스의 너비와 높이를 설정하는 건데 인자 값을 잘못 넣어서 그림을 그릴 공간이 없던 것이다. 
 
-![Image](https://github.com/user-attachments/assets/9ac824d4-16d0-4889-af30-5b7e505245a3)
+![Image](https://github.com/user-attachments/assets/4397c485-d250-4cbf-a4cd-659192e2b2fb)
 
 ---
 
