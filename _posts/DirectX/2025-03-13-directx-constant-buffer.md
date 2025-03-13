@@ -352,8 +352,8 @@ return objCBAddress;
 ![Image](https://github.com/user-attachments/assets/2e775b1c-74f3-4cf4-a99b-c5f01542564f)
 
 - 결과 
-    - 첫 번째 삼각형 → X 좌표 0.75f 증가, R 값 0.75
-    - 두 번째 삼각형 → Y 좌표 0.75 증가, G 값 0.75
+    - 첫 번째 삼각형 → X 좌표 0.75f 증가, R 값 0.75 증가
+    - 두 번째 삼각형 → Y 좌표 0.75 증가, G 값 0.75 증가
 
 
 ---
