@@ -119,7 +119,7 @@ ComPtr<ID3D12GraphicsCommandList> GetCmdList() { return _cmdList; }
 #include "SwapChain.h"
 ```
 
-&nbsp;
+---
 
 [코드 정리 커밋](https://github.com/chaeeun-dev/DirectX12/commit/1a9546d8ff7ca800b1053bbb56efc8a3b7862f59)
 
@@ -315,6 +315,7 @@ float4 PS_Main(VS_OUT input) : SV_Target
 
 - 사용 변수
   - 쉐이더 컴파일 결과를 저장하는 변수들이다.
+
 ```cpp
 ComPtr<ID3DBlob>					_vsBlob;
 ComPtr<ID3DBlob>					_psBlob;
