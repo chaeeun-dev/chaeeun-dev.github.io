@@ -22,7 +22,7 @@ last_modified_at: 2025-03-13
 
 ---
 
-## CPU vs GPU 메모리 구조
+## CPU vs GPU
 
 CPU와 GPU는 성능을 최적화하기 위해 계층적인 메모리 구조를 가진다.
 
@@ -76,14 +76,16 @@ VS_OUT VS_Main(VS_IN input)
 
 ---
 
-### Root Signature 예제
+## Root Signature 예제
 
 1. 빈 Root Signature
+    
     ![Image](https://github.com/user-attachments/assets/9b0d69e1-4884-4b28-a823-cd1564a0de47)
     
     - 데이터를 전달하지 않는 가장 단순한 형태의 Root Signature이다.
     - 이 Root Signature는 데이터를 직접 전달하지 않고, Input Assenbler와 최소한의 쉐이더만 사용하여 렌더링하는 경우에 사용된다. (저번 삼각형 그리기의 Root Signature)
 2. Root Constant
+    
     ![Image](https://github.com/user-attachments/assets/134e8336-632e-4360-875f-650367e2efe4)
 
     - Root Constant를 이용하여 데이터를 전달하는 방식이다.
@@ -92,14 +94,16 @@ VS_OUT VS_Main(VS_IN input)
     - Root Constant: 상수 값을 전달할 때 사용한다. 
     - 참고. 루트 시그니처는 계약서와 같으며, 실제 데이터를 포함하지 않는다.
 3. Root Constant Buffer View
+    
     ![Image](https://github.com/user-attachments/assets/f1d1fd99-26cc-4afe-bb37-75363fc8d70a)
 
     - Constant Buffer를 Root Signature에 추가하는 방식이다. 
     - Root Descriptor(View)를 통해 `rootCBV`를 추가하여, Constant Buffer를 가리키도록 설정한다.
     - Root Descriptor는 포인터처럼 다른 리소스를 가리키는 개념이다. 
 4. Descriptor Table 
-    ![Image](https://github.com/user-attachments/assets/357760fd-1995-43cf-bf92-385a5a69f43e)
     
+    ![Image](https://github.com/user-attachments/assets/357760fd-1995-43cf-bf92-385a5a69f43e)
+
     - Descriptor Table을 이용해 다양한 리소스를 관리하는 방식이다.
     - Descriptor Table은 특정 슬롯에 여러 개의 리소스를 한 번에 넣을 수 있는 방식이다.
     - Root Signature를 설정한 후 어떤 데이터를 사용할지 정의해야 한다.
@@ -107,7 +111,7 @@ VS_OUT VS_Main(VS_IN input)
 
 ---
 
-### Constant Buffer View
+## Constant Buffer View
 
 이번 수업에서는 Constant Buffer View(CBV)를 이용해 데이터를 쉐이더로 전달하는 방식을 다룬다. 
 
@@ -188,7 +192,7 @@ _cmdList->SetGraphicsRootSignature(ROOT_SIGNATURE.Get());
 
 &nbsp;
 
-- 실행 시점의 차이 (중요)
+- 💡 실행 시점의 차이(중요)
     - Command Queue는 작업을 예약하고, 나중에 한 번에 실행한다.
     - Device 작업은 즉시 실행된다.
     - 실행 순서 문제 예시
@@ -322,9 +326,9 @@ return objCBAddress;
         GEngine->GetCB()->PushData(1, &_transform, sizeof(_transform)); 
         ```
 
-& nbsp;
+---
 
-## 삼각형 이동시키기
+## 삼각형 실습
 
 - `Game::Update()`
     - Constant Buffer가 잘 적용되는지 확인해본다.
