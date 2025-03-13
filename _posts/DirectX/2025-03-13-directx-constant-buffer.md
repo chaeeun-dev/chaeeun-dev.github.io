@@ -16,7 +16,7 @@ date: 2025-03-13
 last_modified_at: 2025-03-13
 ---
 
-## Shader와 Rendering Pipeline
+## 규칙
 
 쉐이더 파일은 정해진 규칙에 따라 작성해야 하며, 렌더링 파이프라인의 각 단계에서 특정 역할을 한다. 특히 Input Assembler 단계에서는 한정된 정점 정보만 전달할 수 있는데, 추가적인 데이터를 전달하려면 Constant Buffer와 같은 다른 방법을 사용해야 한다. 또, 데이터를 무작정 GPU로 보낼 수 없고, RootSignature 서명 단계를 거쳐야 한다. 
 
@@ -38,15 +38,13 @@ CPU와 GPU는 성능을 최적화하기 위해 계층적인 메모리 구조를 
 
 ---
 
-## Root Signature와 Constant Buffer
+## Shader
 
 저번 삼각형 그리기 수업에서는 아무 데이터도 전달하지 않은 빈 Root Signature를 사용했다. 이번에는 Constant Buffer를 활용하여 쉐이더에 데이터를 전달하는 방식을 알아본다.
 
----
+&nbsp;
 
-### 쉐이더에 Constant Buffer 추가
-
-- Constant Buffer 추가 (`default.hlsli` 파일)
+- `default.hlsli` 쉐이더 파일에 Constant Buffer 추가 
     - TEST_B0(b0 레지스터)와 TEST_B1(b1 레지스터)를 추가한다.
     -  Constant Buffer를 통해 `offset0`과 `offset1` 값을 전달하고, 이를 정점 위치와 색상 값에 저장한다.
 
@@ -105,7 +103,7 @@ VS_OUT VS_Main(VS_IN input)
 
 ---
 
-### Constant Buffer View(CBV)
+### Constant Buffer View
 
 이번 수업에서는 Constant Buffer View(CBV)를 이용해 데이터를 쉐이더로 전달하는 방식을 다룬다. 
 
@@ -200,10 +198,9 @@ _cmdList->SetGraphicsRootSignature(ROOT_SIGNATURE.Get());
 
 ![Image](https://github.com/user-attachments/assets/32345fd7-f2f8-48c2-a70b-92345a91096a) 
 
----
+&nbsp;
 
-### 흐름 정리
-
+- 흐름 정리
 1. Root Sigature 설정 (쉐이더와 계약서 작성) → 쉐이더에게 b0, b1를 사용하겠다고 계약을 맺는다.
 2. Constant Buffer 생성 (데이터 저장소 마련) → 창고(b0, b1)에 데이터를 채운다.
 3. Constant Buffer View 연결 (데이터 전달 설정) → b0에 넣을 데이터, b1에 넣을 데이터를 설정한다.
@@ -211,7 +208,7 @@ _cmdList->SetGraphicsRootSignature(ROOT_SIGNATURE.Get());
 
 ---
 
-### Constant Buffer
+## Constant Buffer
 
 Constant Buffer의 역할
 - Root Signature에서 선언한 b0, b1에 데이터를 보내기 위한 버퍼이다.
@@ -323,7 +320,7 @@ return objCBAddress;
 
 & nbsp;
 
-### 삼각형 이동시키기
+## 삼각형 이동시키기
 
 - `Game::Update()`
     - Constant Buffer가 잘 적용되는지 확인해본다.
