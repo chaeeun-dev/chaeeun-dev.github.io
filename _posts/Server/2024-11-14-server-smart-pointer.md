@@ -1,11 +1,11 @@
 ---
 title: "[Server] #15-10. 스마트 포인터"
-excerpt: ""
+excerpt: "참조 카운트를 직접 관리해보고 스마트 포인터 이해하기"
 
 categories:
   - Server
 tags:
-  - [Server]
+  - [Server, SmartPointer]
 
 permalink: /theory/server/smart-pointer/
 
