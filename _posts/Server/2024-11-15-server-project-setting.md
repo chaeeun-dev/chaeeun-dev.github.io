@@ -5,7 +5,7 @@ excerpt: "서버 구현을 위한 프로젝트 생성하고 설정하기"
 categories:
   - Server
 tags:
-  - [Server, ServerSetting, Setting]
+  - [Server, ServerSetting, Setting, TLS]
 
 permalink: /theory/server/project-setting/
 
