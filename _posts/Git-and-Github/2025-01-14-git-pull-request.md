@@ -12,8 +12,8 @@ permalink: /theory/git/pull-request
 toc: true
 toc_sticky: true
 
-date: 2024-01-14
-last_modified_at: 2024-01-14
+date: 2025-01-14
+last_modified_at: 2025-01-14
 ---
 
 ## 풀 리퀘스트
