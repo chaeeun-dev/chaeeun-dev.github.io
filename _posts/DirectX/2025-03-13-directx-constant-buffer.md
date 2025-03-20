@@ -16,9 +16,11 @@ date: 2025-03-13
 last_modified_at: 2025-03-13
 ---
 
-## 규칙
+## 들어가며
 
 쉐이더 파일은 정해진 규칙에 따라 작성해야 하며, 렌더링 파이프라인의 각 단계에서 특정 역할을 한다. 특히 Input Assembler 단계에서는 한정된 정점 정보만 전달할 수 있는데, 추가적인 데이터를 전달하려면 Constant Buffer와 같은 다른 방법을 사용해야 한다. 또, 데이터를 무작정 GPU로 보낼 수 없고, RootSignature 서명 단계를 거쳐야 한다. 
+
+이번 수업에서는 Root Signature를 설정하여 쉐이더와 계약을 맺고, Constant Buffer를 생성해 데이터의 저장소를 만든다. Constant Buffer View 연결을 통해 데이터를 전달할 수 있도록 설정하고, 쉐이더가 데이터를 가져가 연산을 수행할 수 있도록 개념을 정리하고 코드로 구현해본다.
 
 ---
 
@@ -205,12 +207,12 @@ _cmdList->SetGraphicsRootSignature(ROOT_SIGNATURE.Get());
     - 해결 방법
         - 버퍼를 여러 개 생성하여 덮어쓰기 문제를 방지한다. 
 
-![Image](https://github.com/user-attachments/assets/32345fd7-f2f8-48c2-a70b-92345a91096a) 
+![Image](https://github.com/user-attachments/assets/32345fd7-f2f8-48c2-a70b-92345a91096a) | ![Image](https://github.com/user-attachments/assets/2181c4dc-b25f-4fb7-b764-182d12fbb9be)
 
 &nbsp;
 
 - 흐름 정리
-1. Root Sigature 설정 (쉐이더와 계약서 작성) → 쉐이더에게 b0, b1를 사용하겠다고 계약을 맺는다.
+1. Root Signature 설정 (쉐이더와 계약서 작성) → 쉐이더에게 b0, b1를 사용하겠다고 계약을 맺는다.
 2. Constant Buffer 생성 (데이터 저장소 마련) → 창고(b0, b1)에 데이터를 채운다.
 3. Constant Buffer View 연결 (데이터 전달 설정) → b0에 넣을 데이터, b1에 넣을 데이터를 설정한다.
 4. 쉐이더 값 사용 → 이제 쉐이더가 데이터를 가져가서 연산을 수행할 수 있다!
