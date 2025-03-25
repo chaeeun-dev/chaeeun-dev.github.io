@@ -1,0 +1,13 @@
+1. C2259: 추상 클래스를 인스턴스화할 수 없습니다. -> 상위 클래스의 virtual 함수 구현이 안 된 것이 원인
+2. 
+    C2065: 'SlashWave' 식별자 선언되지 않음
+    → SlashWave 클래스가 선언되지 않았거나 #include "SlashWave.h"가 누락되었을 가능성이 있음.
+
+    C2672: DevScene::SpawnObject의 오버로드된 함수가 없음
+    → SpawnObject 함수의 매개변수 타입이 맞지 않거나, DevScene 클래스의 해당 함수 선언이 올바르지 않을 가능성이 있음.
+
+    C3867: SlashWave 비표준 구문입니다 (&를 사용하여 멤버 포인터를 만드세요)
+    → SlashWave가 클래스의 멤버 함수처럼 인식되었을 가능성이 있음.
+
+    -> BehaviorTree를 이루는 함수 중에 SlashWave 함수와 이름이 겹쳐서 발생한 오류!!!! 혼자였다면 발견하지 못했을 오류이다..
+3. 오류는 아닌데 OnComponenetBeginOverlap이 실행이 안 된 이유! - 짚라인 Structure에만 Collider Type인가 Layer인가만 넣고, Player 레이어에 Sturcture를 안 넣음..
