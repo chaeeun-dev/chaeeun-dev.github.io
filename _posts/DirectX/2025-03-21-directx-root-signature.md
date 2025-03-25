@@ -1,5 +1,5 @@
 ---
-title: "[DirectX 12] #2-8. Root Signature"
+title: "[DirectX 12] #2-5. Root Signature"
 excerpt: "Root Table로 Constant Buffer 관리하기"
 
 categories:
@@ -105,10 +105,10 @@ CD3DX12_DESCRIPTOR_RANGE ranges[] =
     CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, CBV_REGISTER_COUNT, 0), // b0~b4
 };
 
-CD3DX12_ROOT_PARAMETER param[1]; // Desc.Table을 한 개만 만듦
+CD3DX12_ROOT_PARAMETER param[1];
 param[0].InitAsDescriptorTable(_countof(ranges), ranges);
 
-D3D12_ROOT_SIGNATURE_DESC sigDesc = CD3DX12_ROOT_SIGNATURE_DESC(2, param);
+D3D12_ROOT_SIGNATURE_DESC sigDesc = CD3DX12_ROOT_SIGNATURE_DESC(_countof(param), param);
 sigDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT; // 입력 조립기 단계
 
 ComPtr<ID3DBlob> blobSignature;
@@ -141,6 +141,7 @@ Root Signature를 설정했으므로, 이제 Constant Buffer에서 Descriptor He
     2. `D3D12_DESCRIPTOR_HEAP_DESC`를 사용하여 CBV를 저장할 Descriptor Heap을 생성한다.
     3. CPU Handle을 저장하여 특정 인덱스의 CBV를 참조할 수 있도록 설정한다.
     4. 각 CBV에 대해 `CreateConstantBufferView()`를 호출하여 Descriptor Heap에 등록한다.
+
 ```cpp
 D3D12_DESCRIPTOR_HEAP_DESC cbvDesc = {};
 cbvDesc.NumDescriptors = _elementCount;
@@ -167,10 +168,233 @@ for (uint32 i = 0; i < _elementCount; ++i)
     1. CBV Descriptor Heap이 생성되고, 각 CBV가 Constant Buffer를 가리키게 된다.
     2. 이제 Shader에서 Descriptor Heap을 통해 CBV를 사용할 수 있다.
 
+&nbsp;
+
+이제 Descriptor Table과 Root Signature를 연결해보자.
+
+1. ConstantBuffer::Init()에서 ConstantBuffer::CreateView()를 호출하여 CBV Descriptor Heap을 설정한다.
+    ```cpp
+    void ConstantBuffer::Init(uint32 size, uint32 count)
+    {
+        _elementSize = (size + 255) & ~255;
+        _elementCount = count;
+
+        CreateBuffer();
+        CreateView(); // CBV Descriptor Heap 생성
+    }
+    ```
+2. ConstantBuffer::GetCpuHandle() 함수를 추가해 특정 인덱스 핸들을 가져오도록 한다.
+    ```cpp
+    D3D12_CPU_DESCRIPTOR_HANDLE ConstantBuffer::GetCpuHandle(uint32 index)
+    {
+        return CD3DX12_CPU_DESCRIPTOR_HANDLE(_cpuHandleBegin, index * _handleIncrementSize);
+    }
+    ```
+
+- 최종적으로 CBV Descriptor Heap이 각 Constant Buffer를 참조하고, Root Signature에서 Descriptor Table을 통해 CBV Descriptor Heap을 Shader에 전달하는 구조가 완성된다. 
+
 ![Image](https://github.com/user-attachments/assets/a5c4782c-d7df-4e08-be4f-6ba52376d441)
 
 ---
 
+## Table Descriptor Heap 생성
+
+여러 개의 Descriptor를 관리하는 Table Descriptor Heap class를 구현해보자. 여러 개의 그룹을 만들 수 있도록 `groupSize`와 `groupCount`를 사용한다.
+
+&nbsp;
+
+- 사용 변수 
+
+```cpp
+private:
+	ComPtr<ID3D12DescriptorHeap> _descHeap;
+	uint64					_handleSize = 0;
+	uint64					_groupSize = 0;
+	uint64					_groupCount = 0;
+	uint32					_currentGroupIndex = 0;  // 현재 그룹 인덱스
+```
+
+&nbsp;
+
+- Heap 초기화 (`TableDescriptorHeap::Init()`)
+    1. (그룹 수 * 각 그룹의 레지스터 수)만큼 생성한다.
+    2. `D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE` 설정한다. (GPU에서 접근 가능)
+    3. `CreateDescriptorHeap()`을 호출해 Heap을 생성한다.
+    4. 핸들 크기 및 그룹 크기를 저장한다.
+
+```cpp
+_groupCount = count;
+
+D3D12_DESCRIPTOR_HEAP_DESC desc = {};
+desc.NumDescriptors = count * REGISTER_COUNT;
+desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+
+DEVICE->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&_descHeap));
+
+_handleSize = DEVICE->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+_groupSize = _handleSize * REGISTER_COUNT;
+```
+
+&nbsp;
+
+- 인덱스 초기화 (`TableDescriptorHeap::Clear()`)
+    - 매 프레임마다 그릅 인덱스를 초기화할 수 있도록 Clear 함수를 구현한다.
+
+```cpp
+	_currentGroupIndex = 0;
+```
+
+&nbsp;
+
+- CBV 복사 (`TableDescriptorHeap::SetCBV()`)
+    - CBV를 Descriptor Heap으로 복사한다.
+
+```cpp
+void TableDescriptorHeap::SetCBV(D3D12_CPU_DESCRIPTOR_HANDLE srcHandle, CBV_REGISTER reg)
+{
+	D3D12_CPU_DESCRIPTOR_HANDLE destHandle = GetCPUHandle(reg);
+
+	uint32 destRange = 1;
+	uint32 srcRange = 1;
+	DEVICE->CopyDescriptors(1, &destHandle, &destRange, 1, &srcHandle, &srcRange, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+}
+```
+
+&nbsp;
+
+- CPU 핸들 반환 (`TableDescriptorHeap::GetCPUHandle()`)
+    - Descriptor Heap에서 원하는 위치의 핸들을 가져온다.
+        1. 현재 그룹 위치로 이동한다.
+        2. 레지스터 위치로 이동한다.
+
+```cpp
+D3D12_CPU_DESCRIPTOR_HANDLE TableDescriptorHeap::GetCPUHandle(uint32 reg)
+{
+	D3D12_CPU_DESCRIPTOR_HANDLE handle = _descHeap->GetCPUDescriptorHandleForHeapStart();
+	handle.ptr += _currentGroupIndex * _groupSize;
+	handle.ptr += reg * _handleSize;
+	return handle;
+}
+```
+
+&nbsp;
+
+- Descriptor Heap을 레지스터에 전달 (`TableDescriptorHeap::CommitTable()`)
+    - Descriptor Table을 Root Signature에 바인딩한다.
+    - `_currentGroupIndex`를 이동해 다음 그룹을 사용할 준비를 한다.
+
+```cpp
+	D3D12_GPU_DESCRIPTOR_HANDLE handle = _descHeap->GetGPUDescriptorHandleForHeapStart();
+	handle.ptr += _currentGroupIndex * _groupSize;
+	CMD_LIST->SetGraphicsRootDescriptorTable(0, handle);
+
+	_currentGroupIndex++;
+```
+
+---
+
+## 사용하기
+
+Enginer과 Command Queue에서 Table Descriptor Heap을 사용할 수 있도록 Engine 클래스르 수정한다.
+
+&nbsp;
+
+- Engine
+    - 멤버 변수 추가    
+        ```cpp
+        shared_ptr<TableDescriptorHeap> _tableDescHeap;
+        ```
+    - 멤버 함수 추가
+        ```cpp
+        shared_ptr<TableDescriptorHeap> GetTableDescHeap() { return _tableDescHeap; }
+        ```
+    - 초기화 함수 추가 (`Engine::Init()`)
+        ```cpp
+        _tableDescHeap = make_shared<TableDescriptorHeap>();
+        _tableDescHeap->Init(256);
+        ```
+- CommandQueue
+    - `RenderBegin()`에서 `Clear()` 및 `SetDescriptorHeaps()` 호출하기
+        ```cpp
+        GEngine->GetCB()->Clear();
+        GEngine->GetTableDescHeap()->Clear();
+
+        ID3D12DescriptorHeap* descHeap = GEngine->GetTableDescHeap()->GetDescriptorHeap().Get();
+        _cmdList->SetDescriptorHeaps(1, &descHeap);
+        ```
+
+&nbsp;
+
+기능을 사용하기 전에 Constant Buffer View 관련 코드를 수정해보자.
+
+- `ConstantBufferView::PushData()` 수정
+    - Root Descriptor 관련 코드를 삭제한다.
+    - CBV를 반환하도록 변경한다. (`void` → `D3D12_CPU_DESCRIPTOR_HANDLE`)
+
+```cpp
+assert(_currentIndex < _elementSize);
+
+::memcpy(&_mappedBuffer[_currentIndex * _elementSize], buffer, size);
+
+D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle = GetCpuHandle(_currentIndex);
+
+_currentIndex++;
+
+return cpuHandle;
+```
+
+&nbsp;
+
+- CBV 설정 후 `CommitTable()`를 호출 (`Mesh::Render()`) 
+    1. Buffer에 데이터를 세팅한다.
+    2. Buffer의 주소를 register에 전송한다.
+    3. 모두 세팅이 끝났으면 TableDescHeap을 커밋한다.
+
+```cpp
+CMD_LIST->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+CMD_LIST->IASetVertexBuffers(0, 1, &_vertexBufferView);
+
+{
+	D3D12_CPU_DESCRIPTOR_HANDLE handle = GEngine->GetCB()->PushData(0, &_transform, sizeof(_transform));
+	GEngine->GetTableDescHeap()->SetCBV(handle, CBV_REGISTER::b0);
+}
+{
+	D3D12_CPU_DESCRIPTOR_HANDLE handle = GEngine->GetCB()->PushData(0, &_transform, sizeof(_transform));
+	GEngine->GetTableDescHeap()->SetCBV(handle, CBV_REGISTER::b1);
+}
+
+GEngine->GetTableDescHeap()->CommitTable();
+
+CMD_LIST->DrawInstanced(_vertexCount, 1, 0, 0);
+```
+
+---
+
+## 삼각형 그리기 
+
+위에 작성한 코드대로 실행하면 삼각형이 잘 그려진다! 그려지는 화면은 저번 수업과 같지만, 저번에는 Root Descriptor 방식으로 삼각형을 그렸고, 이번에는 Descriptor Table 방식으로 삼각형을 그린 것이다.
+
+![Image](https://github.com/user-attachments/assets/ce40bba7-346f-4dc8-9f95-d9c0401d3d5a)
+
+---
+
+[Root Signature 커밋](https://github.com/chaeeun-dev/DirectX12/commit/f46e2445e082feed3c0ca28bb47ba90f822ed2fd)
+
+---
+
+## 마치며
+
+이번 시간에 배운 것
+- Root Signature를 Root Table 방식으로 변경하기
+- Table Descriptor Heap을 사용해 CBV를 관리하기
+- CBV를 Descriptor Heap에 복사 후, Root Descriptor Table로 바인딩하기
+- Mesh에서 CBV를 사용해 데이터를 렌더링하기
+- 💡 즉시 실행되는 부분과 나중에 실행되는 부분을 이해하는 것이 중요함!
+
+&nbsp;
+
+어지럽다.. 뒤돌면 까먹으니,, 종이에 그림을 그려가며 복습해야겠다. 완벽하게 이해하자!! 
 
 ---
 
