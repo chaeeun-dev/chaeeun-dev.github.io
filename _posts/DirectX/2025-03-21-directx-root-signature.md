@@ -68,7 +68,7 @@ last_modified_at: 2025-03-21
 
 ---
 
-## Root Sinature 설정
+## Root Sinature 수정
 
 Root Signature를 설정할 때 Descriptor Table을 추가해보자.
 
@@ -168,11 +168,13 @@ for (uint32 i = 0; i < _elementCount; ++i)
     1. CBV Descriptor Heap이 생성되고, 각 CBV가 Constant Buffer를 가리키게 된다.
     2. 이제 Shader에서 Descriptor Heap을 통해 CBV를 사용할 수 있다.
 
-&nbsp;
+---
+
+## Descriptor Table과 Root Signature 연결
 
 이제 Descriptor Table과 Root Signature를 연결해보자.
 
-1. ConstantBuffer::Init()에서 ConstantBuffer::CreateView()를 호출하여 CBV Descriptor Heap을 설정한다.
+1. `ConstantBuffer::Init()`에서 `ConstantBuffer::CreateView()`를 호출하여 CBV Descriptor Heap을 설정한다.
     ```cpp
     void ConstantBuffer::Init(uint32 size, uint32 count)
     {
@@ -183,7 +185,7 @@ for (uint32 i = 0; i < _elementCount; ++i)
         CreateView(); // CBV Descriptor Heap 생성
     }
     ```
-2. ConstantBuffer::GetCpuHandle() 함수를 추가해 특정 인덱스 핸들을 가져오도록 한다.
+2. `ConstantBuffer::GetCpuHandle()` 함수를 추가해 특정 인덱스 핸들을 가져오도록 한다.
     ```cpp
     D3D12_CPU_DESCRIPTOR_HANDLE ConstantBuffer::GetCpuHandle(uint32 index)
     {
@@ -296,7 +298,7 @@ D3D12_CPU_DESCRIPTOR_HANDLE TableDescriptorHeap::GetCPUHandle(uint32 reg)
 
 ## 사용하기
 
-Enginer과 Command Queue에서 Table Descriptor Heap을 사용할 수 있도록 Engine 클래스르 수정한다.
+Enginer과 Command Queue에서 Table Descriptor Heap을 사용할 수 있도록 Engine 클래스를 수정한다.
 
 &nbsp;
 
@@ -326,7 +328,7 @@ Enginer과 Command Queue에서 Table Descriptor Heap을 사용할 수 있도록 
 
 &nbsp;
 
-기능을 사용하기 전에 Constant Buffer View 관련 코드를 수정해보자.
+Constant Buffer View 관련 코드를 수정해보자.
 
 - `ConstantBufferView::PushData()` 수정
     - Root Descriptor 관련 코드를 삭제한다.

@@ -358,6 +358,9 @@ return objCBAddress;
     - 첫 번째 삼각형 → X 좌표 0.75f 증가, R 값 0.75 증가
     - 두 번째 삼각형 → Y 좌표 0.75 증가, G 값 0.75 증가
 
+---
+
+[Constant Buffer 커밋](https://github.com/chaeeun-dev/DirectX12/commit/906dbf236b7b8816fbeee0e0b5c8d19fb6fe5e5b)
 
 ---
 
