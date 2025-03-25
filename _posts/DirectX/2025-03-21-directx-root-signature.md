@@ -76,46 +76,47 @@ Root Signature를 설정할 때 Descriptor Table을 추가해보자.
 
 - Root Signature 설정 (`RootSignature::Init()`)
     1. CBV_REGISTER enum을 정의해 레지스터를 명확하게 관리한다.
-    ```cpp
-    enum class CBV_REGISTER
-    {
-        b0,
-        b1,
-        b2,
-        b3,
-        b4,
-    
-        END // 참고. END는 enum의 총 개수
-    };
-    
-    enum
-    {
-        SWAP_CHAIN_BUFFER_COUNT = 2,
-        CBV_REGISTER_COUNT = CBV_REGISTER::END,
-        REGISTER_COUNT = CBV_REGISTER::END,
-    };
-    ```
+        ```cpp
+        enum class CBV_REGISTER
+        {
+            b0,
+            b1,
+            b2,
+            b3,
+            b4,
+        
+            END // 참고. END는 enum의 총 개수
+        };
+        
+        enum
+        {
+            SWAP_CHAIN_BUFFER_COUNT = 2,
+            CBV_REGISTER_COUNT = CBV_REGISTER::END,
+            REGISTER_COUNT = CBV_REGISTER::END,
+        };
+        ```
     2. `CD3DX12_DESCRIPTOR_RANGE`를 사용해 Descriptor Table을 설정한다.
     3. Root Parameter를 Descriptor Table로 설정한다.
     4. `D3D12SerializeRootSignature()`를 사용해 Root Signature를 생성한다.
 
-    ```cpp
-	CD3DX12_DESCRIPTOR_RANGE ranges[] =
-	{
-		CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, CBV_REGISTER_COUNT, 0), // b0~b4
-	};
+```cpp
+CD3DX12_DESCRIPTOR_RANGE ranges[] =
+{
+    CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, CBV_REGISTER_COUNT, 0), // b0~b4
+};
 
-	CD3DX12_ROOT_PARAMETER param[1]; // Desc.Table을 한 개만 만듦
-	param[0].InitAsDescriptorTable(_countof(ranges), ranges);
+CD3DX12_ROOT_PARAMETER param[1]; // Desc.Table을 한 개만 만듦
+param[0].InitAsDescriptorTable(_countof(ranges), ranges);
 
-	D3D12_ROOT_SIGNATURE_DESC sigDesc = CD3DX12_ROOT_SIGNATURE_DESC(2, param);
-	sigDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT; // 입력 조립기 단계
+D3D12_ROOT_SIGNATURE_DESC sigDesc = CD3DX12_ROOT_SIGNATURE_DESC(2, param);
+sigDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT; // 입력 조립기 단계
 
-	ComPtr<ID3DBlob> blobSignature;
-	ComPtr<ID3DBlob> blobError;
-	::D3D12SerializeRootSignature(&sigDesc, D3D_ROOT_SIGNATURE_VERSION_1, &blobSignature, &blobError);
-	device->CreateRootSignature(0, blobSignature->GetBufferPointer(), blobSignature->GetBufferSize(), IID_PPV_ARGS(&_signature));
-    ```
+ComPtr<ID3DBlob> blobSignature;
+ComPtr<ID3DBlob> blobError;
+::D3D12SerializeRootSignature(&sigDesc, D3D_ROOT_SIGNATURE_VERSION_1, &blobSignature, &blobError);
+device->CreateRootSignature(0, blobSignature->GetBufferPointer(), blobSignature->GetBufferSize(), IID_PPV_ARGS(&_signature));
+```
+
 - 최종적으로
     1. b0 ~ b4의 CBV를 Descriptor Table을 통해 참조할 수 있도록 설정했다.
     2. CBV를 Root Signature에 직접 넣지 않고, Descriptor Table을 통해 접근하게 되었다.
@@ -140,27 +141,28 @@ Root Signature를 설정했으므로, 이제 Constant Buffer에서 Descriptor He
     2. `D3D12_DESCRIPTOR_HEAP_DESC`를 사용하여 CBV를 저장할 Descriptor Heap을 생성한다.
     3. CPU Handle을 저장하여 특정 인덱스의 CBV를 참조할 수 있도록 설정한다.
     4. 각 CBV에 대해 `CreateConstantBufferView()`를 호출하여 Descriptor Heap에 등록한다.
-    ```cpp
-    D3D12_DESCRIPTOR_HEAP_DESC cbvDesc = {};
-    cbvDesc.NumDescriptors = _elementCount;
-    cbvDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-    cbvDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-    DEVICE->CreateDescriptorHeap(&cbvDesc, IID_PPV_ARGS(&_cbvHeap));
+```cpp
+D3D12_DESCRIPTOR_HEAP_DESC cbvDesc = {};
+cbvDesc.NumDescriptors = _elementCount;
+cbvDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+cbvDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+DEVICE->CreateDescriptorHeap(&cbvDesc, IID_PPV_ARGS(&_cbvHeap));
 
-    _cpuHandleBegin = _cbvHeap->GetCPUDescriptorHandleForHeapStart();
-    _handleIncrementSize = DEVICE->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+_cpuHandleBegin = _cbvHeap->GetCPUDescriptorHandleForHeapStart();
+_handleIncrementSize = DEVICE->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
-    for (uint32 i = 0; i < _elementCount; ++i)
-    {
-        D3D12_CPU_DESCRIPTOR_HANDLE cbvHandle = GetCpuHandle(i);
+for (uint32 i = 0; i < _elementCount; ++i)
+{
+    D3D12_CPU_DESCRIPTOR_HANDLE cbvHandle = GetCpuHandle(i);
 
-        D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
-        cbvDesc.BufferLocation = _cbvBuffer->GetGPUVirtualAddress() + static_cast<uint64>(_elementSize) * i;
-        cbvDesc.SizeInBytes = _elementSize;
+    D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
+    cbvDesc.BufferLocation = _cbvBuffer->GetGPUVirtualAddress() + static_cast<uint64>(_elementSize) * i;
+    cbvDesc.SizeInBytes = _elementSize;
 
-        DEVICE->CreateConstantBufferView(&cbvDesc, cbvHandle);
-    }
-    ```
+    DEVICE->CreateConstantBufferView(&cbvDesc, cbvHandle);
+}
+```
+
 - 최종적으로 
     1. CBV Descriptor Heap이 생성되고, 각 CBV가 Constant Buffer를 가리키게 된다.
     2. 이제 Shader에서 Descriptor Heap을 통해 CBV를 사용할 수 있다.
