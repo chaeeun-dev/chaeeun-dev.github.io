@@ -294,6 +294,8 @@ D3D12_CPU_DESCRIPTOR_HANDLE TableDescriptorHeap::GetCPUHandle(uint32 reg)
 	_currentGroupIndex++;
 ```
 
+![Image](https://github.com/user-attachments/assets/064f04dd-2384-435b-9256-f8d5159df939)
+
 ---
 
 ## 사용하기
