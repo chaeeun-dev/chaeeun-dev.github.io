@@ -12,8 +12,8 @@ permalink: /DirectX12/index-buffer/
 toc: true
 toc_sticky: true
 
-date: 2025-03-29
-last_modified_at: 2025-03-29
+date: 2025-03-28
+last_modified_at: 2025-03-28
 ---
 
 ## 들어가며
