@@ -170,8 +170,8 @@ index buffer에는 정점을 그리는 순서를 저장하고, vertex buffer에�
 ## 마치며
 
 이번 시간에 배운 것
-    - vertex buffer만 사용해서 삼각형을 그리는 방법
-    - vertex buffer와 index buffer를 사용하여 효율적으로 렌더링하는 방법
+- vertex buffer만 사용해서 삼각형을 그리는 방법
+- vertex buffer와 index buffer를 사용하여 효율적으로 렌더링하는 방법
 
 ---
 
