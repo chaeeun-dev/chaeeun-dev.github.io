@@ -32,13 +32,13 @@ last_modified_at: 2025-04-10
 >
 > _출처: 네이버 게임 용어 사전_
 
-[TextureMapping](/assets/images/post_img/directx/TextureMapping.png)
+![TextureMapping](/assets/images/post_img/directx/TextureMapping.png)
 
 - Texture를 사용하는 이유?
     - 픽셀 단위로 색을 지정하지 않아도 자연스럽고 디테일한 표현이 가능하다.
     - 렌더링 파이프라인의 Rasterizer 단계에서 보간 처리를 통해 색상이 자연스럽게 입혀진다.
 
-[PixelInterpolation](/assets/images/post_img/directx/PixelInterpolation.png)
+![PixelInterpolation](/assets/images/post_img/directx/PixelInterpolation.png)
 
 ---
 
@@ -109,7 +109,7 @@ Texutre Mapping에 필요한 DirectXTex 라이브러리를 추가해야 한다.
 
 ---
 
-### Command Queue 확장
+### Command Queue 클래스
 
 리소스 전용 커맨드 리스트를 추가한다. 굳이 리소스 전용을 사용하는 이유는 렌더링 명령과 리소스 초기화(업로드) 명령은 타이밍과 흐름이 다르기에 이를 분리해서 관리하기 위함이다.
 
@@ -187,7 +187,7 @@ _resCmdList->Reset(_resCmdAlloc.Get(), nullptr);
 
 ---
 
-### Shader 수정
+### Shader 클래스
 
 정점의 uv 좌표를 받아 픽셀 쉐이더에서 텍스처를 샘플링하여 출력하도록 Shader 파일을 수정해보자.
 
@@ -258,7 +258,7 @@ D3D12_INPUT_ELEMENT_DESC desc[] =
 
 ---
 
-### Root Signature 수정
+### Root Signature 클래스
 
 - 멤버 변수 추가
     - `D3D12_STATIC_SAMPLER_DESC _samplerDesc;`
@@ -343,7 +343,7 @@ D3D12_INPUT_ELEMENT_DESC desc[] =
 
 그럼 넣어준 흰둥이 사진이 잘 출력된다!
 
-[dog](/assets/images/post_img/directx/TextureMappingResult.png)
+![dog](/assets/images/post_img/directx/TextureMappingResult.png)
 
 ---
 
