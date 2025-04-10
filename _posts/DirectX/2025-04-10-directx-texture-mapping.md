@@ -22,6 +22,8 @@ last_modified_at: 2025-04-10
 
 지난 시간에 만든 직사각형에 이미지를 입혀보는 것이다. 직사각형의 정점에 UV 좌표를 부여하여 이미지를 붙여보자.
 
+![TextureMapping](/assets/images/post_img/directx/TextureMapping.png)
+
 ---
 
 ## Texture
@@ -32,7 +34,7 @@ last_modified_at: 2025-04-10
 >
 > _출처: 네이버 게임 용어 사전_
 
-![TextureMapping](/assets/images/post_img/directx/TextureMapping.png)
+&nbsp;
 
 - Texture를 사용하는 이유?
     - 픽셀 단위로 색을 지정하지 않아도 자연스럽고 디테일한 표현이 가능하다.
@@ -344,6 +346,10 @@ D3D12_INPUT_ELEMENT_DESC desc[] =
 그럼 넣어준 흰둥이 사진이 잘 출력된다!
 
 ![dog](/assets/images/post_img/directx/TextureMappingResult.png)
+
+---
+
+[Texture 커밋](https://github.com/chaeeun-dev/DirectX12/commit/0de44414b4af0dc54e4a367637f16a699aca4f0f)
 
 ---
 
