@@ -422,7 +422,7 @@ void Engine::RenderEnd()
 - 각 클래스들이 잘 만들었는지 확인하기 위해 빌드 후, Client 프로젝트의 `Game` 클래스에 Engine 프로젝트의 `GEngine`을 가져와 `Init()`과 `Update()`를 넣고 `Client.cpp`의 게임 루프에서 실행해본다.
 - `GEngine`을 동적 할당으로 생성했는데도 empty가 떠서 헤맸는데, 빌드 순서를 `Engine 프로젝트`가 먼저 되도록 설정하니, 커맨드 큐에서 설정한 `Colors::LightSteelBlue` 하늘색 화면이 잘 출력됐다!
 
-![Image](https://github.com/user-attachments/assets/5c88a7f6-ac7f-4ee3-ba8a-101647c598d9)
+![DeviceResetResult](/assets/images/post_img/directx/DeviceResetResult.png)
 
 ---
 

@@ -421,7 +421,7 @@ GEngine->RenderEnd();
     - 삼각형이 그려지지 않고 파란 화면만 떠서 30분 넘게 헤맸는데, 원인은 Viewport 설정 때문이었다. `_viewport = { 0, 0, static_cast<FLOAT>(info.height), 0.0f, 1.0f }; `로 되어있던 코드를 `_viewport = { 0, 0, static_cast<FLOAT>(info.width), static_cast<FLOAT>(info.height), 0.0f, 1.0f };` 이렇게 수정하니 정상적으로 출력됐다. 
     - 뷰포트는 그림을 그릴 캔버스의 크기를 설정하는 과정이다. 앞서 설정한 코드의 3, 4 번째 인자가 캔버스의 너비와 높이를 설정하는 건데 인자 값을 잘못 넣어서 그림을 그릴 공간이 없던 것이다. 
 
-![Image](https://github.com/user-attachments/assets/4397c485-d250-4cbf-a4cd-659192e2b2fb)
+![DrawTriangleResult](/assets/images/post_img/directx/DrawTriangleResult.png)
 
 ---
 

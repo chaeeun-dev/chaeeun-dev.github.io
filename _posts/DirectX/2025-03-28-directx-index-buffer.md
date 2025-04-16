@@ -27,8 +27,6 @@ DX에서 3D 모델을 사용할 때, 같은 객체를 여러 번 생성한다고
 4. 쉐이더에서 정점 정보를 받아 연산 수행
 5. 삼각형 단위로 화면에 렌더링
 
-![Image](https://github.com/user-attachments/assets/472676b2-1154-41e6-880f-b2dd3e6dd5b3)
-
 이번 수업에서는 vertex buffer와 index buffer를 함께 사용해서 Input Assembler에 전달하여 사각형을 렌더링 하는 방법을 배운다.
 
 ---
@@ -37,7 +35,7 @@ DX에서 3D 모델을 사용할 때, 같은 객체를 여러 번 생성한다고
 
 vertex buffer만 사용해서 사각형을 그리는 방식과 vertex buffer + index buffer를 사용해 사각형을 그리는 방식을 코드로 구현해보자.
 
-![Image](https://github.com/user-attachments/assets/e2a1cc14-5b1d-4713-81de-10fe86654752)
+![IndexVertexBuffer](/assets/images/post_img/directx/VertexIndexBuffer.jpeg)
 
 ---
 
@@ -66,6 +64,7 @@ vec[5].pos = Vec3(-0.5f, 0.5f, 0.5f);
 vec[5].color = Vec4(1.f, 0.f, 0.f, 1.f);
 
 mesh->Init(vec);
+
 ---
 
 - 결과
@@ -73,6 +72,8 @@ mesh->Init(vec);
 - 문제점
     - 중복된 정점이 있어 메모리의 낭비가 발생한다.
     - index buffer를 사용하면 정점 데이터 낭비를 줄일 수 있다.
+
+![Result](/assets/images/post_img/directx/IndexBufferResult.png)
 
 ---
 
@@ -148,6 +149,9 @@ index buffer에는 정점을 그리는 순서를 저장하고, vertex buffer에�
 
 - 결과
     - 똑같은 사각형이 출력되지만, 정점을 그리는 방식에 차이가 있다.
+
+![Result](/assets/images/post_img/directx/IndexBufferResult.png)
+
 
 &nbsp;
 

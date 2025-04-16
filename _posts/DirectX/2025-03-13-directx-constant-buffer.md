@@ -28,7 +28,7 @@ last_modified_at: 2025-03-13
 
 CPU와 GPU는 성능을 최적화하기 위해 계층적인 메모리 구조를 가진다.
 
-![Image](https://github.com/user-attachments/assets/28901293-1031-4896-b351-d746c5c42f40)
+![CpuGpuMemoryHierarchy](/assets/images/post_img/directx/CpuGpuMemoryHierarchy.png)
 
 1. CPU 메모리 계층 구조
     - Register → Cache → RAM 순으로 데이터를 접근한다.
@@ -207,7 +207,7 @@ _cmdList->SetGraphicsRootSignature(ROOT_SIGNATURE.Get());
     - 해결 방법
         - 버퍼를 여러 개 생성하여 덮어쓰기 문제를 방지한다. 
 
-![Image](https://github.com/user-attachments/assets/32345fd7-f2f8-48c2-a70b-92345a91096a) | ![Image](https://github.com/user-attachments/assets/2181c4dc-b25f-4fb7-b764-182d12fbb9be)
+![ExecutePointProblem](/assets/images/post_img/directx/ExecutePointProblem.png)
 
 &nbsp;
 
@@ -352,7 +352,7 @@ return objCBAddress;
 }
 ```
 
-![Image](https://github.com/user-attachments/assets/2e775b1c-74f3-4cf4-a99b-c5f01542564f)
+![ConstantBufferResult](/assets/images/post_img/directx/ConstantBufferReslut.png)
 
 - 결과 
     - 첫 번째 삼각형 → X 좌표 0.75f 증가, R 값 0.75 증가

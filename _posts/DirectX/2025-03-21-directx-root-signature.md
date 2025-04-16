@@ -34,8 +34,6 @@ last_modified_at: 2025-03-21
 
 이제 Root Signature에 직접 CBV를 포함하는 대신, Root Table을 이용해 여러 개의 CBV를 관리하는 방식을 사용한다.
 
-![Image](https://github.com/user-attachments/assets/cf04cbba-85e2-4162-8c6d-12297574a6cc)
-
 - Root Table이란?
     - Root Table은 Descriptor Heap을 가리키는 포인터 역할을 한다.
     - CBV를 Root Signature에 직접 넣는 대신, Root Table이 Descriptor Heap을 참조하도록 설정한다. 
@@ -195,8 +193,6 @@ for (uint32 i = 0; i < _elementCount; ++i)
 
 - 최종적으로 CBV Descriptor Heap이 각 Constant Buffer를 참조하고, Root Signature에서 Descriptor Table을 통해 CBV Descriptor Heap을 Shader에 전달하는 구조가 완성된다. 
 
-![Image](https://github.com/user-attachments/assets/a5c4782c-d7df-4e08-be4f-6ba52376d441)
-
 ---
 
 ## Table Descriptor Heap 생성
@@ -294,8 +290,6 @@ D3D12_CPU_DESCRIPTOR_HANDLE TableDescriptorHeap::GetCPUHandle(uint32 reg)
 	_currentGroupIndex++;
 ```
 
-![Image](https://github.com/user-attachments/assets/064f04dd-2384-435b-9256-f8d5159df939)
-
 ---
 
 ## 사용하기
@@ -379,7 +373,7 @@ CMD_LIST->DrawInstanced(_vertexCount, 1, 0, 0);
 
 위에 작성한 코드대로 실행하면 삼각형이 잘 그려진다! 그려지는 화면은 저번 수업과 같지만, 저번에는 Root Descriptor 방식으로 삼각형을 그렸고, 이번에는 Descriptor Table 방식으로 삼각형을 그린 것이다.
 
-![Image](https://github.com/user-attachments/assets/ce40bba7-346f-4dc8-9f95-d9c0401d3d5a)
+![RootSignatureResult](/assets/images/post_img/directx/ConstantBufferReslut.png)
 
 ---
 
