@@ -5,9 +5,9 @@ excerpt: "GPU에 대한 이해와 렌더링 파이프라인"
 categories:
   - DirectX12
 tags:
-  - [DirectX]
+  - [DirectX, RenderingPipeline]
 
-permalink: /DirectX12/ot/
+permalink: /DirectX12/rendering-pipeline/
 
 toc: true
 toc_sticky: true
@@ -33,7 +33,7 @@ last_modified_at: 2025-02-19
 	- 그래픽과 관련된 연산을 전담하여 CPU의 부담을 줄인다.
 	- 정점(삼각형 단위의 기본 요소) 연산을 병렬로 처리한다.
 	- 연관성이 없는 독립적인 연산에 특화되어 있다.
-![Image](https://github.com/user-attachments/assets/3863385e-826e-47d9-85a0-42461f8ccf19)
+![CpuGpuStructure](/assets/images/post_img/directx/CpuGpuStructure.png)
 
 
 
