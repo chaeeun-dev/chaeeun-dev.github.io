@@ -18,14 +18,16 @@ last_modified_at: 2025-04-16
 
 ## 들어가며
 
-이번 시간에는 3D 객체를 화면에 출력하기 위해 꼭 필요한 Depth 개념을 알아보고, 픽셀의 깊이 값을 추적해 가장 가까운 객체의 픽셀만 출력되도록 처리하는 실습을 해본다.
+이번 시간에는 3D 객체를 화면에 출력하기 위해 꼭 필요한 Projection과 Depth 개념을 알아보고, 픽셀의 깊이 값을 추적해 가장 가까운 객체의 픽셀만 출력되도록 처리하는 실습을 해본다.
 
 ---
 
 ## DepthStencil
 
-- Depth
+- Projection
     - 3D 게임의 세상은 입체적이지만, 모니터에 출력되는 화면은 2D로 납작하다. 3D를 2D로 나타내기 위해 투영(Projection)이 필요하다.
+
+![Projection](/assets/images/post_img/directx/DepthStencilViewCoordinate.png)
 
 > 💡 Projection이란?
 >
@@ -33,6 +35,9 @@ last_modified_at: 2025-04-16
 
 &nbsp;
 
+- Depth
+    - 투영 과정에서 z값은 그리기 우선 순위를 판단하는 기준으로 사용된다.
+    - 겹치는 오브젝트가 있다면 더 가까운 오브젝트만 화면에 그리는 개념이다.
 - Depth Buffer
     - 역할
         - 픽셀 단위로 Depth(깊이)값을 저장한다.
@@ -42,6 +47,8 @@ last_modified_at: 2025-04-16
     - 특징
         - 깊이 값은 일반적으로 0.0 ~ 1.0이다.
         - 1에 가까울 수록 멀리 있는 오브젝트이고, 1 이상은 아예 계산하지 않는다.
+
+![DSVBuffer](/assets/images/post_img/directx/DepthStencilcViewBufferValue.png)
 
 &nbsp;
 
