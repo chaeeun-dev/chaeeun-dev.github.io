@@ -1,6 +1,6 @@
 ---
 title: "[DirectX 12] #2-8. DepthStencilView"
-excerpt: "카메라 좌표계를 투영 좌표게로 변환하기"
+excerpt: "카메라 좌표계를 투영 좌표계로 변환하기"
 
 categories:
   - DirectX12

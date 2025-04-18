@@ -51,6 +51,7 @@ enum class KEY_STATE
 &nbsp;
 
 - `Input::Init()`
+
 ```cpp
 _hwnd = hwnd;
 _states.resize(KEY_TYPE_COUNT, KEY_STATE::NONE);
@@ -101,6 +102,7 @@ HWND hwnd = ::GetActiveWindow();
 &nbsp;
 
 - 키 상태 확인 함수
+
 ```cpp
 // 누르고 있을 때
 bool GetButton(KEY_TYPE key) { return GetState(key) == KEY_STATE::PRESS; }
@@ -119,6 +121,7 @@ bool GetButtonUp(KEY_TYPE key) { return GetState(key) == KEY_STATE::UP; }
 &nbsp;
 
 - 멤버 변수
+
 ```cpp
 uint64 _frequency;   // 성능 카운터 빈도
 uint64 _prevCount;   // 이전 프레임의 카운터
@@ -132,6 +135,7 @@ uint32 _fps;
 &nbsp;
 
 - `Timer::Init()`
+
 ```cpp
 ::QueryPerformanceFrequency(reinterpret_cast<LARGE_INTEGER*>(&_frequency));
 ::QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&_prevCount)); // CPU 클럭
@@ -144,10 +148,10 @@ uint32 _fps;
         - `QueryPerformanceCounter()`는 CPU 클럭 기반의 정밀한 시간 측정을 한다.
         - `_frequency`는 1초 동안 카운트 수이고, 초기화시 `QueryPerformanceCounter()`로 받아온다.
         - 두 카운터의 차이를 빈도로 나누면 경과 시간(초)이 된다.
-    - fps
+    - fps(초당 프레임 수)
         - `_frameCount`는 1초 동안 누적된 프레임 수이다.
         - `_frameTime`은 deltaTime을 누적해 1초가 될 때까지 시간을 계속 더한다.
-        - 누적된 시간이 1초 이상 되면 `fps` 값(초당 프레임 수)을 갱신하고 초기화한다.
+        - 누적된 시간이 1초 이상 되면 `fps` 값을 갱신하고 초기화한다.
 
 ```cpp
 	uint64 currentCount;
@@ -173,6 +177,7 @@ uint32 _fps;
 ## Engine 클래스
 
 - 멤버 변수 및 함수 추가
+
 ```cpp
 shared_ptr<Input> _input = make_shared<Input>();
 shared_ptr<Timer> _timer = make_shared<Timer>();
@@ -184,6 +189,7 @@ shared_ptr<Timer> GetTimer() { return _timer; }
 &nbsp;
 
 - `Engine::Update()`
+
 ```cpp
 _input->Update();
 _timer->Update();
@@ -193,6 +199,7 @@ _timer->Update();
 
 - `Engine::ShowFps()`
     - 화면에 FPS를 출력한다.
+
 ```cpp
 uint32 fps = _timer->GetFps();
 
@@ -205,6 +212,7 @@ SetWindowText(_window.hwnd, text);
 &nbsp;
 
 - `EnginePch.h`에 전역 사용을 위한 매크로 추가
+
 ```cpp
 #define INPUT GEngine->GetInput()
 #define DELTATIME GEngine->GetTimer()->GetDeltaTime()
@@ -220,6 +228,7 @@ SetWindowText(_window.hwnd, text);
 
 - `Game::update()`
     - 키보드 입력에 따라 `속도 * 시간` 값으로 오브젝트가 움직이도록 한다.
+
 ```cpp
 static Transform t{};
 
@@ -240,6 +249,7 @@ mesh->Render();
 
 - 결과
     - 키보드 입력에 따라 흰둥이가 잘 움직인다.
+
 ![InputAndTimerResult](/assets/images/post_img/directx/InputAndTimerResult.gif)
 
 ---
