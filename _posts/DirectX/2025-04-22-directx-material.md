@@ -182,31 +182,34 @@ array<shared_ptr<Texture>, MATERIAL_TEXTURE_COUNT> _textures;
 &nbsp;
 
 - 멤버 함수
-    - `void SetShader(shared_ptr<Shader> shader) { _shader = shader; }`
-    - `void SetInt(uint8 index, int32 value) { _params.SetInt(index, value); }`
-    - `void SetFloat(uint8 index, float value) { _params.SetFloat(index, value); }`
-    - `void SetTexture(uint8 index, shared_ptr<Texture> texture) { _textures[index] = texture; }`
-    - `Update()`
+    - 각종 Set 함수
+        ```cpp
+        void SetShader(shared_ptr<Shader> shader) { _shader = shader; }
+        void SetInt(uint8 index, int32 value) { _params.SetInt(index, value); }
+        void SetFloat(uint8 index, float value) { _params.SetFloat(index, value); }
+        void SetTexture(uint8 index, shared_ptr<Texture> texture) { _textures[index] = texture; }
+        ```
+    - `Material::Update()`
         1. CBV 업로드
         2. SRV 업로드
         3. 파이프라인 설정
-        ```cpp
-        // CBV 업로드
-        CONST_BUFFER(CONSTANT_BUFFER_TYPE::MATERIAL)->PushData(&_params, sizeof(_params));
+            ```cpp
+            // CBV 업로드
+            CONST_BUFFER(CONSTANT_BUFFER_TYPE::MATERIAL)->PushData(&_params, sizeof(_params));
 
-        // SRV 업로드
-        for (size_t i = 0; i < _textures.size(); i++)
-        {
-            if (_textures[i] == nullptr)
-                continue;
+            // SRV 업로드
+            for (size_t i = 0; i < _textures.size(); i++)
+            {
+                if (_textures[i] == nullptr)
+                    continue;
 
-            SRV_REGISTER reg = SRV_REGISTER(static_cast<int8>(SRV_REGISTER::t0) + i);
-            GEngine->GetTableDescHeap()->SetSRV(_textures[i]->GetCpuHandle(), reg);
-        }
+                SRV_REGISTER reg = SRV_REGISTER(static_cast<int8>(SRV_REGISTER::t0) + i);
+                GEngine->GetTableDescHeap()->SetSRV(_textures[i]->GetCpuHandle(), reg);
+            }
 
-        // 파이프라인 설정
-        _shader->Update();
-        ```
+            // 파이프라인 설정
+            _shader->Update();
+            ```
 
 ---
 
@@ -238,6 +241,7 @@ void SetMaterial(shared_ptr<Material> mat) { _mat = mat; }
 
 - `default.hlsl` 파일 수정
     - float 0, 1, 2를 사용하도록 쉐이더 파일을 수정한다.
+
 ```hlsl
 VS_OUT VS_Main(VS_IN input)
 {
@@ -264,9 +268,7 @@ VS_OUT VS_Main(VS_IN input)
     3. Material 생성 및 설정
         - Shader 등록
         - Shader에 넘길 float 값 설정
-            - x축으로 +0.3f
-            - y축으로 +0.4f
-            - z축으로 +0.3f
+            - x축으로 +0.3f, y축으로 +0.4f, z축으로 +0.3f
         - Texture 등록 (t0 레지스터에 연결되어 GPU에 업로드됨)
     4. Mesh에 Material 설정
         - 이후 `Mesh::Render()` 시, 이 Material이 자동으로 `Udpate()`되어, CBV, SRV, Shader가 한 번에 적용됨
