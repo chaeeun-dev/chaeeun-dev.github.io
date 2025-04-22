@@ -46,6 +46,12 @@ enum class KEY_STATE
 {
 	NONE, PRESS, DOWN, UP, END
 };
+
+enum
+{
+	KEY_TYPE_COUNT = static_cast<int32>(UINT8_MAX + 1),
+	KEY_STATE_COUNT = static_cast<int32>(KEY_STATE::END),
+};
 ```
 
 &nbsp;
@@ -61,7 +67,7 @@ _states.resize(KEY_TYPE_COUNT, KEY_STATE::NONE);
 
 - `Input::Update()`
     - 게임 창 포커스 상태에서만 키 입력을 받도록 한다. (핸들 확인)
-    - `GetAsyncKeystate()`로 현재 키 상태를 매 프레임 가져와 상태를 갱신한다.
+    - `::GetKeyboardState()`로 256개의 키보드 정보를 한 번에 가져와 확인한다.
 
 ```cpp
 HWND hwnd = ::GetActiveWindow();
@@ -73,30 +79,34 @@ HWND hwnd = ::GetActiveWindow();
 		return;
 	}
 
-	for (uint32 key = 0; key < KEY_TYPE_COUNT; key++)
+BYTE asciiKeys[KEY_TYPE_COUNT] = {};
+if (::GetKeyboardState(asciiKeys) == false)
+	return;
+
+for (uint32 key = 0; key < KEY_TYPE_COUNT; key++)
+{
+	// 키가 눌려 있으면 true
+	if (asciiKeys[key] & 0x80)
 	{
-		// 키가 눌려 있으면 true
-		if (::GetAsyncKeyState(key) & 0x8000)
-		{
-			KEY_STATE& state = _states[key];
+		KEY_STATE& state = _states[key];
 
-			// 이전 프레임에 키를 누른 상태라면 PRESS
-			if (state == KEY_STATE::PRESS || state == KEY_STATE::DOWN)
-				state = KEY_STATE::PRESS;
-			else
-				state = KEY_STATE::DOWN;
-		}
+		// 이전 프레임에 키를 누른 상태라면 PRESS
+		if (state == KEY_STATE::PRESS || state == KEY_STATE::DOWN)
+			state = KEY_STATE::PRESS;
 		else
-		{
-			KEY_STATE& state = _states[key];
-
-			// 이전 프레임에 키를 누른 상태라면 UP
-			if (state == KEY_STATE::PRESS || state == KEY_STATE::DOWN)
-				state = KEY_STATE::UP;
-			else
-				state = KEY_STATE::NONE;
-		}
+			state = KEY_STATE::DOWN;
 	}
+	else
+	{
+		KEY_STATE& state = _states[key];
+
+		// 이전 프레임에 키를 누른 상태라면 UP
+		if (state == KEY_STATE::PRESS || state == KEY_STATE::DOWN)
+			state = KEY_STATE::UP;
+		else
+			state = KEY_STATE::NONE;
+	}
+}
 ```
 
 &nbsp;
