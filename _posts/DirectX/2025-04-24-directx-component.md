@@ -61,7 +61,7 @@ enum class COMPONENT_TYPE : uint8
 - 멤버 변수
     - `_type`: Component가 어떤 타입인지 구분한다.
     - `_gameObject`: 자신이 소유한 GameObject를 기리킨다
-        - 💡 왜 `weak_ptr인가`? 
+        - 💡 왜 `weak_ptr`? 
             1. 만약 `shared_ptr로` 연결하면 GameObject Component 간 순환 참조(circular reference)가 발생한다.
             2. 순환 참조는 reference count를 0으로 만들 수 없어 메모리 누수가 발생할 수 있다.
             3. 이를 방지하기 위해 Component에서는 GameObject를 `weak_ptr로` 참조한다.
@@ -90,6 +90,7 @@ virtual void LateUpdate() {}
 
 - Get, Set 함수
     - `IsValid()`: 이 Component가 유효한 GameObject를 가리키고 있는지 확인한다.
+
 ```cpp
 COMPONENT_TYPE GetType() { return _type; }
 bool IsValid() { return _gameObject.expired() == false; }
@@ -188,7 +189,7 @@ for (shared_ptr<MonoBehaviour>& script : _scripts)
 
 &nbsp;
 
-- GameObject::GetTransform()
+- `GameObject::GetTransform()`
     - Transform 타입의 Component가 어디 저장되어 있는지 인덱스를 통해 바로 찾아 반환한다.
 
 ```cpp
@@ -251,8 +252,9 @@ _mesh->Render();
 
 ### Mesh 클래스
 
-- 삭제
-    - transform과 material 관련 기능들은 MeshRenderer에서 처리하도록 했고, Mesh는 순수하게 vertex와 index 데이터를 GPU에게 전달하는 역할만 한다.
+- 변수 및 함수 삭제
+    - Transform과 Material 관련 기능들은 MeshRenderer에서 처리하도록 했다.
+    - Mesh는 순수하게 vertex와 index 데이터를 GPU에게 전달하는 역할만 한다.
 
 ```cpp
 Transform _transform;
@@ -277,8 +279,7 @@ void SetMaterial(shared_ptr<Material> mat);
 &nbsp;
 
 - `Game::Init()` 수정
-    - Transform 컴포넌트를 자동으로 붙여준다.
-    - Unity처럼 GameObject를 생성하면 자동으로 Transform이 포함되도록 한 것이다.
+    - GameObject를 생성하고 초기화한다. 여기서 Transform 컴포넌트가 추가된다.
         ```cpp
         shared_ptr<GameObject> gameObject = make_shared<GameObject>();
         gameObject->Init(); // Transform 컴포넌트 추가
@@ -342,7 +343,7 @@ GEngine->RenderEnd();
 - 결과
     - 저번 수업에서 달라진 건 없지만, 컴포넌트를 사용해서 그리는 구조로 바뀌었다.
 
-![ComponentResult](/assets/images/post_img/directx/ComponentResult)
+![ComponentResult](/assets/images/post_img/directx/ComponentResult.png)
 
 ---
 
