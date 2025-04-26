@@ -5,7 +5,7 @@ excerpt: "Scene 개념에 대한 이해와 Manager 구현"
 categories:
   - DirectX12
 tags:
-  - [DirectX, Scene, Manager]
+  - [DirectX, Scene, Manager, Singleton]
 
 permalink: /DirectX12/scene/
 
