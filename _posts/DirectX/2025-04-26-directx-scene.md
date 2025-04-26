@@ -171,7 +171,7 @@ void SceneManager::LoadScene(const wstring& sceneName)
 
 ---
 
-### Input, Timer 클래스 
+## Input, Timer 클래스 
 
 전역으로 관리되던 Input과 Timer 클래스를 SceneManager와 마찬가지로 싱글톤으로 수정해보자.
 
