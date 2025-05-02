@@ -9,6 +9,7 @@ tags:
 
 permalink: /DirectX12/vector/
 
+published: false
 toc: true
 toc_sticky: true
 
