@@ -31,7 +31,9 @@ last_modified_at: 2025-05-02
 - 높이 (opposite): 𝑜
 - 각도: 𝜃
 
-$$h^2 = a^2 + o^2$$
+$$
+h^2 = a^2 + o^2
+$$
 
 &nbsp;
 
@@ -49,9 +51,7 @@ $$h^2 = a^2 + o^2$$
 
 - 삼각함수의 기본 정의
 
-```math
-\cos(\theta) = \frac{a}{h}
-```
+$\cos(\theta) = \frac{a}{h}$
 
 ```math
 \sin(\theta) = \frac{o}{h}
