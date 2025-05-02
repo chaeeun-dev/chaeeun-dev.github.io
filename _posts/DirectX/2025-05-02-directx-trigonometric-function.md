@@ -31,9 +31,7 @@ last_modified_at: 2025-05-02
 - 높이 (opposite): 𝑜
 - 각도: 𝜃
 
-```math
-h^2 = a^2 + o^2
-```
+$$h^2 = a^2 + o^2$$
 
 &nbsp;
 
