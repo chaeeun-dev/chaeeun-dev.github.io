@@ -9,12 +9,11 @@ tags:
 
 permalink: /DirectX12/trigonometric-function/
 
-published: false
 toc: true
 toc_sticky: true
 
 date: 2025-05-02
-last_modified_at: 2025-05-02
+last_modified_at: 2025-05-07
 ---
 
 ## 들어가며
@@ -23,7 +22,13 @@ last_modified_at: 2025-05-02
 
 ---
 
-## 피타고라스의 정리
+## 삼각함수
+
+삼각함수에 대해 알아보자.
+
+---
+
+### 피타고라스의 정리
 
 직각 삼각형 ABC에서 
 
@@ -32,9 +37,7 @@ last_modified_at: 2025-05-02
 - 높이 (opposite): 𝑜
 - 각도: 𝜃
 
-$$
-h^2 = a^2 + o^2
-$$
+![피타고라스의 정리](/assets/images/post_img/directx/PythagorasTheorem.jpg)
 
 &nbsp;
 
@@ -48,30 +51,21 @@ $$
 
 ---
 
-## 삼각함수 
+### 삼각함수 
 
 - 삼각함수의 기본 정의
 
-$\cos(\theta) = \frac{a}{h}$
-
-```math
-\sin(\theta) = \frac{o}{h}
-```
-
-```math
-\tan(\theta) = \frac{o}{a} = \frac{\sin(\theta)}{\cos(\theta)}
-```
+![삼각함수](/assets/images/post_img/directx/TrigonometricFunction.jpg)
 
 ---
 
 ### 단위원
 
 - 정의
-    - 반지름이 1인 원
+    - 원점을 중심으로 하고 반지름이 1인 원
     - 원 위의 각도 θ에 해당하는 점의 좌표
-        ```math
-        (\cos(\theta), \sin(\theta))
-        ```
+
+![UnitCircle](/assets/images/post_img/directx/UnitCircle.jpg)
 
 ---
 
@@ -79,61 +73,50 @@ $\cos(\theta) = \frac{a}{h}$
 
 게임에서는 도(degree)가 아닌 라디안(radian)을 사용한다.
 
-```math
-180^\circ = \pi,\quad 360^\circ = 2\pi
-```
+- 라디안
+    - 호의 길이가 반지름과 같게 되는 만큼의 각을 1 라디안이라고 정의한다. 
 
-```math
-60^\circ = \frac{\pi}{3},\quad 45^\circ = \frac{\pi}{4},\quad 30^\circ = \frac{\pi}{6}
-```
+![Radian](/assets/images/post_img/directx/Radian.jpg)
 
 ---
 
-### 삼각함수의 성질
+### 삼각함수 그래프
 
-- 주기성
-    ```math
-    \sin(\theta + 2\pi) = \sin(\theta) \
-    \cos(\theta + 2\pi) = \cos(\theta)
-    ```
-- 짝/홀 함수 (우/기 함수)
-    ```math
-    \cos(-\theta) = \cos(\theta) \quad \text{(짝함수)} \
-    \sin(-\theta) = -\sin(\theta) \quad \text{(홀함수)}
-    ```
+![Graph](/assets/images/post_img/directx/TrigonometricFunctionGraph.jpg)
+
 
 ---
 
 ### 역삼각함수
 
-삼각함수의 값을 알고 있을 때 각도를 구하고 싶다면? (단 역함수는 결과의 범위가 정해져 있음)
+삼각함수의 값을 알고 있을 때 각도를 구하고 싶다면 역삼각함수를 사용한다. (단 역함수는 결과의 범위가 정해져 있음) arc(아크)를 붙여 사용한다.
 
-```math
-\theta = \cos^{-1}(x),\quad \theta \in [0, \pi] \
-\theta = \sin^{-1}(x),\quad \theta \in \left[-\frac{\pi}{2}, \frac{\pi}{2} \right]
-```
+![ArcCosSin](/assets/images/post_img/directx/ArcCosSin.jpg)
 
 --- 
 
-## 활용
+## 자주 사용하는 공식
 
-- 거리 계산
-    ```cpp
-    float distance = sqrt(dx * dx + dy * dy);
-    ```
-- 두 벡터의 사이각 구하기
-    ```cpp
-    float dot = Normalize(a).Dot(Normalize(b));
-    float angle = acos(dot);
-    ```
-- 코사인 덧셈 공식 
-    - 회전 행렬에서 활용된다. 
-        ```math
-        \cos(\alpha + \beta) = \cos(\alpha)\cos(\beta) - \sin(\alpha)\sin(\beta)
+게임 좌표 연산에서 자주 활용되는 개념에 대해 알아보자.
+
+- 코사인 법칙
+    ![CosineLaw](/assets/images/post_img/directx/CosineLaw.jpg)
+- 코사인 덧셈 정리
+    - 회전 행렬에서 자주 사용된다. 
+    ![CosineAdditionTheorem](/assets/images/post_img/directx/CosineAdditionTheorem.jpg)
+
+&nbsp;
+
+- 공식 활용 예시
+    - 거리 계산
+        ```cpp
+        float distance = sqrt(dx * dx + dy * dy);
         ```
-
----
-
+    - 두 벡터의 사이각 구하기
+        ```cpp
+        float dot = Normalize(a).Dot(Normalize(b));
+        float angle = acos(dot);
+        ```
 
 ---
 
