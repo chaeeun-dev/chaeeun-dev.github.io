@@ -30,6 +30,8 @@ categories:
         url: /theory/git/
       - title: "Error"
         url: /theory/error/
+      - title: "GameMath"
+        url: /theory/gamemath/
 
   - title: "Projects"
     children:

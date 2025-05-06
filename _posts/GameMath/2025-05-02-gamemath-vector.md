@@ -1,13 +1,13 @@
 ---
-title: "[DirectX 12] #4-2. vector"
+title: "벡터"
 excerpt: "벡터의 개념과 게임에서의 활용"
 
 categories:
-  - DirectX12
+  - GameMath
 tags:
-  - [DirectX, Vector]
+  - [GameMath, Vector]
 
-permalink: /DirectX12/vector/
+permalink: /GameMath/vector/
 
 published: false
 toc: true

@@ -1,13 +1,13 @@
 ---
-title: "[DirectX 12] #4-1. 삼각함수"
+title: "삼각함수"
 excerpt: "삼각함수 개념과 게임에서의 활용"
 
 categories:
-  - DirectX12
+  - GameMath
 tags:
-  - [DirectX, TrigonometricFunction]
+  - [GameMath, TrigonometricFunction]
 
-permalink: /DirectX12/trigonometric-function/
+permalink: /GameMath/trigonometric-function/
 
 toc: true
 toc_sticky: true
