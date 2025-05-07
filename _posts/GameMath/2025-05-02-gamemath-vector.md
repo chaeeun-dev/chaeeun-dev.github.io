@@ -9,12 +9,11 @@ tags:
 
 permalink: /GameMath/vector/
 
-published: false
 toc: true
 toc_sticky: true
 
 date: 2025-05-02
-last_modified_at: 2025-05-02
+last_modified_at: 2025-05-07
 ---
 
 ## 들어가며
@@ -23,7 +22,9 @@ last_modified_at: 2025-05-02
 
 ---
 
-## 스칼라 vs 벡터
+## 벡터
+
+### 스칼라 vs 벡터
 
 - 스칼라: 하나의 숫자 값
 - 벡터: 크기(magnitude)와 방향(direction)을 가진 값
@@ -34,30 +35,27 @@ last_modified_at: 2025-05-02
 
 ---
 
-## 벡터
+### 벡터 개념
 
 - 벡터 개념
     - 기하 벡터: 수학적 벡터 (방향 + 크기)
     - 위치 벡터: 좌표를 표현하는 벡터 (게임 오브젝트의 위치 등)
+
 - 벡터의 표현
-    - 표기법: \\( \\vec{AB} \\), 또는 `B - A`
     - 계산: 목적지 좌표에서 시작지 좌표를 빼는 방식으로 표현
+    ![VectorNotaion](/assets/images/post_img/gamemath/VectorNotation.jpg)
+
 - 벡터의 성질 
-    - 벡터 덧셈: \\( \\vec{a} + \\vec{b} \\)
-    - 벡터 뺄셈: \\( \\vec{a} - \\vec{b} \\)
-    - 스칼라와의 곱: \\( k \\cdot \\vec{a} \\), 크기는 k배, 방향은 동일
     - 벡터와 벡터의 곱셈/나눗셈은 정의되지 않는다.
+    ![VectorProperty](/assets/images/post_img/gamemath/VectorProperty.jpg)
+
 - 벡터의 연산법칙
-    - 교환 법칙 \\( \\vec{a} + \\vec{b} = \\vec{b} + \\vec{a} \\)
-    - 결합 법칙 \\( (\\vec{a} + \\vec{b}) + \\vec{c} = \\vec{a} + (\\vec{b} + \\vec{c}) \\)    
+  ![VectorLaw](/assets/images/post_img/gamemath/VectorLaw.jpg)
+
 - 벡터의 크기와 단위 벡터
-    - 크기 계산 (2D):  
-    \\[ |\\vec{v}| = \\sqrt{x^2 + y^2} \\]
-    - 3D 거리 계산 피타고라스를 2번 적용  
-    \\[ |\\vec{v}| = \\sqrt{x^2 + y^2 + z^2} \\]
     - 단위 벡터  
-    크기가 1인 벡터로 방향만 유지하고 크기를 제거함  
-    \\[ \\hat{v} = \\frac{\\vec{v}}{|\\vec{v}|} \\]
+    크기가 1인 벡터로 방향만 유지하고 크기를 제거한다.
+    ![VectorDistance](/assets/images/post_img/gamemath/VectorDistance.jpg)
 
 > 활용 방향을 구한 후 `속도 * 시간`을 곱해 이동 계산
 
@@ -69,8 +67,11 @@ last_modified_at: 2025-05-02
 ### 내적
 
 - 공식  
-  \\[ \\vec{a} \\cdot \\vec{b} = |\\vec{a}||\\vec{b}| \\cos\\theta = a_xb_x + a_yb_y \\]
-- 결과 스칼라 값
+  ![VectorDot](/assets/images/post_img/gamemath/VectorDot.jpg)
+
+- 특징
+  - 교환법칙이 성립
+  - 결과는 스칼라
 
 > 활용 예시  
 > - 두 벡터의 방향 차이를 구해 각도 비교, 데미지 계산
@@ -83,16 +84,16 @@ last_modified_at: 2025-05-02
 ### 외적
 
 - 공식  
-  \\[ \\vec{a} \\times \\vec{b} = |\\vec{a}||\\vec{b}| \\sin\\theta \\hat{n} \\]
-- 결과 수직 벡터 (벡터 값)
+  ![VectorCross](/assets/images/post_img/gamemath/VectorCross.jpg)
 
-> 특징
-> - 교환 법칙이 성립하지 않음 - 방향이 반대
-> - 결과는 벡터
+- 특징
+  - 교환 법칙이 성립하지 않음 - 방향이 반대
+  - 결과는 수직 벡터 (벡터 값)
 
 - 활용 예시  
   - 법선 벡터 구하기
   - 삼각형 안에 점이 존재하는지 판별 (삼각형 OAB 안에 점 C가 존재하는지?)
+    ![VectorCrossExample](/assets/images/post_img/gamemath/VectorCrossExample.jpg)
   - 쿨타임 UI 색칠 여부 계산
 
 - `cross()` 함수 사용
