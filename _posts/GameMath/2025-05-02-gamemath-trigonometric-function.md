@@ -37,7 +37,7 @@ last_modified_at: 2025-05-07
 - 높이 (opposite): 𝑜
 - 각도: 𝜃
 
-![피타고라스의 정리](/assets/images/post_img/directx/PythagorasTheorem.jpg)
+![피타고라스의 정리](/assets/images/post_img/gamemath/PythagorasTheorem.jpg)
 
 &nbsp;
 
@@ -55,7 +55,7 @@ last_modified_at: 2025-05-07
 
 - 삼각함수의 기본 정의
 
-![삼각함수](/assets/images/post_img/directx/TrigonometricFunction.jpg)
+![삼각함수](/assets/images/post_img/gamemath/TrigonometricFunction.jpg)
 
 ---
 
@@ -65,7 +65,7 @@ last_modified_at: 2025-05-07
     - 원점을 중심으로 하고 반지름이 1인 원
     - 원 위의 각도 θ에 해당하는 점의 좌표
 
-![UnitCircle](/assets/images/post_img/directx/UnitCircle.jpg)
+![UnitCircle](/assets/images/post_img/gamemath/UnitCircle.jpg)
 
 ---
 
@@ -76,13 +76,13 @@ last_modified_at: 2025-05-07
 - 라디안
     - 호의 길이가 반지름과 같게 되는 만큼의 각을 1 라디안이라고 정의한다. 
 
-![Radian](/assets/images/post_img/directx/Radian.jpg)
+![Radian](/assets/images/post_img/gamemath/Radian.jpg)
 
 ---
 
 ### 삼각함수 그래프
 
-![Graph](/assets/images/post_img/directx/TrigonometricFunctionGraph.jpg)
+![Graph](/assets/images/post_img/gamemath/TrigonometricFunctionGraph.jpg)
 
 
 ---
@@ -91,7 +91,7 @@ last_modified_at: 2025-05-07
 
 삼각함수의 값을 알고 있을 때 각도를 구하고 싶다면 역삼각함수를 사용한다. (단 역함수는 결과의 범위가 정해져 있음) arc(아크)를 붙여 사용한다.
 
-![ArcCosSin](/assets/images/post_img/directx/ArcCosSin.jpg)
+![ArcCosSin](/assets/images/post_img/gamemath/ArcCosSin.jpg)
 
 --- 
 
@@ -100,10 +100,10 @@ last_modified_at: 2025-05-07
 게임 좌표 연산에서 자주 활용되는 개념에 대해 알아보자.
 
 - 코사인 법칙
-    ![CosineLaw](/assets/images/post_img/directx/CosineLaw.jpg)
+    ![CosineLaw](/assets/images/post_img/gamemath/CosineLaw.jpg)
 - 코사인 덧셈 정리
     - 회전 행렬에서 자주 사용된다. 
-    ![CosineAdditionTheorem](/assets/images/post_img/directx/CosineAdditionTheorem.jpg)
+    ![CosineAdditionTheorem](/assets/images/post_img/gamemath/CosineAdditionTheorem.jpg)
 
 &nbsp;
 
