@@ -57,7 +57,7 @@ last_modified_at: 2025-05-07
     크기가 1인 벡터로 방향만 유지하고 크기를 제거한다.
     ![VectorDistance](/assets/images/post_img/gamemath/VectorDistance.jpg)
 
-> 활용 방향을 구한 후 `속도 * 시간`을 곱해 이동 계산
+> 활용: 방향을 구한 후 `속도 * 시간`을 곱해 이동 계산
 
 - `magnitude()`: 벡터의 크기를 구하는 함수
 - `normalize()`: 단위 벡터를 구하는 함수
@@ -90,11 +90,11 @@ last_modified_at: 2025-05-07
   - 교환 법칙이 성립하지 않음 - 방향이 반대
   - 결과는 수직 벡터 (벡터 값)
 
-- 활용 예시  
-  - 법선 벡터 구하기
-  - 삼각형 안에 점이 존재하는지 판별 (삼각형 OAB 안에 점 C가 존재하는지?)
-    ![VectorCrossExample](/assets/images/post_img/gamemath/VectorCrossExample.jpg)
-  - 쿨타임 UI 색칠 여부 계산
+> 활용 예시  
+> - 법선 벡터 구하기
+> - 삼각형 안에 점이 존재하는지 판별 (삼각형 OAB 안에 점 C가 존재하는지?)
+>   ![VectorCrossExample](/assets/images/post_img/gamemath/VectorCrossExample.jpg)
+> - 쿨타임 UI 색칠 여부 계산
 
 - `cross()` 함수 사용
 
