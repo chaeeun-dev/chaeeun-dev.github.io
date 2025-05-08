@@ -45,9 +45,12 @@ last_modified_at: 2025-05-08
 - `(x, y, z)`에 대해 각 `a, b, c`만큼의 크기 조절을 적용해보자.
     ![MatrixScale](/assets/images/post_img/gamemath/MatrixScale.jpg)
 
+&nbsp;
+
 - 주의할 점
     - 원점을 기준으로 Scale 연산을 적용하지 않으면 객체가 왜곡되거나 엉뚱한 방향으로 커질 수 있다.
     - 참고. 게임에서는 대개 플레이어의 발을 기준으로 좌표를 세팅한다.
+
 ---
 
 ## Rotation
@@ -59,6 +62,8 @@ last_modified_at: 2025-05-08
         ![MatrixRotationEx](/assets/images/post_img/gamemath/MatrixRotationEx.jpg)
     - 행렬로 나타내면 다음과 같다. 
         ![MatrixRotation](/assets/images/post_img/gamemath/MatrixRotation.jpg)
+
+&nbsp;
 
 - 자전 vs 공전
     - 자전: 자신의 축을 중심으로 도는 회전으로, 지구가 자전하는 개념과 같다.
