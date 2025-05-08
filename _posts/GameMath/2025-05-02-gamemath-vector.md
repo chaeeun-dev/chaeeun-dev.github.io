@@ -29,9 +29,10 @@ last_modified_at: 2025-05-07
 - 스칼라: 하나의 숫자 값
 - 벡터: 크기(magnitude)와 방향(direction)을 가진 값
 
-> 예시: A에서 B까지의 거리가 5일 때,  
-> - 스칼라: 거리 5 (어디든 5 떨어진 지점)
-> - 벡터: A에서 B를 정확히 가리키는 방향 + 거리
+> 예시
+> - A에서 B까지의 거리가 5일 때,  
+>   - 스칼라: 거리 5 (어디든 5 떨어진 지점)
+>   - 벡터: A에서 B를 정확히 가리키는 방향 + 거리
 
 ---
 
@@ -42,7 +43,7 @@ last_modified_at: 2025-05-07
     - 위치 벡터: 좌표를 표현하는 벡터 (게임 오브젝트의 위치 등)
 
 - 벡터의 표현
-    - 계산: 목적지 좌표에서 시작지 좌표를 빼는 방식으로 표현
+    - 목적지 좌표에서 시작지 좌표를 빼는 방식으로 표현한다.
     ![VectorNotaion](/assets/images/post_img/gamemath/VectorNotation.jpg)
 
 - 벡터의 성질 
@@ -53,11 +54,11 @@ last_modified_at: 2025-05-07
   ![VectorLaw](/assets/images/post_img/gamemath/VectorLaw.jpg)
 
 - 벡터의 크기와 단위 벡터
-    - 단위 벡터  
-    크기가 1인 벡터로 방향만 유지하고 크기를 제거한다.
+    - 단위 벡터: 크기가 1인 벡터로 방향만 유지하고 크기를 제거한다.
     ![VectorDistance](/assets/images/post_img/gamemath/VectorDistance.jpg)
 
-> 활용: 방향을 구한 후 `속도 * 시간`을 곱해 이동 계산
+> 활용 예시
+> - 방향을 구한 후 `속도 * 시간`을 곱해 이동 계산
 
 - `magnitude()`: 벡터의 크기를 구하는 함수
 - `normalize()`: 단위 벡터를 구하는 함수
