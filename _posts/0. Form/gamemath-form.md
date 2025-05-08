@@ -1,5 +1,5 @@
 ---
-title: ""
+title: "[GameMath] "
 excerpt: ""
 
 categories:

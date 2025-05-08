@@ -1,5 +1,5 @@
 ---
-title: "Scale, Rotation, Translation"
+title: "[GameMath] Scale, Rotation, Translation"
 excerpt: "SRT 행렬 개념과 게임에서의 활용"
 
 categories:
@@ -58,7 +58,7 @@ last_modified_at: 2025-05-08
 회전은 앞의 변환보다 더 까다로운 변환이다. 예를 들어 z축을 기준으로 회전하면 `(x, y)` 평면에서 원형으로 회전하게 된다.
 
 - 회전은 특정 축을 중심으로 이루어지고, 삼각함수의 개념이 사용된다.
-    - 점 A에서 B로 알파만큼 회전시켜보자.
+    - 점 A에서 B로 세타만큼 회전시켜보자.
         ![MatrixRotationEx](/assets/images/post_img/gamemath/MatrixRotationEx.jpg)
     - 행렬로 나타내면 다음과 같다. 
         ![MatrixRotation](/assets/images/post_img/gamemath/MatrixRotation.jpg)

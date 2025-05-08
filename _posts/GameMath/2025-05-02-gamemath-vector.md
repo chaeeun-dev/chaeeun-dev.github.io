@@ -1,5 +1,5 @@
 ---
-title: "벡터"
+title: "[GameMath] 벡터"
 excerpt: "벡터의 개념과 게임에서의 활용"
 
 categories:

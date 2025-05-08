@@ -1,5 +1,5 @@
 ---
-title: "삼각함수"
+title: "[GameMath] 삼각함수"
 excerpt: "삼각함수 개념과 게임에서의 활용"
 
 categories:
