@@ -26,7 +26,7 @@ last_modified_at: 2025-05-13
 
 - 좌표 공간의 종류
     - Local Space 
-        - 모델이 생성될 때의 좌표계로, 각 모델은 ㅜ 자기만의 기준 위치와 방향을 갖는다.
+        - 모델이 생성될 때의 좌표계로, 각 모델은 자기만의 기준 위치와 방향을 갖는다.
     - World Spcae
         - 각 모델이 실제 게임 월드에 배치되는 공간이다.
         - 위치(Position), 크기(Sclae), 회전(Rotation) 등의 변환이 적용되어 배치된다.
@@ -41,8 +41,9 @@ last_modified_at: 2025-05-13
 
 &nbsp;
 
->- 좌표계 변환
->   - Local Space → World Space → View Space → Projection Space → Screen Space
+> 📌 좌표계 변환
+>
+> Local Space → World Space → View Space → Projection Space → Screen Space
 
 이번 시간에는 World 변환(Local → World)과 View 변환(World Space → View Space)에 대해 알아본다.
 
@@ -67,7 +68,6 @@ View 변환은 World 좌표계를 카메라 좌표계로 변환하는 과정이�
 &nbsp;
 
 View 행렬은 카메라의 World 변환 행렬의 역행렬이다.
-
 ![ViewTransformation](/assets/images/post_img/gamemath/MatrixViewTransformation.jpg)
 
 ---
