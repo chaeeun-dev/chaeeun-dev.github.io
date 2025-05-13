@@ -55,7 +55,7 @@ World 변환은 모델의 Local Space 좌표를 World Space로 변환하는 과�
 
 ![WorldTransformation](/assets/images/post_img/gamemath/MatrixWorldTransformation.jpg)
 
-> 💡 기저 벡터란>
+> 💡 기저 벡터란?
 > 
 > Rotation 변환에서는 보통 모델의 기준 축 벡터인 Right, Up, Look을 사용하는데, 이처럼 서로 수직인 단위 벡터의 집합을 기저 벡터라고 부른다.
 
