@@ -12,8 +12,8 @@ permalink: /DirectX12/camera/
 toc: true
 toc_sticky: true
 
-date: 2025-05-21
-last_modified_at: 2025-05-21
+date: 2025-05-20
+last_modified_at: 2025-05-20
 ---
 
 ## 들어가며
