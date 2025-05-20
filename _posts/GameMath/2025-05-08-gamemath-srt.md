@@ -26,11 +26,11 @@ last_modified_at: 2025-05-08
 
 게임에서 객체의 위치를 이동시키는 걸 Translation이라고 한다. 
 
-- `(x, y, z)` 좌표를 `(a, b, c)`만큼을 이동시키고 싶을 때, 벡터와 행렬의 곱으로 나타낼 수 없다.
+- `(x, y, z)` 좌표를 `(a, b, c)`만큼을 이동시키고 싶을 때, 3차원 벡터로는 이동 행렬을 곱셈으로 처리하기 어렵다.
     ![MatrixOperation](/assets/images/post_img/gamemath/MatrixOperation.jpg)
 
-- 따라서 동차 좌표계를 사용한다.
-    - 동차 좌표계는 n차원의 좌표를 n+1개의 요소로 표현한다.
+- 따라서 `w` 성분을 1로 사용하면 4x4 행렬 곱을 통해 좌표에 일정 값을 더하는 이동 변환을 적용할 수 있다. 
+    - 이를 동차 좌표계라고 하는데, 동차 좌표계는 n차원의 좌표를 n+1개의 요소로 표현한다.
     - 동차 좌표계는 기존 좌표 (x, y, z)를 (x, y, z, 1)로 표현한다.
     ![MatrixTranslation](/assets/images/post_img/gamemath/MatrixTranslation.jpg)
 
