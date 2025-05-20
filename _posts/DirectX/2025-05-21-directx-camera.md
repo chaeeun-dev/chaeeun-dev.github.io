@@ -53,18 +53,21 @@ DirectX12의 수학 연산에서 `XMMATRIX`는 SIMD(Single Instruction, Multiple
 
 ![HierarchyLocalCoordinate](/assets/images/post_img/directx/HierarchyLocalCoordinate.png)
 
+&nbsp;
 
 - `FinalUpdate()`
     - `Component`, `GameObject`, `Scene`, `SceneManager` 클래스에 `FinalUpdate()`를 추가한다.
     - Object 별로 최종 위치, 회전, 스케일 변환을 수행하는 단계로, Engine 루프의 마지막에 호출된다.
     - 예. `Transform::FinalUpdate()`에서 SRT 순서로 변환 행렬을 계산하고, 계층 구조를 반영하여 _matWorld를 계산한다.
 
+&nbsp;
 
 - `PushData()`
     - 최종 `World * View * Projection` 행렬을 계산헤 Shader에 전달한다.
     - `TransformParams` 구조체에 `matWVP`를 저장 후 Constant Buffer로 GPU에 넘긴다.
     - Shader에서는 이 행렬을 이용해 정점의 위치를 화면 좌표로 변환한다.
 
+&nbsp;
 
 - Camera
     - 카메라는 View, Projection 행렬을 계산한다.
@@ -72,17 +75,20 @@ DirectX12의 수학 연산에서 `XMMATRIX`는 SIMD(Single Instruction, Multiple
         - Projection: 원근 or 직교 투영 설정에 따라 계산
     - 계산된 행렬은 전역 정적 변수(`S_MatView`, `S_MatProjection`)로 저장되어 다른 객체에서도 접근 가능하다.
 
+&nbsp;
 
 - 렌더링 흐름 재정비
     - `MeshRenderer::Render()`에서는 Transform, Material, Mesh 각각의 데이터를 GPU에 전달한 뒤 실제로 Mesh를 그린다.
     - `Camera::Render()`에서는 Scene에 있는 GameObject를 순회하면서 MeshRenderer가 붙은 오브젝트만 렌더링한다.
 
+&nbsp;
 
 - TestScene
     - TestObject 생성: Transform, MeshRenderer, Material 등 연결
     - Camera 오브젝트 생성: Transform, Camera, TestCameraScript 연결
     - TestCameraScript에서는 키보드 입력을 받아 카메라를 이동, 회전하도록 함.
 
+&nbsp;
 
 - 결과
     - 키보드의 입력에 따라 카메라가 잘 움직인다.
