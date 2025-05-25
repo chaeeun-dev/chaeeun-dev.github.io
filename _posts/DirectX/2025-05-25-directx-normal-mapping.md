@@ -72,6 +72,7 @@ Cube에 Texture를 매핑했을 때 너무 밋밋한 문제가 있다. 이 문�
     - Normal Mapping을 적용했을 때
         ![NormalMapping](/assets/images/post_img/directx/NormalMappingResult.png)
     - Normal Mapping을 적용한 결과가 훨씬 입체적이고 사실적이다.
+    
 ---
 
 [Normal Mapping 커밋](https://github.com/chaeeun-dev/DirectX12/commit/7e7bd85dbbc14d9376339d22ba1b972cd6ddd47c)
