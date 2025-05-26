@@ -77,9 +77,14 @@ VS_OUT VS_Main(VS_IN input)
 
 ---
 
-## Culling
+### Culling
 
 일반적으로 정점은 시계방향으로 그려지는데, Rasterizer에서 Back Face Culling을 사용하면 반시계 방향은 그리지 않는다. 그런데 SkyBox는 내부에서 바깥면을 보는 구조이기 때문에 Cull Mode를 None 또는 Front로 설정해야 내부 면이 렌더링 된다. 
+
+---
+
+- 결과
+    ![SkyBox](/assets/images/post_img/directx/SkyBoxResult.png)
 
 ---
 
