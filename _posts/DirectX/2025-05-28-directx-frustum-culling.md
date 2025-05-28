@@ -75,6 +75,10 @@ last_modified_at: 2025-05-28
 
 ---
 
+[Frustum Culling 커밋](https://github.com/chaeeun-dev/DirectX12/commit/7835b84b6b889a3afe8f89253f1bdb959ba3dd6c)
+
+---
+
 ## 마치며
 
 CPU 단계에서 바로 컷해버리니까 엄청난 성능 연산이 될 수 밖에 없구나. 게임 성능 향상을 위한 방법이 정말 많은 것 같다. 그 중 절두체 컬링이 가장 효과적인 것 같다!
