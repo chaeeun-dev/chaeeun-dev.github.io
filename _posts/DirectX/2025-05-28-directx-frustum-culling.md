@@ -38,6 +38,8 @@ last_modified_at: 2025-05-28
         - Frustum Culling: CPU가 먼저 Frustum 범위 바깥인지 판별 후 렌더링하지 않는다.
         - 성능 최적화에 매우 큰 효과가 있다!
 
+![Frustum Culling](/assets/images/post_img/directx/FrustumCulling.png)
+
 ---
 
 ### 수학 증명
