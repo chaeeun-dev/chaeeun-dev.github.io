@@ -50,6 +50,7 @@ last_modified_at: 2025-06-04
 
   ![QuaternionMatrix](/assets/images/post_img/directx/QuaternionMatrix.jpg)
 
+---
 
 ## 마치며
 
