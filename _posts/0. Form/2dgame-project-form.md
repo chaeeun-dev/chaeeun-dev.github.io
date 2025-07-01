@@ -1,5 +1,5 @@
 ---
-title: "[2DGP] #"
+title: "[2DGP] "
 excerpt: ""
 
 categories:
