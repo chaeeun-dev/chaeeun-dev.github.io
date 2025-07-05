@@ -32,6 +32,8 @@ categories:
         url: /theory/error/
       - title: "GameMath"
         url: /theory/gamemath/
+      - title: /theory/network/
+        url: /theory/network/
 
   - title: "Projects"
     children:
