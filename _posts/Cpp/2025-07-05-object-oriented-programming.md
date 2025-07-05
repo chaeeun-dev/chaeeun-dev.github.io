@@ -12,8 +12,8 @@ permalink: /C++/oop/
 toc: true
 toc_sticky: true
 
-date: 2025-07-06
-last_modified_at: 2025-07-06
+date: 2025-07-05
+last_modified_at: 2025-07-05
 ---
 
 ## 객체 지향 프로그래밍
@@ -71,4 +71,4 @@ C++은 객체지향 프로그래밍의 중요한 특징들을 지원한다.
 ---
 
 *출처* 
-*[]()*
+*[게임으로 배우는 C++](https://www.booksr.co.kr/product/%EA%B2%8C%EC%9E%84%EC%9C%BC%EB%A1%9C-%EB%B0%B0%EC%9A%B0%EB%8A%94-c/)*
