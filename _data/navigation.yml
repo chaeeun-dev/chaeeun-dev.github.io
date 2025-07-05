@@ -32,7 +32,7 @@ categories:
         url: /theory/error/
       - title: "GameMath"
         url: /theory/gamemath/
-      - title: /theory/network/
+      - title: "Network"
         url: /theory/network/
 
   - title: "Projects"
