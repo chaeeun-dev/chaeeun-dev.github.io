@@ -5,7 +5,7 @@ excerpt: ""
 categories:
   - 2DGame Project
 tags:
-  - [DirectX]
+  - [2DGame Project]
 
 permalink: /2dgame-project/life-cycle/
 

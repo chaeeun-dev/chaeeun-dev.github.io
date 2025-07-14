@@ -5,7 +5,7 @@ excerpt: "불필요한 Update를 방지하는 관찰자 패턴"
 categories:
   - 2DGame Project
 tags:
-  - [2DGP]
+  - [2DGame Project]
 
 permalink: /2dgame-project/observer-pattern/
 
