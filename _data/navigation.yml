@@ -24,16 +24,16 @@ categories:
         url: /theory/cpp/
       - title: "DirectX12"
         url: /theory/directx12/
+      - title: "GameMath"
+        url: /theory/gamemath/
+      - title: "Network"
+        url: /theory/network/
       - title: "Server"
         url: /theory/server/
       - title: "Git"
         url: /theory/git/
       - title: "Error"
         url: /theory/error/
-      - title: "GameMath"
-        url: /theory/gamemath/
-      - title: "Network"
-        url: /theory/network/
 
   - title: "Projects"
     children:
