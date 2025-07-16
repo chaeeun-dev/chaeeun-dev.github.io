@@ -7,7 +7,7 @@ categories:
 tags:
   - [Network]
 
-permalink: /theory/network/
+permalink: /theory/network//
 
 toc: true
 toc_sticky: true
